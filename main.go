@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -25,7 +24,6 @@ func main() {
 			Payload:     25},
 		Timestamp: time.Now(),
 	}
-
 	InsertPacket(*packet1)
-	fmt.Println("Connection to MongoDB closed.")
+
 }

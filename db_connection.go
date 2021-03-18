@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,8 +11,8 @@ import (
 /* Set client options */
 var ClientOptions = options.Client().ApplyURI("mongodb://localhost:27017")
 
-/* Single connection to Database */
-func BD_Connection() {
+/* Single connection to Database and disconnects at the end */
+func BD_Connect() {
 
 	//Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), ClientOptions)
@@ -22,14 +21,15 @@ func BD_Connection() {
 		log.Fatal(err)
 	}
 
+	//Defer desconection
+	defer client.Disconnect(context.TODO())
+
 	//Check the connection
 	err = client.Ping(context.TODO(), nil)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Connected to MongoDB!")
 }
 
 /* Returns a variable that has the db and collection configuration. */

@@ -7,7 +7,7 @@ import (
 )
 
 func InsertPacket(packet Packet) {
-	BD_Connection()
+	BD_Connect()
 	collection := BD_Selection("tg", "packets")
 	insertResult, err := collection.InsertOne(context.TODO(), packet)
 	if err != nil {
