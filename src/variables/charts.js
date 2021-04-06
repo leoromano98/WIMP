@@ -84,23 +84,24 @@ let chartExample1 = {
     gradientStroke.addColorStop(0, "rgba(29,140,248,0)"); //blue colors
 
     return {
+      // TODO: Replace with relevant column information
       labels: [
-        "JAN",
+        "ENE",
         "FEB",
         "MAR",
-        "APR",
+        "ABR",
         "MAY",
         "JUN",
         "JUL",
-        "AUG",
+        "AGO",
         "SEP",
         "OCT",
         "NOV",
-        "DEC",
+        "DIC",
       ],
       datasets: [
         {
-          label: "My First dataset",
+          label: "Paquetes por mes",
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: "#1f8ef1",
@@ -114,7 +115,8 @@ let chartExample1 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+          data: [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100], 
+          // TODO: Replace with DB data
         },
       ],
     };
@@ -130,22 +132,22 @@ let chartExample1 = {
 
     return {
       labels: [
-        "JAN",
+        "ENE",
         "FEB",
         "MAR",
-        "APR",
+        "ABR",
         "MAY",
         "JUN",
         "JUL",
-        "AUG",
+        "AGO",
         "SEP",
         "OCT",
         "NOV",
-        "DEC",
+        "DIC",
       ],
       datasets: [
         {
-          label: "My First dataset",
+          label: "Paquetes IPv4 por mes",
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: "#1f8ef1",
@@ -175,22 +177,22 @@ let chartExample1 = {
 
     return {
       labels: [
-        "JAN",
+        "ENE",
         "FEB",
         "MAR",
-        "APR",
+        "ABR",
         "MAY",
         "JUN",
         "JUL",
-        "AUG",
+        "AGO",
         "SEP",
         "OCT",
         "NOV",
-        "DEC",
+        "DIC",
       ],
       datasets: [
         {
-          label: "My First dataset",
+          label: "Paquetes IPv6 por mes",
           fill: true,
           backgroundColor: gradientStroke,
           borderColor: "#1f8ef1",
