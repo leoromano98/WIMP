@@ -20,6 +20,7 @@ import React from "react";
 import classNames from "classnames";
 // react plugin used to create charts
 import { Line, Bar } from "react-chartjs-2";
+import TableData from "components/TableData/TableData.js";
 
 // reactstrap components
 import {
@@ -39,7 +40,7 @@ import {
   Table,
   Row,
   Col,
-  UncontrolledTooltip,
+  UncontrolledTooltip
 } from "reactstrap";
 
 // core components
@@ -47,14 +48,48 @@ import {
   chartExample1,
   chartExample2,
   chartExample3,
-  chartExample4,
+  chartExample4
 } from "variables/charts.js";
 
 function Dashboard(props) {
   const [bigChartData, setbigChartData] = React.useState("data1");
-  const setBgChartData = (name) => {
+  const setBgChartData = name => {
     setbigChartData(name);
   };
+
+  let today = new Date();
+  today = String(
+    today.getDate() +
+      "/" +
+      today.getMonth() +
+      "/" +
+      today.getYear() +
+      " " +
+      today.getHours() +
+      ":" +
+      today.getMinutes() +
+      ":" +
+      today.getSeconds()
+  );
+
+  let warningData = [
+    {
+      dispositive: "Switch 1",
+      description: "Exploto",
+      date: today
+    },
+    {
+      dispositive: "Switch 3",
+      description: "Se prendio fuego",
+      date: today
+    },
+    {
+      dispositive: "Router 10",
+      description: "Fua el diego",
+      date: today
+    }
+  ];
+
   return (
     <>
       <div className="content">
@@ -64,7 +99,9 @@ function Dashboard(props) {
               <CardHeader>
                 <Row>
                   <Col className="text-left" sm="6">
-                    <h5 className="card-category">Cantidad de paquetes por mes</h5>
+                    <h5 className="card-category">
+                      Cantidad de paquetes por mes
+                    </h5>
                     <CardTitle tag="h2">Tráfico de la red</CardTitle>
                   </Col>
                   <Col sm="6">
@@ -75,7 +112,7 @@ function Dashboard(props) {
                       <Button
                         tag="label"
                         className={classNames("btn-simple", {
-                          active: bigChartData === "data1",
+                          active: bigChartData === "data1"
                         })}
                         color="info"
                         id="0"
@@ -95,7 +132,7 @@ function Dashboard(props) {
                         size="sm"
                         tag="label"
                         className={classNames("btn-simple", {
-                          active: bigChartData === "data2",
+                          active: bigChartData === "data2"
                         })}
                         onClick={() => setBgChartData("data2")}
                       >
@@ -112,7 +149,7 @@ function Dashboard(props) {
                         size="sm"
                         tag="label"
                         className={classNames("btn-simple", {
-                          active: bigChartData === "data3",
+                          active: bigChartData === "data3"
                         })}
                         onClick={() => setBgChartData("data3")}
                       >
@@ -214,19 +251,19 @@ function Dashboard(props) {
                   <DropdownMenu aria-labelledby="dropdownMenuLink" right>
                     <DropdownItem
                       href="#pablo"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={e => e.preventDefault()}
                     >
                       Action
                     </DropdownItem>
                     <DropdownItem
                       href="#pablo"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={e => e.preventDefault()}
                     >
                       Another action
                     </DropdownItem>
                     <DropdownItem
                       href="#pablo"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={e => e.preventDefault()}
                     >
                       Something else
                     </DropdownItem>
@@ -463,23 +500,25 @@ function Dashboard(props) {
               </CardBody>
             </Card>
           </Col>
-          <Col lg="6" md="12">
+          <Col lg="12" md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h4">Simple Table</CardTitle>
+                <CardTitle tag="h4">Alertas</CardTitle>
               </CardHeader>
               <CardBody>
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
-                      <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-center">Salary</th>
+                      <th>Dispositivo</th>
+                      <th>Descripción</th>
+                      <th>Fecha</th>
+                      {/* <th className="text-center">Salary</th> */}
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
+                  <TableData data={warningData} />
+                  {/* TODO: Remove all comments */}
+                  {/*<tbody>
+                     <tr>
                       <td>Dakota Rice</td>
                       <td>Niger</td>
                       <td>Oud-Turnhout</td>
@@ -520,8 +559,8 @@ function Dashboard(props) {
                       <td>Portugal</td>
                       <td>Gloucester</td>
                       <td className="text-center">$98,615</td>
-                    </tr>
-                  </tbody>
+                    </tr> 
+                  </tbody>*/}
                 </Table>
               </CardBody>
             </Card>

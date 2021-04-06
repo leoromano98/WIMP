@@ -25,6 +25,8 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 
+// TODO: Remove all comments
+
 var routes = [
   {
     path: "/dashboard",
@@ -34,17 +36,17 @@ var routes = [
     component: Dashboard,
     layout: "/admin",
   },
-  {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-atom",
-    component: Icons,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   rtlName: "الرموز",
+  //   icon: "tim-icons icon-atom",
+  //   component: Icons,
+  //   layout: "/admin",
+  // },
   {
     path: "/map",
-    name: "Map",
+    name: "Mapa",
     rtlName: "خرائط",
     icon: "tim-icons icon-pin",
     component: Map,
@@ -74,21 +76,21 @@ var routes = [
     component: TableList,
     layout: "/admin",
   },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: "tim-icons icon-align-center",
-    component: Typography,
-    layout: "/admin",
-  },
-  {
-    path: "/rtl-support",
-    name: "RTL Support",
-    rtlName: "ار تي ال",
-    icon: "tim-icons icon-world",
-    component: Rtl,
-    layout: "/rtl",
-  },
+  // {
+  //   path: "/typography",
+  //   name: "Typography",
+  //   rtlName: "طباعة",
+  //   icon: "tim-icons icon-align-center",
+  //   component: Typography,
+  //   layout: "/admin",
+  // },
+  // {
+  //   path: "/rtl-support",
+  //   name: "RTL Support",
+  //   rtlName: "ار تي ال",
+  //   icon: "tim-icons icon-world",
+  //   component: Rtl,
+  //   layout: "/rtl",
+  // },
 ];
 export default routes;
