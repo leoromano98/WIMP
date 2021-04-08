@@ -2,9 +2,8 @@ package db
 
 import (
 	"context"
-	"log"
-	"time"
 
+	"github.com/Farber98/WIMP/tree/backend/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -17,29 +16,26 @@ var MongoCN = ConnectBD()
 /* clientOptions for MongoDB. */
 var clientOptions = options.Client().ApplyURI(connectionString)
 
-/* Context defined for MongoDB connection */
-var ctx, _ = context.WithTimeout(context.TODO(), 1*time.Second)
-
 func ConnectBD() *mongo.Client {
 
-	client, err := mongo.Connect(ctx, clientOptions)
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Fatal(err.Error())
+		models.ErrorLog.Fatal(err.Error())
 		return client
 	}
 
-	err = client.Ping(ctx, nil)
+	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		models.ErrorLog.Fatal(err.Error())
 		return client
 	}
 
-	log.Println("MongoDB live")
+	models.InfoLog.Println("MongoDB live")
 	return client
 }
 
 func CheckConnection() int {
-	err := MongoCN.Ping(ctx, nil)
+	err := MongoCN.Ping(context.TODO(), nil)
 	if err != nil {
 		return 0
 	}
