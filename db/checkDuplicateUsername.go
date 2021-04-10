@@ -9,14 +9,14 @@ import (
 )
 
 /* Checks if a given mail already exists in db */
-func CheckEmail(email string) (models.User, bool, string) {
+func CheckUsername(username string) (models.User, bool, string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	db := MongoCN.Database("tg")
 	coll := db.Collection("users")
 
-	condition := bson.M{"email": email}
+	condition := bson.M{"username": username}
 
 	var result models.User
 

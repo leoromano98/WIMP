@@ -9,7 +9,7 @@ import (
 
 var PORT = "3333"
 
-/* Handler() defines router and runs server. */
+/* Runs server. */
 func Handler() {
 	router := RouterConfig()
 	/* Allow all connections. TODO restrict with IP */

@@ -16,6 +16,7 @@ var MongoCN = ConnectBD()
 /* clientOptions for MongoDB. */
 var clientOptions = options.Client().ApplyURI(connectionString)
 
+/* Handles connection to MongoDB */
 func ConnectBD() *mongo.Client {
 
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -34,6 +35,7 @@ func ConnectBD() *mongo.Client {
 	return client
 }
 
+/* Checks if connection is alive before executing a handler. */
 func CheckConnection() int {
 	err := MongoCN.Ping(context.TODO(), nil)
 	if err != nil {
