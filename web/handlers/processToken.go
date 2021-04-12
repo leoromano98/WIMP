@@ -23,7 +23,7 @@ func ProcessToken(tk string) (*models.Claim, bool, string, error) {
 	/* Splits our token from Bearer delimiter */
 	splitToken := strings.Split(tk, "Bearer")
 	if len(splitToken) != 2 {
-		return claims, false, string(""), errors.New("formato de token invalido")
+		return claims, false, string(""), errors.New("formato invalido")
 	}
 
 	tk = strings.TrimSpace(splitToken[1])
