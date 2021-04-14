@@ -6,28 +6,38 @@ import {
   TileLayer,
   Marker,
   Popup,
-  Polyline
+  Polyline,
+  useMapEvents,
+  MapConsumer
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "assets/css/styles.css";
 import marker from "assets/img/switch.svg";
 
-// Leaflet.Icon.Default.imagePath = "../node_modules/leaflet";
+let myIcon = new L.Icon({
+  iconUrl: marker,
+  iconRetinaUrl: marker,
+  popupAnchor: [-0, -0],
+  iconSize: [70, 45]
+});
 
-// delete Leaflet.Icon.Default.prototype._getIconUrl;
-
-// Leaflet.Icon.Default.mergeOptions({
-//   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
-//   iconUrl: require("leaflet/dist/images/marker-icon.png"),
-//   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
-// });
+function MyComponent({ saveMarkers }) {
+  const map = useMapEvents({
+    click: e => {
+      const { lat, lng } = e.latlng;
+      L.marker([lat, lng], { icon: myIcon }).addTo(map);
+      saveMarkers([lat, lng]);
+    }
+  });
+  return null;
+}
 
 export default class MapDisplay extends Component {
   state = {
     map: {
       lat: -26.84174,
       lng: -65.23149,
-      zoom: 16
+      zoom: 17
     },
     switches: [
       {
@@ -57,56 +67,70 @@ export default class MapDisplay extends Component {
       {
         name: "Switch 4",
         position: {
-          lat: -26.84230,
+          lat: -26.8423,
           lng: -65.22767
         },
         parent: "Switch 1"
       }
-    ]
+    ],
+    new: null
   };
 
+  saveMarkers = newMarkerCoords => {
+    const array = this.state.switches;
+    const newSwitch = {
+      name: "Switch 10",
+      position: {
+        lat: newMarkerCoords[0],
+        lng: newMarkerCoords[1]
+      },
+      parent: "Switch 1"
+    };
+    array.push(newSwitch);
+    this.setState({
+      switches: array
+    });
+    console.log(this.state);
+  };
+
+  myIcon = new L.Icon({
+    iconUrl: marker,
+    iconRetinaUrl: marker,
+    popupAnchor: [-0, -0],
+    iconSize: [70, 45]
+  });
+
   render() {
+    // const myIcon = new L.Icon({
+    //   iconUrl: marker,
+    //   iconRetinaUrl: marker,
+    //   popupAnchor: [-0, -0],
+    //   iconSize: [70, 45]
+    // });
+
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
     }, 1000);
 
     const position = [this.state.map.lat, this.state.map.lng];
-    const myIcon = new L.Icon({
-      iconUrl: marker,
-      iconRetinaUrl: marker,
-      popupAnchor: [-0, -0],
-      iconSize: [70, 45]
-    });
-    // const sw1 = {
-    //   name: "Switch 1",
-    //   position: {
-    //     lat: -26.84279,
-    //     lng: -65.23006
-    //   }
-    // };
-    // const sw2 = {
-    //   name: "Switch 2",
-    //   position: {
-    //     lat: -26.84185,
-    //     lng: -65.22997
-    //   }
-    // };
-    // const switches = [sw1, sw2];
+
     const showSwitches = this.state.switches.map(index => {
       return (
-        <Marker position={index.position} icon={myIcon}>
+        <Marker
+          position={index.position}
+          icon={this.myIcon}
+          onClick={this.handleClick}
+        >
           <Popup>{index.name}</Popup>
         </Marker>
       );
     });
 
     const drawLines = this.state.switches.map(index => {
-      console.log(index.name)
       if (index.parent !== "") {
         let parentIndex = this.state.switches.findIndex(
           i => index.parent === i.name
         );
-        console.log(parentIndex)
         return (
           <Polyline
             // key={"id1"}
@@ -115,21 +139,17 @@ export default class MapDisplay extends Component {
                 this.state.switches[parentIndex].position.lat,
                 this.state.switches[parentIndex].position.lng
               ],
-              [
-                index.position.lat,
-                index.position.lng
-              ]
+              [index.position.lat, index.position.lng]
             ]}
             color={"red"}
           />
         );
-      }
-      else{
-        console.log("Sin padre")
+      } else {
         return null;
       }
     });
 
+    console.log(this.state);
     return (
       <MapContainer
         center={position}
@@ -141,21 +161,8 @@ export default class MapDisplay extends Component {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {showSwitches}
-        {/* <Polyline
-          key={"id1"}
-          positions={[
-            [
-              this.state.switches[0].position.lat,
-              this.state.switches[0].position.lng
-            ],
-            [
-              this.state.switches[1].position.lat,
-              this.state.switches[1].position.lng
-            ]
-          ]}
-          color={"red"}
-        /> */}
         {drawLines}
+        <MyComponent saveMarkers={this.saveMarkers} />
       </MapContainer>
     );
   }
