@@ -13,6 +13,9 @@ import {
 import "leaflet/dist/leaflet.css";
 import "assets/css/styles.css";
 import marker from "assets/img/switch.svg";
+import { Modal, Button, Form } from "react-bootstrap";
+// import Button from 'react-bootstrap/Button'
+// import Button from 'react-bootstrap/Button'
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -34,6 +37,8 @@ function MyComponent({ saveMarkers }) {
 
 export default class MapDisplay extends Component {
   state = {
+    showModal: false,
+    newSwitch: null,
     map: {
       lat: -26.84174,
       lng: -65.23149,
@@ -77,19 +82,28 @@ export default class MapDisplay extends Component {
   };
 
   saveMarkers = newMarkerCoords => {
-    const array = this.state.switches;
-    const newSwitch = {
-      name: "Switch 10",
-      position: {
-        lat: newMarkerCoords[0],
-        lng: newMarkerCoords[1]
-      },
-      parent: "Switch 1"
-    };
-    array.push(newSwitch);
     this.setState({
-      switches: array
+      showModal: true,
+      newSwitch: {
+        position: {
+          lat: newMarkerCoords[0],
+          lng: newMarkerCoords[1]
+        }
+      }
     });
+    // const array = this.state.switches;
+    // const newSwitch = {
+    //   name: "Switch 10",
+    //   position: {
+    //     lat: newMarkerCoords[0],
+    //     lng: newMarkerCoords[1]
+    //   },
+    //   parent: "Switch 1"
+    // };
+    // array.push(newSwitch);
+    // this.setState({
+    //   switches: array
+    // });
     console.log(this.state);
   };
 
@@ -101,7 +115,6 @@ export default class MapDisplay extends Component {
   });
 
   render() {
-
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
     }, 1000);
@@ -143,21 +156,83 @@ export default class MapDisplay extends Component {
       }
     });
 
+    const handleClose = () =>
+      this.setState({
+        showModal: false
+      });
+
+    const handleAccept = () => {
+      const array = this.state.switches;
+      const newSwitch = {
+        name: "Switch 10",
+        position: this.state.newSwitch,
+        parent: "Switch 1"
+      };
+      array.push(newSwitch);
+      this.setState({
+        switches: array,
+        showModal: false
+      });
+    };
+
+    let parentOptions = this.state.switches.map(index => {
+      return <option>{index.name}</option>;
+    });
+
     console.log(this.state);
     return (
-      <MapContainer
-        center={position}
-        zoom={this.state.map.zoom}
-        className="map-container"
-      >
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {showSwitches}
-        {drawLines}
-        <MyComponent saveMarkers={this.saveMarkers} />
-      </MapContainer>
+      <>
+        <MapContainer
+          center={position}
+          zoom={this.state.map.zoom}
+          className="map-container"
+        >
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {showSwitches}
+          {drawLines}
+
+          <MyComponent saveMarkers={this.saveMarkers} />
+        </MapContainer>
+        {/* <Notify ref="notify">
+          holaa
+        </Notify> */}
+        <Modal show={this.state.showModal} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Agregar switch</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Woohoo, you're reading this text in a modal!
+            <Form>
+              <Form.Group controlId="exampleForm.ControlInput1">
+                <Form.Label>Nombre del switch</Form.Label>
+                <Form.Control type="text" placeholder="Switch 10 (el diego)" />
+              </Form.Group>
+              <Form.Group controlId="exampleForm.ControlSelect1">
+                <Form.Label>Padre de: </Form.Label>
+                <Form.Control as="select">
+                  {/* <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option> */}
+                  {parentOptions}
+                </Form.Control>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button variant="info" onClick={handleAccept}>
+              Aceptar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
     );
   }
 }

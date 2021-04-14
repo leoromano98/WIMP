@@ -29,6 +29,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
+import 'bootstrap/dist/css/bootstrap.css';
 
 ReactDOM.render(
   <ThemeContextWrapper>
