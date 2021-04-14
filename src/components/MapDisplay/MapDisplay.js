@@ -101,12 +101,6 @@ export default class MapDisplay extends Component {
   });
 
   render() {
-    // const myIcon = new L.Icon({
-    //   iconUrl: marker,
-    //   iconRetinaUrl: marker,
-    //   popupAnchor: [-0, -0],
-    //   iconSize: [70, 45]
-    // });
 
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
