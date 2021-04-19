@@ -8,7 +8,7 @@ import (
 
 type Switch struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	ParentID primitive.ObjectID `bson:"_parentid,omitempty" json:"parentid"`
+	ParentID primitive.ObjectID `bson:"_pid,omitempty" json:"pid"`
 	Name     string             `bson:"name" json:"name,omitempty"`
 	Model    string             `bson:"model" json:"model,omitempty"`
 	Position Position           `bson:"position" json:"position,omitempty"`

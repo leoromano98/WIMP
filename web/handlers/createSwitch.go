@@ -41,6 +41,14 @@ func CreateSwitch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	/* 000... is empty pid value */
+	if t.ParentID.Hex() != "000000000000000000000000" {
+		_, parentID, _ := db.CheckParentID(t.ParentID)
+		if !parentID {
+			http.Error(w, "No existe un padre con ese ID.", http.StatusBadRequest)
+			return
+		}
+	}
 	_, status, err := db.InsertSwitch(t)
 	if err != nil {
 		http.Error(w, "Error al realizar el registro del switch."+err.Error(), http.StatusBadRequest)
