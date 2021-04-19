@@ -20,6 +20,7 @@ func RouterConfig() *mux.Router {
 	router.HandleFunc("/switches", CheckBD(ValidateJwt(handlers.GetAllSwitches))).Methods("GET")
 	router.HandleFunc("/switches/create", CheckBD(ValidateJwt(handlers.CreateSwitch))).Methods("POST")
 	router.HandleFunc("/switches/modify", CheckBD(handlers.ModifySwitch)).Methods("POST")
+	router.HandleFunc("/switches/delete", CheckBD(handlers.DeleteSwitch)).Methods("DELETE")
 
 	return router
 }
