@@ -43,7 +43,7 @@ func CreateSwitch(w http.ResponseWriter, r *http.Request) {
 
 	/* 000... is empty pid value */
 	if t.ParentID.Hex() != "000000000000000000000000" {
-		_, parentID, _ := db.CheckParentID(t.ParentID)
+		_, parentID, _ := db.CheckID(t.ParentID)
 		if !parentID {
 			http.Error(w, "No existe un padre con ese ID.", http.StatusBadRequest)
 			return

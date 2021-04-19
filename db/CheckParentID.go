@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-/* Checks if a given parentID already exists in db */
-func CheckParentID(ID primitive.ObjectID) (models.Switch, bool, string) {
+/* Checks if a given ID already exists in db */
+func CheckID(ID primitive.ObjectID) (models.Switch, bool, string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
