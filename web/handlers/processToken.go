@@ -6,7 +6,7 @@ import (
 
 	"github.com/Farber98/WIMP/tree/backend/db"
 	"github.com/Farber98/WIMP/tree/backend/models"
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 /* Email value used in all endpoints */
@@ -32,11 +32,12 @@ func ProcessToken(tk string) (*models.Claim, bool, string, error) {
 		return myKey, nil
 	})
 	if err == nil {
-		_, found, _ := db.CheckEmail(claims.Email)
+		_, found, ID := db.CheckEmail(claims.Email)
 		if found {
 			TokenEmail = claims.Email
-			TokenUserID = claims.ID.Hex()
+			TokenUserID = ID
 		}
+
 		return claims, found, TokenUserID, nil
 	}
 
