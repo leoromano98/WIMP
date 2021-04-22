@@ -160,7 +160,6 @@ export default class MapDisplay extends Component {
         showModal: false,
         newSwitch: null
       });
-      console.log(this.state);
     };
 
     const handleNameChange = (event) =>{
@@ -187,7 +186,6 @@ export default class MapDisplay extends Component {
       return <option>{index.name}</option>;
     });
 
-    console.log(this.state);
     return (
       <>
         <MapContainer
