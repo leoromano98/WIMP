@@ -14,8 +14,6 @@ import "leaflet/dist/leaflet.css";
 import "assets/css/styles.css";
 import marker from "assets/img/switch.svg";
 import { Modal, Button, Form } from "react-bootstrap";
-// import Button from 'react-bootstrap/Button'
-// import Button from 'react-bootstrap/Button'
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -38,7 +36,14 @@ function MyComponent({ saveMarkers }) {
 export default class MapDisplay extends Component {
   state = {
     showModal: false,
-    newSwitch: null,
+    newSwitch: {
+      name: "a",
+      position: {
+        lat: 0,
+        lng: 0
+      },
+      parent: "a"
+    },
     map: {
       lat: -26.84174,
       lng: -65.23149,
@@ -91,20 +96,6 @@ export default class MapDisplay extends Component {
         }
       }
     });
-    // const array = this.state.switches;
-    // const newSwitch = {
-    //   name: "Switch 10",
-    //   position: {
-    //     lat: newMarkerCoords[0],
-    //     lng: newMarkerCoords[1]
-    //   },
-    //   parent: "Switch 1"
-    // };
-    // array.push(newSwitch);
-    // this.setState({
-    //   switches: array
-    // });
-    console.log(this.state);
   };
 
   myIcon = new L.Icon({
@@ -140,7 +131,6 @@ export default class MapDisplay extends Component {
         );
         return (
           <Polyline
-            // key={"id1"}
             positions={[
               [
                 this.state.switches[parentIndex].position.lat,
@@ -158,22 +148,40 @@ export default class MapDisplay extends Component {
 
     const handleClose = () =>
       this.setState({
-        showModal: false
+        showModal: false,
+        newSwitch: null
       });
 
     const handleAccept = () => {
       const array = this.state.switches;
-      const newSwitch = {
-        name: "Switch 10",
-        position: this.state.newSwitch,
-        parent: "Switch 1"
-      };
-      array.push(newSwitch);
+      array.push(this.state.newSwitch);
       this.setState({
         switches: array,
-        showModal: false
+        showModal: false,
+        newSwitch: null
       });
+      console.log(this.state);
     };
+
+    const handleNameChange = (event) =>{
+      this.setState({
+        newSwitch:{
+          name: event.target.value,
+          position: this.state.newSwitch.position,
+          parent: this.state.newSwitch.parent
+        }
+      })
+    }
+
+    const handleParentChange = (event) =>{
+      this.setState({
+        newSwitch:{
+          name: this.state.newSwitch.name,
+          position: this.state.newSwitch.position,
+          parent: event.target.value
+        }
+      })
+    }
 
     let parentOptions = this.state.switches.map(index => {
       return <option>{index.name}</option>;
@@ -196,9 +204,6 @@ export default class MapDisplay extends Component {
 
           <MyComponent saveMarkers={this.saveMarkers} />
         </MapContainer>
-        {/* <Notify ref="notify">
-          holaa
-        </Notify> */}
         <Modal show={this.state.showModal} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Agregar switch</Modal.Title>
@@ -208,16 +213,17 @@ export default class MapDisplay extends Component {
             <Form>
               <Form.Group controlId="exampleForm.ControlInput1">
                 <Form.Label>Nombre del switch</Form.Label>
-                <Form.Control type="text" placeholder="Switch 10 (el diego)" />
+                <Form.Control
+                  type="text"
+                  placeholder="Switch 10 (el diego)"
+                  onChange={handleNameChange}
+                />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlSelect1">
                 <Form.Label>Padre de: </Form.Label>
-                <Form.Control as="select">
-                  {/* <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option> */}
+                <Form.Control as="select"
+                  onChange={handleParentChange}
+                  >
                   {parentOptions}
                 </Form.Control>
               </Form.Group>
