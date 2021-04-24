@@ -22,9 +22,9 @@ func RouterConfig() *mux.Router {
 	router.HandleFunc("/switches/delete", CheckBD(ValidateJwt(handlers.DeleteSwitch))).Methods("DELETE")
 	router.HandleFunc("/switches/activate", CheckBD(ValidateJwt(handlers.ActivateSwitch))).Methods("PUT")
 	router.HandleFunc("/switches/deactivate", CheckBD(ValidateJwt(handlers.DeactivateSwitch))).Methods("PUT")
-	//router.HandleFunc("/switches/alarms"), CheckBD(ValidateJwt(handlers.GetAllAlarms))).Methods("GET")
-	//router.HandleFunc("/switches/alarms/"), CheckBD(ValidateJwt(handlers.GetSwitchAlarms))).Methods("GET")
-	//router.HandleFunc("/switches/alarms/"), CheckBD(ValidateJwt(handlers.DeleteSwitchAlarm))).Methods("DELETE")
+	router.HandleFunc("/switches/alarms", CheckBD(ValidateJwt(handlers.GetAllAlarms))).Methods("GET")
+	router.HandleFunc("/switches/alarms/switch", CheckBD(ValidateJwt(handlers.GetSwitchAlarms))).Methods("GET")
+	router.HandleFunc("/switches/alarms/confirm", CheckBD(ValidateJwt(handlers.ConfirmAlarm))).Methods("DELETE")
 
 	/* Package processing */
 
