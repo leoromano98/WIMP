@@ -16,7 +16,7 @@ func GenerateJwt(t models.User) (string, error) {
 		"username": t.Username,
 		"email":    t.Email,
 		"_id":      t.ID.Hex(),
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"exp":      time.Now().Add(time.Hour * 12).Unix(),
 	}
 
 	/* Define jwt with claims and signing algorithm */

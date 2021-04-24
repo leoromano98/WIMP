@@ -34,6 +34,7 @@ func CreateSwitch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t.Date = time.Now()
+	t.Status = true
 
 	_, duplicateSwitch, _ := db.CheckSwitch(t.Name)
 	if duplicateSwitch {

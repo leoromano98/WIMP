@@ -13,6 +13,7 @@ type Switch struct {
 	Model    string             `bson:"model" json:"model,omitempty"`
 	Position Position           `bson:"position" json:"position,omitempty"`
 	Date     time.Time          `bson:"date" json:"date,omitempty"`
+	Status   bool               `bson:"status" json:"status,omitempty"`
 }
 
 type Position struct {
