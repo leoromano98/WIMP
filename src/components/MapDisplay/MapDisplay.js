@@ -14,6 +14,7 @@ import "leaflet/dist/leaflet.css";
 import "assets/css/styles.css";
 import marker from "assets/img/switch.svg";
 import { Modal, Button, Form } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
 
 let myIcon = new L.Icon({
   iconUrl: marker,

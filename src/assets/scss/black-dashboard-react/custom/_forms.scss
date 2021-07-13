@@ -2,6 +2,7 @@
 @include form-control-placeholder(#6c757c, 1);
 
 .form-control{
+  color: black !important;
   border-color: lighten($black,5%);
   border-radius: $border-radius-lg;
   font-size: $font-size-sm;
