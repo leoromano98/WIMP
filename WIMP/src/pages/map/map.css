@@ -1,0 +1,10 @@
+.map-container {
+    height: 800px;
+    width: 1000px;
+    margin-left: 20%;
+    margin-top: 5%;
+  }
+  
+  .my-leaflet-map-container img {
+    max-height: none;
+  }

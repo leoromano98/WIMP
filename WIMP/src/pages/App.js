@@ -17,7 +17,6 @@ function App() {
       <Router>
         <Switch>
           <Route path="/map">
-            {" "}
             <Map />
           </Route>
           <Route path="/landing">
