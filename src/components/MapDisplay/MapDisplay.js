@@ -23,12 +23,13 @@ let myIcon = new L.Icon({
   iconSize: [70, 45]
 });
 
+//@DOC: On click, add icon to map (switch)
 function MyComponent({ saveMarkers }) {
   const map = useMapEvents({
     click: e => {
       const { lat, lng } = e.latlng;
-      L.marker([lat, lng], { icon: myIcon }).addTo(map);
-      saveMarkers([lat, lng]);
+       saveMarkers([lat, lng]);
+        L.marker([lat, lng], { icon: myIcon }).addTo(map);
     }
   });
   return null;
@@ -147,13 +148,14 @@ export default class MapDisplay extends Component {
       }
     });
 
-    const handleClose = () =>
+    const handleClose = () =>{
       this.setState({
         showModal: false,
         newSwitch: null
       });
+    }
 
-    const handleAccept = () => {
+    const handleAccept = () => { //TODO: this must update DB
       const array = this.state.switches;
       array.push(this.state.newSwitch);
       this.setState({
@@ -201,7 +203,7 @@ export default class MapDisplay extends Component {
           {showSwitches}
           {drawLines}
 
-          <MyComponent saveMarkers={this.saveMarkers} />
+        <MyComponent saveMarkers={this.saveMarkers} />
         </MapContainer>
         <Modal show={this.state.showModal} onHide={handleClose}>
           <Modal.Header closeButton>
