@@ -201,7 +201,6 @@ export default class MapDisplay extends Component {
 
     return (
       <>
-      <h1>asdlksadkj</h1>
         <MapContainer
           center={position}
           zoom={this.state.map.zoom}
@@ -217,11 +216,10 @@ export default class MapDisplay extends Component {
         <MyComponent saveMarkers={this.saveMarkers} />
         </MapContainer>
         <Modal show={this.state.showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
+          <Modal.Header className="modal-header">
             <Modal.Title>Agregar switch</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Woohoo, you're reading this text in a modal!
             <Form>
               <Form.Group controlId="exampleForm.ControlInput1">
                 <Form.Label>Nombre del switch</Form.Label>

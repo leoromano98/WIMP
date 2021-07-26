@@ -8,6 +8,7 @@ import {
 import Header from "./header/header";
 import Login from "./login/login";
 import Landing from "./landing/landing";
+import Alerts from "./alerts/alerts";
 import Map from "./map/map";
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/alerts">
+            <Alerts />
           </Route>
           <Route exact path="/">
             <Redirect to="/login" />

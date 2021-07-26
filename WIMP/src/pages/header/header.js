@@ -1,7 +1,15 @@
 import "./header.css";
 import { slide as Menu } from "react-burger-menu";
+import socketIOClient from "socket.io-client";
+import { useState } from 'react';
+
+export const socket = socketIOClient("http://localhost:3001/");
 
 const Header = () => {
+  const [endpoint, setEndpoint] = useState("http://localhost:3001/");
+  
+  var socket = socketIOClient(endpoint);
+
   function showSettings(event) {
     event.preventDefault();
   }
@@ -20,6 +28,9 @@ const Header = () => {
         </a>
         <a className="menu-item" href="/map">
           Mapa
+        </a>
+        <a className="menu-item" href="/alerts">
+          Alertas
         </a>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
