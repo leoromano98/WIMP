@@ -1,3 +1,5 @@
+import {useState, useEffect} from 'react';
+
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -11,8 +13,23 @@ import Landing from "./landing/landing";
 import Alerts from "./alerts/alerts";
 import Map from "./map/map";
 
+
 function App() {
-  return (
+  const [token,setToken]=useState(null);
+  const [login,setLogin]=useState(false);
+
+  useEffect( ()=>{
+    let storage = JSON.parse(localStorage.getItem('token'));
+    console.log('storage:L ' + storage)
+    if(storage!=null){
+      setToken(storage.token)
+    }
+    else{
+      console.log('sin login')
+    }
+  })
+
+    return (
     <div className="App">
       <Header />
       <Router>
@@ -29,6 +46,7 @@ function App() {
           <Route path="/alerts">
             <Alerts />
           </Route>
+          
           <Route exact path="/">
             <Redirect to="/login" />
           </Route>

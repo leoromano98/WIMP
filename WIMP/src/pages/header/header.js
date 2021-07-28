@@ -2,13 +2,15 @@ import "./header.css";
 import { slide as Menu } from "react-burger-menu";
 import socketIOClient from "socket.io-client";
 import { useState } from 'react';
+import logo from '../../assets/img/logoWIMP.png'
 
-export const socket = socketIOClient("http://localhost:3001/");
+// export const socket = socketIOClient("http://localhost:3001/");
+export const socket = null;
 
 const Header = () => {
-  const [endpoint, setEndpoint] = useState("http://localhost:3001/");
+  // const [endpoint, setEndpoint] = useState("http://localhost:3001/");
   
-  var socket = socketIOClient(endpoint);
+  // var socket = socketIOClient(endpoint);
 
   function showSettings(event) {
     event.preventDefault();
@@ -16,8 +18,7 @@ const Header = () => {
   return (
     <>
       <div className="header">
-        <img src="/../../assets/img/logoWIMP.png" alt="logo"></img>
-        <h1>WIMP</h1>
+        <img src={logo} alt="logo" className="logo"></img>
       </div>
       <Menu id={"sidebar"} className={"my-menu"}>
         <a className="menu-item" href="/landing">

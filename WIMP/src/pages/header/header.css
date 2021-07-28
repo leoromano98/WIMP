@@ -83,4 +83,10 @@
 
   .header{
     background-color: #37718E;
+    color: white
+  }
+
+  .logo{
+    width: 150px;
+    margin: 14px 0;
   }
