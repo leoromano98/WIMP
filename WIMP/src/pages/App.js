@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 import "./App.css";
 import {
@@ -13,46 +13,75 @@ import Landing from "./landing/landing";
 import Alerts from "./alerts/alerts";
 import Map from "./map/map";
 
+import { AuthContext } from "../utils/context";
+import { isUserLogedApi, triggerLogin } from "../api/auth";
 
 function App() {
-  const [token,setToken]=useState(null);
-  const [login,setLogin]=useState(false);
+  const [user, setUser] = useState(null);
+  const [loadUser, setLoadUser] = useState(false);
+  const [refreshCheckLogin, setRefreshCheckLogin] = useState(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
-  useEffect( ()=>{
-    let storage = JSON.parse(localStorage.getItem('token'));
-    console.log('storage:L ' + storage)
-    if(storage!=null){
-      setToken(storage.token)
-    }
-    else{
-      console.log('sin login')
-    }
-  })
+  function callback(params) {
+    setIsLoginSuccess(params);
+  }
 
-    return (
-    <div className="App">
+  useEffect(() => {
+    console.log(1)
+    setUser(isUserLogedApi());
+    renderRedirect();
+  }, [isLoginSuccess]);
+
+  function renderRedirect() {
+    if (isLoginSuccess) {
+      return <Redirect to="/" />;
+    }
+  }
+
+  // useEffect(() => {
+  //   setUser(isUserLogedApi());
+  //   setIsLoginSuccess(isUserLogedApi());
+  //   setRefreshCheckLogin(false);
+  //   setLoadUser(true);
+  // }, [refreshCheckLogin]);
+
+  // if (!loadUser) return null;
+
+  console.log(user);
+
+  return (
+    <AuthContext.Provider value={user}>
       <Header />
       <Router>
+        {renderRedirect()}
         <Switch>
-          <Route path="/map">
-            <Map />
-          </Route>
-          <Route path="/landing">
-            <Landing />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/alerts">
-            <Alerts />
-          </Route>
-          
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
+          {user ? (
+            <>
+              <Route path="/map">
+                <Map />
+              </Route>
+              <Route path="/landing">
+                <Landing />
+              </Route>
+              <Route path="/alerts">
+                <Alerts />
+              </Route>
+
+              <Route exact path="/">
+                <Redirect to="/landing" />
+              </Route>
+            </>
+          ) : (
+            <>
+              <Route exact path="/*">
+                <Redirect to="/login" />
+                <Login parentCallback={callback} />
+              </Route>
+            </>
+          )}
         </Switch>
       </Router>
-    </div>
+    </AuthContext.Provider>
   );
 }
 
