@@ -23,14 +23,17 @@ function App() {
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
   function callback(params) {
-    setIsLoginSuccess(params);
+    if(params){
+      setUser(isUserLogedApi());
+      
+    }
   }
 
-  useEffect(() => {
-    console.log(1)
-    setUser(isUserLogedApi());
-    renderRedirect();
-  }, [isLoginSuccess]);
+  // useEffect(() => {
+  //   console.log(1)
+  //   setUser(isUserLogedApi());
+  //   renderRedirect();
+  // }, [isLoginSuccess]);
 
   function renderRedirect() {
     if (isLoginSuccess) {
@@ -38,14 +41,14 @@ function App() {
     }
   }
 
-  // useEffect(() => {
-  //   setUser(isUserLogedApi());
-  //   setIsLoginSuccess(isUserLogedApi());
-  //   setRefreshCheckLogin(false);
-  //   setLoadUser(true);
-  // }, [refreshCheckLogin]);
+  useEffect(() => {
+    setUser(isUserLogedApi());
+    setIsLoginSuccess(isUserLogedApi());
+    setRefreshCheckLogin(false);
+    setLoadUser(true);
+  }, [refreshCheckLogin]);
 
-  // if (!loadUser) return null;
+  if (!loadUser) return null;
 
   console.log(user);
 
@@ -53,7 +56,7 @@ function App() {
     <AuthContext.Provider value={user}>
       <Header />
       <Router>
-        {renderRedirect()}
+        {/* {renderRedirect()} */}
         <Switch>
           {user ? (
             <>
@@ -65,6 +68,9 @@ function App() {
               </Route>
               <Route path="/alerts">
                 <Alerts />
+              </Route>
+              <Route exact path="/login">
+                <Redirect to="/" />
               </Route>
 
               <Route exact path="/">
