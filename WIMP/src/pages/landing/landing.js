@@ -7,6 +7,7 @@
 import "./landing.css";
 import { Bar, Doughnut } from "react-chartjs-2";
 import GaugeChart from 'react-gauge-chart'
+import { getTokenApi, getTopology, deleteSwitch, modifySwitch, createSwitch, createUser, activateSwitch, deactivateSwitch } from "../../api/auth";
 
 // Configuracion para graficos:
 const dataBar = {
@@ -133,6 +134,14 @@ const optionsGrouped = {
 const Landing = () => {
   return (
     <>
+    
+      <button onClick={getTopology}>TOPOLOGOIA</button>
+      <button onClick={modifySwitch}>MODIFICAR</button>
+      <button onClick={deleteSwitch}>BORRAR</button>
+      <button onClick={createSwitch}>CREAR SWITCH</button>
+      <button onClick={createUser}>CREAR USUARIO</button>
+      <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
+      <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
       <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBar} />
