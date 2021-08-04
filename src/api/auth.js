@@ -280,7 +280,7 @@ export function signUpApi(user) {
 }
 
 export function signInApi(user,password) {
-  const url = `${API_HOST}usuarios/iniciar-sesion`;
+  const url = `${API_HOST}/usuarios/iniciar-sesion`;
 
   const data = {
     usuario: user,
