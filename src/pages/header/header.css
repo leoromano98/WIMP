@@ -1,92 +1,110 @@
 /* Position and sizing of burger button */
 .bm-burger-button {
-    position: fixed;
-    width: 36px;
-    height: 30px;
-    left: 36px;
-    top: 26px;
-  }
-  
-  /* Color/shape of burger icon bars */
-  .bm-burger-bars {
-    background: white;
-  }
-  
-  /* Color/shape of burger icon bars on hover*/
-  .bm-burger-bars-hover {
-    background: #162d38;
-  }
-  
-  /* Position and sizing of clickable cross button */
-  .bm-cross-button {
-    height: 24px;
-    width: 24px;
-  }
-  
-  /* Color/shape of close button cross */
-  .bm-cross {
-    background: #bdc3c7;
-  }
-  
-  /*
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 26px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: white;
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: #162d38;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/*
   Sidebar wrapper styles
   Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
   */
-  .bm-menu-wrap {
-    position: fixed;
-    height: 100%;
-    margin-top: -10px;
-    width: 200px !important;
-  }
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+  margin-top: -10px;
+  width: 200px !important;
+}
 
-  .bm-menu-wrap  a{
-    color: white;
-    text-decoration: none;
-  }
+.bm-menu-wrap a {
+  color: white;
+  text-decoration: none;
+}
 
-  .bm-menu-wrap  a:hover{
-    color: black;
-    background-color: #739baf;
-  }
+.bm-menu-wrap a:hover {
+  color: black;
+  background-color: #739baf;
+}
 
-  
-  /* General sidebar styles */
-  .bm-menu {
-    background: #37718e;
-    padding: 1.5em 0 0;
-    font-size: 1.15em;
-  }
-  
-  /* Morph shape necessary with bubble or elastic */
-  .bm-morph-shape {
-    fill: #373a47;
-  }
-  
-  /* Wrapper for item list */
-  .bm-item-list {
-    color: #b8b7ad;
-  }
-  
-  /* Individual item */
-  .bm-item {
-    display: inline-block;
-    padding: 10px 0;
-  }
-  
-  /* Styling of overlay */
-  .bm-overlay {
-    background: rgba(0, 0, 0, 0.3);
-    margin-top: -10px;
-  }
+/* General sidebar styles */
+.bm-menu {
+  background: #37718e;
+  padding: 1.5em 0 0;
+  font-size: 1.15em;
+}
 
-  /* Header styles */
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
 
-  .header{
-    background-color: #37718E;
-    color: white
-  }
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+}
 
-  .logo{
-    width: 150px;
-    margin: 14px 0;
-  }
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  padding: 10px 0;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  margin-top: -10px;
+}
+
+/* Header styles */
+
+.header {
+  background-color: #37718e;
+  color: white;
+  display: flex;
+}
+
+.logo-container {
+  width: 100%;
+  text-align: center;
+}
+
+.logo {
+  width: 150px;
+  margin: 14px 0;
+}
+
+.account-dropdown button {
+  /* background-color: transparent !important;
+    border: none !important; */
+  font-size: large;
+  height: 65px;
+  vertical-align: middle;
+  margin: 5px;
+}
+
+.account-dropdown button svg {
+  font-size: 52px;
+}

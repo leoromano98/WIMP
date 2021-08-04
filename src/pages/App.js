@@ -25,7 +25,6 @@ function App() {
   function callback(params) {
     if(params){
       setUser(isUserLogedApi());
-      
     }
   }
 

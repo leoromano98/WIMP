@@ -1,5 +1,7 @@
 import { API_HOST, TOKEN } from "../utils/constant";
 import jwtDecode from "jwt-decode";
+import { useHistory } from "react-router-dom";
+
 
 export function deactivateSwitch() {
   var token = getTokenApi();

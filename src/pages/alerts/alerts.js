@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import "./alerts.css";
 import { Table } from "reactstrap";
-import { socket } from "../header/header";
 
 
 const Alerts = () => {
@@ -23,23 +22,6 @@ const Alerts = () => {
     console.log(foodItems);
     setNotifications(foodItems);
   };
-
-  const changeData = () => socket.emit("initial_data");
-
-  useEffect(() => {
-    var state_current = this;
-    socket.emit("initial_data");
-    socket.on("get_data", getData);
-    socket.on("change_data", changeData);
-  },[])
-
-  useEffect(() => {
-    socket.off("get_data");
-    socket.off("change_data");
-  },[])
-
-
-
   return (
     <div className="login-container">
       <div className="form-container">
