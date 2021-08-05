@@ -69,6 +69,9 @@ const Login = ({ parentCallback }) => {
     if (!ValidateEmail(newEmail)) {
       setEmailError("Formato de correo invalido.");
     }
+    if(!emailError && !userError && !passwordError){
+      alert("Usuario creado! (solo frontend)")
+    }
   };
 
   const loginEnterHandler = (event) => {
