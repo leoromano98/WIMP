@@ -1,21 +1,101 @@
-.form-container{
-    width: 500px;
-    height: auto;
-    padding: 20px;
-    margin: 0 auto;
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.form-container {
+  width: 500px;
+  height: auto;
+  padding: 20px;
+  margin: 0 auto;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.input-container{
-    margin-bottom: 20px;
+.input-container {
+  margin-bottom: 20px;
 }
 
-.form-title{
-    margin-bottom: 20px;
+.form-title {
+  margin-bottom: 20px;
+}
+
+.overlay {
+  opacity: 0.5;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.loading-circle {
+  width: 110px !important;
+  display: flex !important;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 100% !important;
+  margin: 0 auto;
+}
+
+.alert {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  width: 22%;
+  margin: 10px;
+  float: right;
+}
+
+.alert > button {
+  border: none;
+  background: none;
+}
+
+.registration-container {
+  text-align: center;
+  font-size: 17px;
+  border-top: 1px solid lightgrey;
+  padding-top: 10px;
+}
+
+.registration-link {
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: transform 0.2s; /* Animation */
+}
+
+.registration-link:hover {
+  transform: scale(
+    1.2
+  ); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.buttons-container {
+  margin-bottom: 10px;
+}
+
+.btn-container {
+  justify-content: space-between;
+  width: 100%;
+  display: flex;
+}
+
+.modal-footer-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-msg{
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.input-error{
+    border: 1px solid red !important;
 }

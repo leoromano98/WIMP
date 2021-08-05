@@ -75,13 +75,13 @@ export function activateSwitch() {
 }
 
 
-export function createUser() {
+export function createUser(email, usuario, password) {
   var token = getTokenApi();
 
   var data = {
-    email: "elpingudo@gmail.com",
-    usuario: "El PITUDO",
-    password: "12345678"
+    email: email,
+    usuario: usuario,
+    password: password
   }
   
   const url = `${API_HOST}/usuarios/crear`;
