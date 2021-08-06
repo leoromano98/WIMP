@@ -99,3 +99,10 @@
 .input-error{
     border: 1px solid red !important;
 }
+
+.close{
+  border: none;
+  background-color: transparent;
+  color: white;
+  font-size:26px;
+}

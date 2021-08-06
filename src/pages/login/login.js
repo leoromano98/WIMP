@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./login.css";
-import { getTokenApi, signInApi, setTokenApi } from "../../api/auth";
+import { getTokenApi, signInApi, setTokenApi, createUser } from "../../api/auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   InputGroup,
@@ -47,6 +47,9 @@ const Login = ({ parentCallback }) => {
   const [passwordError, setPasswordError] = useState(false);
 
   const toggleRegistration = () => setModalRegistration(!modalRegistration);
+
+  const [createSuccess, setCreateSuccess] = useState(false);
+  const [nestedModal, setNestedModal] = useState(false);
 
   const validateForm = () => {
     console.log(newEmail, newUser, newPassword);
@@ -96,7 +99,6 @@ const Login = ({ parentCallback }) => {
     if (inputsCheck && userCheck && passwordCheck && emailCheck) {
       return true;
     }
-    alert(false);
     return false;
   };
 
@@ -113,11 +115,19 @@ const Login = ({ parentCallback }) => {
     if (inputsError) {
       console.log("inputs error!");
     }
+    if(createSuccess){
+      console.log('created new user!')
+    }
   }, [userError, emailError, passwordError, inputsError]);
 
   const registrationClickHandler = () => {
     if (validateForm()) {
-      alert("Usuario creado! (solo frontend)");
+      var response = createUser(newEmail, newUser, newPassword);
+      console.log(response)
+      if(response.ok){
+        alert('usuario creado!');
+        setCreateSuccess(true);
+      }
     }
   };
 
@@ -164,6 +174,10 @@ const Login = ({ parentCallback }) => {
     setNewPassword(event.target.value);
   };
 
+  const toggleNested = () => {
+    setNestedModal(!nestedModal);
+  }
+
   let circleLoading = null;
   if (loading) {
     circleLoading = (
@@ -175,7 +189,7 @@ const Login = ({ parentCallback }) => {
 
   let registrationModal = (
     <Modal isOpen={modalRegistration} toggle={toggleRegistration}>
-      <ModalHeader toggle={toggleRegistration}>Modal title</ModalHeader>
+      <ModalHeader toggle={toggleRegistration}>Crear Usuario</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup controlId="exampleForm.ControlInput1">
@@ -219,6 +233,14 @@ const Login = ({ parentCallback }) => {
             ) : null}
           </FormGroup>
         </Form>
+        <Modal isOpen={createSuccess} toggle={toggleNested}>
+            <ModalHeader>Nested Modal title</ModalHeader>
+            <ModalBody>Stuff and things</ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={toggleNested}>Done</Button>{' '}
+              
+            </ModalFooter>
+          </Modal>
       </ModalBody>
       <ModalFooter className="modal-footer-container">
         {inputsError ? (
