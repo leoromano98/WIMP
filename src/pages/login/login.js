@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./login.css";
 import { getTokenApi, signInApi, setTokenApi } from "../../api/auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -28,6 +28,7 @@ function ValidateEmail(mail) {
 
 const Login = ({ parentCallback }) => {
   localStorage.clear();
+
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -38,7 +39,8 @@ const Login = ({ parentCallback }) => {
   const [loading, setLoading] = useState(false);
 
   const [modalRegistration, setModalRegistration] = useState(false);
-  const [errorRegistration, setErrorRegistration] = useState("");
+
+  const [inputsError, setInputsError] = useState(false);
 
   const [emailError, setEmailError] = useState(false);
   const [userError, setUserError] = useState(false);
@@ -46,31 +48,76 @@ const Login = ({ parentCallback }) => {
 
   const toggleRegistration = () => setModalRegistration(!modalRegistration);
 
-  const registrationClickHandler = () => {
+  const validateForm = () => {
     console.log(newEmail, newUser, newPassword);
-    setErrorRegistration("");
-    setEmailError(false);
-    setUserError(false);
-    setPasswordError(false);
+    let userCheck = true;
+    let emailCheck = true;
+    let passwordCheck = true;
+    let inputsCheck = true;
+
+    // Todos los campos obligatorios:
     if (
       newEmail.length === 0 ||
       newUser.length === 0 ||
       newPassword.length === 0
     ) {
-      setErrorRegistration("Todos los campos son obligatorios.");
+      inputsCheck = false;
+      setInputsError(true);
+    } else {
+      setInputsError(false);
     }
 
+    // Usuario > 3
     if (newUser.length < 4) {
-      setUserError("El usuario debe contener al menos 4 caracteres.");
+      userCheck = false;
+      setUserError(true);
+    } else {
+      setUserError(false);
     }
-    if (newPassword.length < 8) {
-      setPasswordError("La contraseña debe contener al menos 8 caracteres.");
-    }
+
+    // Email valido:
     if (!ValidateEmail(newEmail)) {
-      setEmailError("Formato de correo invalido.");
+      emailCheck = false;
+      setEmailError(true);
+    } else {
+      setEmailError(false);
     }
-    if(!emailError && !userError && !passwordError){
-      alert("Usuario creado! (solo frontend)")
+
+    //Password >7
+    if (newPassword.length < 8) {
+      userCheck = false;
+      passwordCheck = false;
+
+      setPasswordError(true);
+    } else {
+      setPasswordError(false);
+    }
+
+    if (inputsCheck && userCheck && passwordCheck && emailCheck) {
+      return true;
+    }
+    alert(false);
+    return false;
+  };
+
+  useEffect(() => {
+    if (userError) {
+      console.log("user error!");
+    }
+    if (emailError) {
+      console.log("email error!");
+    }
+    if (passwordError) {
+      console.log("password error!");
+    }
+    if (inputsError) {
+      console.log("inputs error!");
+    }
+  }, [userError, emailError, passwordError, inputsError]);
+
+  const registrationClickHandler = () => {
+    if (validateForm()) {
+      alert("Usuario creado! (solo frontend)");
     }
   };
 
@@ -137,9 +184,11 @@ const Login = ({ parentCallback }) => {
               type="email"
               placeholder="wimp@wimp.com"
               onChange={handleNewEmailChange}
-              className={emailError?"input-error":null}
+              className={emailError ? "input-error" : null}
             />
-            <div className="error-msg">{emailError}</div>
+            {emailError ? (
+              <div className="error-msg">Formato de correo invalido.</div>
+            ) : null}
           </FormGroup>
           <FormGroup controlId="exampleForm.ControlInput1">
             <Label>Usuario</Label>
@@ -147,9 +196,13 @@ const Login = ({ parentCallback }) => {
               type="text"
               placeholder="WIMP"
               onChange={handleNewUserChange}
-              className={userError?"input-error":null}
+              className={userError ? "input-error" : null}
             />
-            <div className="error-msg">{userError}</div>
+            {userError ? (
+              <div className="error-msg">
+                El usuario debe contener al menos 4 caracteres.
+              </div>
+            ) : null}
           </FormGroup>
           <FormGroup controlId="exampleForm.ControlInput1">
             <Label>Contraseña</Label>
@@ -157,14 +210,21 @@ const Login = ({ parentCallback }) => {
               type="password"
               placeholder="*******"
               onChange={handleNewPasswordChange}
-              className={passwordError?"input-error":null}
+              className={passwordError ? "input-error" : null}
             />
-            <div className="error-msg">{passwordError}</div>
+            {passwordError ? (
+              <div className="error-msg">
+                La contraseña debe contener al menos 8 caracteres.
+              </div>
+            ) : null}
           </FormGroup>
         </Form>
       </ModalBody>
       <ModalFooter className="modal-footer-container">
-        <div className="error-msg">{errorRegistration}</div>
+        {inputsError ? (
+          <div className="error-msg">Todos los campos son obligatorios.</div>
+        ) : null}
+
         <div className="btn-container">
           <Button color="danger" onClick={toggleRegistration}>
             Cancel
