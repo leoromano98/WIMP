@@ -18,29 +18,30 @@ import {
   Popup,
   Polyline,
   useMapEvents,
-  MapConsumer
+  MapConsumer,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import marker from "../../assets/img/switch.svg";
 import { Modal, Button, Form } from "react-bootstrap";
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/css/bootstrap.css";
+import { getTopology, createSwitch } from "../../api/auth";
 
 let myIcon = new L.Icon({
   iconUrl: marker,
   iconRetinaUrl: marker,
   popupAnchor: [-0, -0],
-  iconSize: [70, 45]
+  iconSize: [70, 45],
 });
 
 //@DOC: On click, add icon to map (switch)
 function MyComponent({ saveMarkers }) {
   const map = useMapEvents({
-    click: e => {
+    click: (e) => {
       const { lat, lng } = e.latlng;
-       saveMarkers([lat, lng]);
-        L.marker([lat, lng], { icon: myIcon }).addTo(map);
-    }
+      saveMarkers([lat, lng]);
+      L.marker([lat, lng], { icon: myIcon }).addTo(map);
+    },
   });
   return null;
 }
@@ -52,61 +53,38 @@ export default class MapDisplay extends Component {
       name: "a",
       position: {
         lat: 0,
-        lng: 0
+        lng: 0,
       },
-      parent: "a"
+      parent: "a",
     },
     map: {
       lat: -26.84174,
       lng: -65.23149,
-      zoom: 17
+      zoom: 17,
     },
-    switches: [
-      {
-        name: "Switch 1",
-        position: {
-          lat: -26.84279,
-          lng: -65.23006
-        },
-        parent: ""
-      },
-      {
-        name: "Switch 2",
-        position: {
-          lat: -26.84185,
-          lng: -65.22997
-        },
-        parent: "Switch 1"
-      },
-      {
-        name: "Switch 3",
-        position: {
-          lat: -26.83931,
-          lng: -65.23337
-        },
-        parent: "Switch 1"
-      },
-      {
-        name: "Switch 4",
-        position: {
-          lat: -26.8423,
-          lng: -65.22767
-        },
-        parent: "Switch 1"
-      }
-    ],
-    new: null
+    newName: null,
+    newModel: null,
+    newParent: null,
+    newLat: null,
+    newLng: null,
+    switches: [],
+    new: null,
   };
 
-  saveMarkers = newMarkerCoords => {
+  async componentDidMount() {
+    var response = await getTopology();
+    this.setState({
+      switches: response,
+    });
+    console.log("Switches: ", response);
+    this.updateLines();
+  }
+
+  saveMarkers = (newMarkerCoords) => {
     this.setState({
       showModal: true,
-      newSwitch: {
-        position: {
-          lat: newMarkerCoords[0],
-          lng: newMarkerCoords[1]
-        }
-      }
+      newLat: newMarkerCoords[0],
+      newLng: newMarkerCoords[1],
     });
   };
 
@@ -114,89 +92,151 @@ export default class MapDisplay extends Component {
     iconUrl: marker,
     iconRetinaUrl: marker,
     popupAnchor: [-0, -0],
-    iconSize: [70, 45]
+    iconSize: [70, 45],
   });
 
+  updateLines = () => {
+    if (this.state.switches.length !== 0) {
+      const drawLines = this.state.switches.map((index) => {
+        if (index._pid) {
+          let parentIndex = this.state.switches.findIndex(
+            (i) => index._pid === i._id
+          );
+          return (
+            <Polyline
+              positions={[
+                [
+                  this.state.switches[parentIndex].lat,
+                  this.state.switches[parentIndex].lng,
+                ],
+                [index.lat, index.lng],
+              ]}
+              color={"red"}
+            />
+          );
+        } else {
+          return null;
+        }
+      });
+      this.setState({
+        drawLines: drawLines
+      })
+    }
+  };
+
   render() {
+
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
     }, 1000);
 
     const position = [this.state.map.lat, this.state.map.lng];
 
-    const showSwitches = this.state.switches.map(index => {
+    const showSwitches = this.state.switches.map((index) => {
       return (
         <Marker
-          position={index.position}
+          position={[index.lat, index.lng]}
           icon={this.myIcon}
           onClick={this.handleClick}
         >
-          <Popup>{index.name}</Popup>
+          <Popup>{index.nombre}</Popup>
         </Marker>
       );
     });
 
-    const drawLines = this.state.switches.map(index => {
-      if (index.parent !== "") {
-        let parentIndex = this.state.switches.findIndex(
-          i => index.parent === i.name
-        );
-        return (
-          <Polyline
-            positions={[
-              [
-                this.state.switches[parentIndex].position.lat,
-                this.state.switches[parentIndex].position.lng
-              ],
-              [index.position.lat, index.position.lng]
-            ]}
-            color={"red"}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
+    var drawLines = this.state.drawLines;
+    // const updateLines = () => {
+    //   if (this.state.switches.length !== 0) {
+    //     drawLines = this.state.switches.map((index) => {
+    //       if (index._pid) {
+    //         let parentIndex = this.state.switches.findIndex(
+    //           (i) => index._pid === i._id
+    //         );
+    //         return (
+    //           <Polyline
+    //             positions={[
+    //               [
+    //                 this.state.switches[parentIndex].lat,
+    //                 this.state.switches[parentIndex].lng,
+    //               ],
+    //               [index.lat, index.lng],
+    //             ]}
+    //             color={"red"}
+    //           />
+    //         );
+    //       } else {
+    //         return null;
+    //       }
+    //     });
+    //   }
+    // };
 
-    const handleClose = () =>{
+
+
+    const handleClose = () => {
       this.setState({
         showModal: false,
-        newSwitch: null
-      });
-    }
-
-    const handleAccept = () => { //TODO: this must update DB
-      const array = this.state.switches;
-      array.push(this.state.newSwitch);
-      this.setState({
-        switches: array,
-        showModal: false,
-        newSwitch: null
+        newSwitch: null,
       });
     };
 
-    const handleNameChange = (event) =>{
-      this.setState({
-        newSwitch:{
-          name: event.target.value,
-          position: this.state.newSwitch.position,
-          parent: this.state.newSwitch.parent
-        }
-      })
-    }
+    const handleAccept = () => {
+      //TODO: this must update DB
+      let newSwitch = {
+        nombre: this.state.newName,
+        modelo: this.state.newModel,
+        lat: this.state.newLat,
+        lng: this.state.newLng,
+      };
+      if (this.state.newParent) {
+        const padre = this.state.switches.find(
+          (index) => index.nombre === this.state.newParent
+        );
+        console.log(padre);
+        newSwitch["idPadre"] = padre._id;
+      }
 
-    const handleParentChange = (event) =>{
-      this.setState({
-        newSwitch:{
-          name: this.state.newSwitch.name,
-          position: this.state.newSwitch.position,
-          parent: event.target.value
-        }
-      })
-    }
+      createSwitch(newSwitch);
 
-    let parentOptions = this.state.switches.map(index => {
-      return <option>{index.name}</option>;
+      const array = this.state.switches;
+      array.push(newSwitch);
+      this.setState({
+        switches: array,
+        showModal: false,
+        newSwitch: null,
+      });
+
+      this.updateLines()
+
+    };
+
+    const handleNameChange = (event) => {
+      this.setState({
+        newName: event.target.value,
+      });
+    };
+
+    const handleModelChange = (event) => {
+      this.setState({
+        newModel: event.target.value,
+      });
+    };
+
+    const handleParentChange = (event) => {
+      if (event.target.value === "-") {
+        this.setState({
+          newParent: null,
+        });
+      } else {
+        this.setState({
+          newParent: event.target.value,
+        });
+      }
+    };
+
+    let parentOptions = [<option>-</option>];
+    this.state.switches.map((index) => {
+      return parentOptions.push(<option>{index.nombre}</option>);
     });
 
     return (
@@ -211,9 +251,9 @@ export default class MapDisplay extends Component {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {showSwitches}
-          {drawLines}
+          {this.state.drawLines}
 
-        <MyComponent saveMarkers={this.saveMarkers} />
+          <MyComponent saveMarkers={this.saveMarkers} />
         </MapContainer>
         <Modal show={this.state.showModal} onHide={handleClose}>
           <Modal.Header className="modal-header">
@@ -229,11 +269,17 @@ export default class MapDisplay extends Component {
                   onChange={handleNameChange}
                 />
               </Form.Group>
+              <Form.Group controlId="exampleForm.ControlInput1">
+                <Form.Label>Modelo del switch</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ubiquiti 10"
+                  onChange={handleModelChange}
+                />
+              </Form.Group>
               <Form.Group controlId="exampleForm.ControlSelect1">
                 <Form.Label>Padre de: </Form.Label>
-                <Form.Control as="select"
-                  onChange={handleParentChange}
-                  >
+                <Form.Control as="select" onChange={handleParentChange}>
                   {parentOptions}
                 </Form.Control>
               </Form.Group>

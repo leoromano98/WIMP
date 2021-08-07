@@ -114,16 +114,16 @@ export function createUser(email, usuario, password) {
 
 
 
-export function createSwitch() {
+export function createSwitch(newSwitch) {
   var token = getTokenApi();
 
-  var data = {
-     lat : 111,
-     lng : 222,
-     nombre : "El suich hijo ?????",
-     modelo : "Super Super Sayayin 3",
-     idPadre: "61093c9ad13c2240886c75c2"
-  }
+  // var data = {
+  //    lat : 111,
+  //    lng : 222,
+  //    nombre : "El suich hijo ?????",
+  //    modelo : "Super Super Sayayin 3",
+  //    idPadre: "61093c9ad13c2240886c75c2"
+  // }
   
   const url = `${API_HOST}/switches/crear`;
   console.log(token)
@@ -134,7 +134,7 @@ export function createSwitch() {
       "Content-Type": "application/json",
       'Authorization': "Bearer " + token
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(newSwitch)
   };
 
   
@@ -239,7 +239,6 @@ export function getTopology() {
   return fetch(url, params)
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        console.log(response.json())
         return response.json();
       }
     })
