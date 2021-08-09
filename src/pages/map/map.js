@@ -23,6 +23,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import marker from "../../assets/img/switch.svg";
+import TableComponent from "../../components/Table/Table";
 import { Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import { getTopology, createSwitch } from "../../api/auth";
@@ -119,13 +120,12 @@ export default class MapDisplay extends Component {
         }
       });
       this.setState({
-        drawLines: drawLines
-      })
+        drawLines: drawLines,
+      });
     }
   };
 
   render() {
-
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
     }, 1000);
@@ -143,6 +143,19 @@ export default class MapDisplay extends Component {
         </Marker>
       );
     });
+
+    console.log(this.state.switches);
+
+    if (this.state.switches.length !== 0) {
+
+      var tableData =       JSON.parse(JSON.stringify(this.state.switches))
+      tableData.forEach((element) => {
+        delete element["_id"];
+        delete element["_pid"];
+        delete element["lat"];
+        delete element["lng"];
+      });
+    }
 
     var drawLines = this.state.drawLines;
     // const updateLines = () => {
@@ -170,8 +183,6 @@ export default class MapDisplay extends Component {
     //     });
     //   }
     // };
-
-
 
     const handleClose = () => {
       this.setState({
@@ -206,8 +217,7 @@ export default class MapDisplay extends Component {
         newSwitch: null,
       });
 
-      this.updateLines()
-
+      this.updateLines();
     };
 
     const handleNameChange = (event) => {
@@ -294,6 +304,12 @@ export default class MapDisplay extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+        {this.state.switches.length !== 0 ? (
+          <TableComponent
+            header={Object.keys(tableData[0])}
+            data={tableData}
+          />
+        ) : null}
       </>
     );
   }
