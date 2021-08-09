@@ -42,6 +42,7 @@
 .bm-menu-wrap a {
   color: white;
   text-decoration: none;
+  text-align: center;
 }
 
 .bm-menu-wrap a:hover {
