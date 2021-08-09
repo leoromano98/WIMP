@@ -38,7 +38,7 @@ const TableComponent = (props) => {
   console.log(data);
 
   return (
-    <Table striped hover>
+    <Table striped hover className="table" >
       <thead>
         <tr>{header}</tr>
       </thead>
