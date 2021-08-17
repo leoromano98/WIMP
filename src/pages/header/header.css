@@ -103,7 +103,11 @@
   font-size: large;
   height: 65px;
   vertical-align: middle;
-  margin: 5px;
+}
+
+.account-container {
+  display: flex;
+  align-items: center;
 }
 
 .account-dropdown button svg {

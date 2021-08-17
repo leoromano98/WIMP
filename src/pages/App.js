@@ -12,6 +12,7 @@ import Login from "./login/login";
 import Landing from "./landing/landing";
 import Alerts from "./alerts/alerts";
 import Map from "./map/map";
+import D3 from "./d3/d3";
 
 import { AuthContext } from "../utils/context";
 import { isUserLogedApi, triggerLogin } from "../api/auth";
@@ -23,7 +24,7 @@ function App() {
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
   function callback(params) {
-    if(params){
+    if (params) {
       setUser(isUserLogedApi());
     }
   }
@@ -59,6 +60,9 @@ function App() {
         <Switch>
           {user ? (
             <>
+              <Route path="/d3">
+                <D3 />
+              </Route>
               <Route path="/map">
                 <Map />
               </Route>

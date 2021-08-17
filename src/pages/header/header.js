@@ -69,6 +69,9 @@ const Header = () => {
         <a className="menu-item" href="/alerts">
           Alertas
         </a>
+        <a className="menu-item" href="/d3">
+          D3 Graph
+        </a>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
         </a> */}

@@ -97,7 +97,9 @@ export default class MapDisplay extends Component {
   });
 
   updateLines = () => {
+    console.log("updatelines");
     if (this.state.switches.length !== 0) {
+      console.log();
       const drawLines = this.state.switches.map((index) => {
         if (index._pid) {
           let parentIndex = this.state.switches.findIndex(
@@ -147,8 +149,7 @@ export default class MapDisplay extends Component {
     console.log(this.state.switches);
 
     if (this.state.switches.length !== 0) {
-
-      var tableData =       JSON.parse(JSON.stringify(this.state.switches))
+      var tableData = JSON.parse(JSON.stringify(this.state.switches));
       tableData.forEach((element) => {
         delete element["_id"];
         delete element["_pid"];
@@ -211,13 +212,14 @@ export default class MapDisplay extends Component {
 
       const array = this.state.switches;
       array.push(newSwitch);
-      this.setState({
-        switches: array,
-        showModal: false,
-        newSwitch: null,
-      });
-
-      this.updateLines();
+      this.setState(
+        {
+          switches: array,
+          showModal: false,
+          newSwitch: null,
+        },
+        this.updateLines()
+      );
     };
 
     const handleNameChange = (event) => {
@@ -305,10 +307,7 @@ export default class MapDisplay extends Component {
           </Modal.Footer>
         </Modal>
         {this.state.switches.length !== 0 ? (
-          <TableComponent
-            header={Object.keys(tableData[0])}
-            data={tableData}
-          />
+          <TableComponent header={Object.keys(tableData[0])} data={tableData} />
         ) : null}
       </>
     );
