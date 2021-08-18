@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import "./d3.css";
 import { Graph } from "react-d3-graph";
 import { getTopology } from "../../api/auth";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 // graph payload (with minimalist structure)
-// const data = {
-//   nodes: [{ id: "Harry" }, { id: "Sally" }, { id: "Alice" }],
-//   links: [
-//     { source: "Harry", target: "Sally" },
-//     { source: "Harry", target: "Alice" },
-//   ],
-// };
+const data = {
+  nodes: [{ id: "Harry" }, { id: "Sally" }, { id: "Alice" }],
+  links: [
+    { source: "Harry", target: "Sally" },
+    { source: "Harry", target: "Alice" },
+  ],
+};
 
 // the graph configuration, just override the ones you need
 // const myConfig = {
@@ -113,29 +114,62 @@ const D3 = () => {
   //   setPassword(event.target.value);
   // };
 
-  const [data, setData] = useState({ nodes: {} });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getData() {
     var switches = await getTopology();
-    var newData = { nodes: switches };
+    console.log(switches);
+    var newData = {
+      nodes: switches.map((s) => {
+        if (s.hasOwnProperty("_id")) {
+          s.id = s._id;
+          delete s._id;
+        }
+        return s;
+      }),
+    };
     setData(newData);
-    console.log("Switches: ", data);
   }
 
   useEffect(() => {
-    getData();
-  });
+    let mounted = true;
+    getData().then((items) => {
+      if (mounted) {
+        setData(items);
+      }
+    });
+    return () => (mounted = false);
+  }, []);
+
+  // useEffect(() => {
+  //   if (data.length !== 0 || data !== undefined) {
+  //     setIsLoading(false);
+  //   }
+  // }, [data]);
+
+  const circleLoading = (
+    <div class="overlay">
+      <CircularProgress className="loading-circle" />
+    </div>
+  );
 
   return (
     <div className="login-container">
       <div className="form-container">
-        <Graph
-          id="graph-id" // id is mandatory
-          data={data}
-          config={myConfig}
-          onClickNode={onClickNode}
-          onClickLink={onClickLink}
-        />
+        {console.log("data: ", data, " ", new Date())}
+        {/* {isLoading ? (
+          circleLoading
+        ) : (
+          <Graph
+            id="graph-id" // id is mandatory
+            data={data}
+            config={myConfig}
+            onClickNode={onClickNode}
+            onClickLink={onClickLink}
+          />
+        )} */}
+        <button onClick={getData}>GETDATA </button>
       </div>
     </div>
   );
