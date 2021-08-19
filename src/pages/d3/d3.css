@@ -1,15 +1,13 @@
-.form-container {
-  width: 500px;
-  height: auto;
-  padding: 20px;
-  margin: 0 auto;
-  border: 1px solid lightgrey;
+.graph-container {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.graph-container > div > svg {
+  width: 100% !important;
+  height: 80vh !important;
+  border: 2px solid lightgrey;
   border-radius: 5px;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .input-container {

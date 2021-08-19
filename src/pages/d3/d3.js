@@ -165,7 +165,7 @@ const D3 = () => {
 
   return (
     <div className="login-container">
-      <div className="form-container">
+      <div className="graph-container">
         {console.log("data: ", data, " ", new Date())}
         {isLoading ? (
           circleLoading
@@ -178,7 +178,6 @@ const D3 = () => {
             onClickLink={onClickLink}
           />
         )}
-        <button onClick={getData}>GETDATA </button>
       </div>
     </div>
   );
