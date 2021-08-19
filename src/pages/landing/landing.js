@@ -4,10 +4,22 @@
 // Ejemplos y documentacion de gauge ("velocimetro"):
 // https://www.npmjs.com/package/react-gauge-chart
 
+import React, { useState } from "react";
 import "./landing.css";
 import { Bar, Doughnut } from "react-chartjs-2";
-import GaugeChart from 'react-gauge-chart'
-import { getTokenApi, getTopology, deleteSwitch, modifySwitch, createSwitch, createUser, activateSwitch, deactivateSwitch } from "../../api/auth";
+import GaugeChart from "react-gauge-chart";
+import {
+  getTokenApi,
+  getTopology,
+  deleteSwitch,
+  modifySwitch,
+  createSwitch,
+  createUser,
+  activateSwitch,
+  deactivateSwitch,
+} from "../../api/auth";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Configuracion para graficos:
 const dataBar = {
@@ -77,7 +89,7 @@ const dataDoughnut = {
 };
 
 const optionsBarHorizontal = {
-  indexAxis: 'y',
+  indexAxis: "y",
   // Elements options apply to all of the options unless overridden in a dataset
   // In this case, we are setting the border of each horizontal bar to be 2px wide
   elements: {
@@ -88,32 +100,32 @@ const optionsBarHorizontal = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'right',
+      position: "right",
     },
     title: {
       display: true,
-      text: 'Chart.js Horizontal Bar Chart',
+      text: "Chart.js Horizontal Bar Chart",
     },
   },
 };
 
 const dataGrouped = {
-  labels: ['1', '2', '3', '4', '5', '6'],
+  labels: ["1", "2", "3", "4", "5", "6"],
   datasets: [
     {
-      label: '# of Red Votes',
+      label: "# of Red Votes",
       data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: 'rgb(255, 99, 132)',
+      backgroundColor: "rgb(255, 99, 132)",
     },
     {
-      label: '# of Blue Votes',
+      label: "# of Blue Votes",
       data: [2, 3, 20, 5, 1, 4],
-      backgroundColor: 'rgb(54, 162, 235)',
+      backgroundColor: "rgb(54, 162, 235)",
     },
     {
-      label: '# of Green Votes',
+      label: "# of Green Votes",
       data: [3, 10, 13, 15, 22, 30],
-      backgroundColor: 'rgb(75, 192, 192)',
+      backgroundColor: "rgb(75, 192, 192)",
     },
   ],
 };
@@ -130,11 +142,11 @@ const optionsGrouped = {
   },
 };
 
-
 const Landing = () => {
+  const [startDate, setStartDate] = useState(new Date());
+
   return (
     <>
-    
       <button onClick={getTopology}>TOPOLOGOIA</button>
       <button onClick={modifySwitch}>MODIFICAR</button>
       <button onClick={deleteSwitch}>BORRAR</button>
@@ -142,6 +154,10 @@ const Landing = () => {
       <button onClick={createUser}>CREAR USUARIO</button>
       <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
       <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
+      <DatePicker
+        selected={startDate}
+        onChange={(date) => setStartDate(date)}
+      />
       <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBar} />
@@ -168,8 +184,6 @@ const Landing = () => {
           <GaugeChart id="gauge-chart2" />
         </div>
       </div>
-
-
     </>
   );
 };
