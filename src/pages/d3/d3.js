@@ -129,24 +129,26 @@ const D3 = () => {
         return s;
       }),
     };
-    setData(newData);
+    if (newData !== undefined) {
+      setData(newData);
+    }
   }
 
   useEffect(() => {
     let mounted = true;
     getData().then((items) => {
-      if (mounted) {
+      if (mounted && items !== undefined) {
         setData(items);
       }
     });
     return () => (mounted = false);
   }, []);
 
-  // useEffect(() => {
-  //   if (data.length !== 0 || data !== undefined) {
-  //     setIsLoading(false);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data.length !== 0 || data !== undefined) {
+      setIsLoading(false);
+    }
+  }, [data]);
 
   const circleLoading = (
     <div class="overlay">
@@ -158,7 +160,7 @@ const D3 = () => {
     <div className="login-container">
       <div className="form-container">
         {console.log("data: ", data, " ", new Date())}
-        {/* {isLoading ? (
+        {isLoading ? (
           circleLoading
         ) : (
           <Graph
@@ -168,7 +170,7 @@ const D3 = () => {
             onClickNode={onClickNode}
             onClickLink={onClickLink}
           />
-        )} */}
+        )}
         <button onClick={getData}>GETDATA </button>
       </div>
     </div>
