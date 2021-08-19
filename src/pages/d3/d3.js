@@ -118,18 +118,25 @@ const D3 = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   async function getData() {
-    var switches = await getTopology();
-    console.log(switches);
-    var newData = {
-      nodes: switches.map((s) => {
-        if (s.hasOwnProperty("_id")) {
-          s.id = s._id;
-          delete s._id;
+    var newNodes = await getTopology();
+    newNodes.map((s) => {
+      if (s.hasOwnProperty("_id")) {
+        s.id = s._id;
+        delete s._id;
+      }
+      return s;
+    });
+    if (newNodes !== undefined) {
+      var newLinks = [];
+      newNodes.forEach((index) => {
+        if (index._pid !== undefined) {
+          newLinks.push({ source: index.id, target: index._pid });
         }
-        return s;
-      }),
-    };
-    if (newData !== undefined) {
+      });
+      var newData = {
+        nodes: newNodes,
+        links: newLinks,
+      };
       setData(newData);
     }
   }
