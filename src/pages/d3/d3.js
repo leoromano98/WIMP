@@ -28,7 +28,7 @@ const data = {
 
 const myConfig = {
   automaticRearrangeAfterDropNode: false,
-  collapsible: false,
+  collapsible: true,
   directed: false,
   focusAnimationDuration: 0.75,
   focusZoom: 1,
@@ -36,10 +36,10 @@ const myConfig = {
   height: 400,
   highlightDegree: 1,
   highlightOpacity: 1,
-  linkHighlightBehavior: false,
-  maxZoom: 8,
-  minZoom: 0.1,
-  nodeHighlightBehavior: false,
+  linkHighlightBehavior: true,
+  maxZoom: 5,
+  minZoom: 0.5,
+  nodeHighlightBehavior: true,
   panAndZoom: false,
   staticGraph: false,
   staticGraphWithDragAndDrop: false,
@@ -54,14 +54,14 @@ const myConfig = {
   node: {
     color: "#ff0000",
     fontColor: "black",
-    fontSize: 8,
+    fontSize: 12,
     fontWeight: "normal",
     highlightColor: "SAME",
-    highlightFontSize: 8,
-    highlightFontWeight: "normal",
+    highlightFontSize: 16,
+    highlightFontWeight: "true",
     highlightStrokeColor: "SAME",
     highlightStrokeWidth: "SAME",
-    labelProperty: "id",
+    labelProperty: "nombre",
     mouseCursor: "pointer",
     opacity: 1,
     renderLabel: true,
@@ -119,6 +119,7 @@ const D3 = () => {
 
   async function getData() {
     var newNodes = await getTopology();
+    while (newNodes === undefined) {}
     newNodes.map((s) => {
       if (s.hasOwnProperty("_id")) {
         s.id = s._id;
