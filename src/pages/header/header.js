@@ -60,9 +60,9 @@ const Header = () => {
         <a className="menu-item" href="/landing">
           Home
         </a>
-        <a className="menu-item" href="/login">
+        {/* <a className="menu-item" href="/login">
           Login
-        </a>
+        </a> */}
         <a className="menu-item" href="/map">
           Mapa
         </a>
