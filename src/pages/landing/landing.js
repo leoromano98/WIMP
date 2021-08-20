@@ -17,6 +17,7 @@ import {
   createUser,
   activateSwitch,
   deactivateSwitch,
+  handleSendMail,
 } from "../../api/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -154,6 +155,7 @@ const Landing = () => {
       <button onClick={createUser}>CREAR USUARIO</button>
       <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
       <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
+      <button onClick={handleSendMail}>ENVIAR MAIL</button>
       <DatePicker
         selected={startDate}
         onChange={(date) => setStartDate(date)}
