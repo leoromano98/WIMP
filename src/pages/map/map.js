@@ -105,18 +105,20 @@ export default class MapDisplay extends Component {
           let parentIndex = this.state.switches.findIndex(
             (i) => index._pid === i._id
           );
-          return (
-            <Polyline
-              positions={[
-                [
-                  this.state.switches[parentIndex].lat,
-                  this.state.switches[parentIndex].lng,
-                ],
-                [index.lat, index.lng],
-              ]}
-              color={"red"}
-            />
-          );
+          if (parentIndex > 0) {
+            return (
+              <Polyline
+                positions={[
+                  [
+                    this.state.switches[parentIndex].lat,
+                    this.state.switches[parentIndex].lng,
+                  ],
+                  [index.lat, index.lng],
+                ]}
+                color={"red"}
+              />
+            );
+          }
         } else {
           return null;
         }
