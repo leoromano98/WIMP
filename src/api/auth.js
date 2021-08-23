@@ -339,26 +339,34 @@ function isExpired(token) {
   return false;
 }
 
-export function handleSendMail(e) {
-  e.preventDefault();
+// export function handleSend(e) {
+//   e.preventDefault();
 
-  console.log("handleSendMail");
+//   console.log("handleSendMail");
 
-  axios
-    .get("/api/form")
-    .then((res) => {
-      console.log(res);
-    })
-    .catch(() => {
-      console.log("F");
-    });
+//   axios
+//     .get("http://localhost:3001/api/form")
+//     .then((res) => {
+//       console.log("[GET]", res);
+//     })
+//     .catch(() => {
+//       console.log("F");
+//     });
 
-  // axios
-  //   .post("/api/form", "data")
-  //   .then((res) => {
-  //     console.log(res);
-  //   })
-  //   .catch(() => {
-  //     console.log("F");
-  //   });
+//   axios
+//     .post("http://localhost:3001/api/form", "data")
+//     .then((res) => {
+//       console.log("[POST]", res);
+//     })
+//     .catch(() => {
+//       console.log("F");
+//     });
+// }
+
+export async function handleSend(e) {
+  try {
+    await axios.post("http://localhost:4000/send_mail", "PUTO EL QUE LEEEEE");
+  } catch (error) {
+    console.error("[handleSend]:", error);
+  }
 }
