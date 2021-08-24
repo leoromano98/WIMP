@@ -1,8 +1,12 @@
 var nodemailer = require("nodemailer");
 var express = require("express");
+const bodyParser = require("body-parser");
 var app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.post("/send-email", (req, res) => {
+  console.log("Got body:", req.body);
   var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -17,7 +21,7 @@ app.post("/send-email", (req, res) => {
     from: "lr290698@gmail.com",
     to: "lr290698@gmail.com",
     subject: "Enviado desde nodemailer",
-    text: "Puto el que lee",
+    text: req.body.text,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {

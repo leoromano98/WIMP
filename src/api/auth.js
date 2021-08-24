@@ -365,7 +365,9 @@ function isExpired(token) {
 
 export async function handleSend(e) {
   try {
-    await axios.post("http://localhost:4000/send_mail", "PUTO EL QUE LEEEEE");
+    await axios.post("http://localhost:3000/send-email", {
+      text: "PUTO EL QUE LEEEEE",
+    });
   } catch (error) {
     console.error("[handleSend]:", error);
   }
