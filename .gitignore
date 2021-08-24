@@ -8,6 +8,11 @@
 /mail/.pnp
 /mail/.pnp.js
 
+#mail
+mail/node_modules
+/mail/.pnp
+mail/.pnp.js
+
 # testing
 /coverage
 
