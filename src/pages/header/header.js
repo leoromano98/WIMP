@@ -26,7 +26,6 @@ const Header = () => {
 
   return (
     <>
-      a
       <div className="header">
         <div className="logo-container">
           <img src={logo} alt="logo" className="logo"></img>
