@@ -111,15 +111,14 @@ export function createSwitch(newSwitch) {
   var token = getTokenApi();
 
   // var data = {
-  //    lat : 111,
-  //    lng : 222,
-  //    nombre : "El suich hijo ?????",
-  //    modelo : "Super Super Sayayin 3",
-  //    idPadre: "61093c9ad13c2240886c75c2"
-  // }
+  //   lat: 111,
+  //   lng: 222,
+  //   nombre: "Test",
+  //   modelo: "Test",
+  // };
 
   const url = `${API_HOST}/switches/crear`;
-  console.log(token);
+  console.log(newSwitch);
 
   const params = {
     method: "POST",

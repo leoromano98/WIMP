@@ -105,7 +105,7 @@ export default class MapDisplay extends Component {
           let parentIndex = this.state.switches.findIndex(
             (i) => index._pid === i._id
           );
-          if (parentIndex > 0) {
+          if ((parentIndex) => 0) {
             return (
               <Polyline
                 positions={[
@@ -195,7 +195,6 @@ export default class MapDisplay extends Component {
     };
 
     const handleAccept = () => {
-      //TODO: this must update DB
       let newSwitch = {
         nombre: this.state.newName,
         modelo: this.state.newModel,
@@ -208,6 +207,7 @@ export default class MapDisplay extends Component {
         );
         console.log(padre);
         newSwitch["idPadre"] = padre._id;
+        newSwitch["_pid"] = padre._id;
       }
 
       createSwitch(newSwitch);
@@ -279,7 +279,7 @@ export default class MapDisplay extends Component {
                 <Form.Label>Nombre del switch</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Switch 10 (el diego)"
+                  placeholder="Switch 10"
                   onChange={handleNameChange}
                 />
               </Form.Group>
