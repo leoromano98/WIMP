@@ -94,11 +94,11 @@ const myConfig = {
 };
 
 const onClickNode = function (nodeId) {
-  window.alert(`Clicked node ${nodeId}`);
+  console.log(`Clicked node ${nodeId}`);
 };
 
 const onClickLink = function (source, target) {
-  window.alert(`Clicked link between ${source} and ${target}`);
+  console.log(`Clicked link between ${source} and ${target}`);
 };
 
 const D3 = () => {

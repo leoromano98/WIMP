@@ -18,15 +18,13 @@ const TableComponent = (props) => {
   const dataTable = () => {
     props.data.forEach((index) => {
       const values = Object.entries(index);
-      console.log("index", index);
-
       data.push(
         <tr>
           {props.header.map((head) => {
-            const find = values.find((element) => element[0] === head.key);
-            console.log(find);
+            const find = values.find((element) => element[0] === head.key); //Busco coincidencias entre header.key y el key de los datos
             if (find) {
               if (typeof find[1] === "boolean") {
+                //Si es dato booleano, mostrar activo o inactivo
                 if (find[1]) {
                   return <td>Activo</td>;
                 } else {
@@ -35,6 +33,9 @@ const TableComponent = (props) => {
               } else {
                 return <td>{find ? find[1] : null}</td>;
               }
+            } else {
+              //Si no hay coincidencias, es porque no hay dato para mostrar ENTONCES es un boton
+              return <button onClick={props.btnClick}>Mostrar</button>;
             }
           })}
         </tr>

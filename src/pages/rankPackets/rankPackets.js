@@ -25,6 +25,7 @@ import {
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 // Configuracion para graficos:
 const dataBar = {
@@ -168,6 +169,9 @@ const tableHeader = [
 
 const RankPackets = () => {
   const [tableData, setTableData] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState(null);
+  const toggleModal = () => setOpenModal(!openModal);
 
   useEffect(() => {
     async function getData() {
@@ -183,30 +187,39 @@ const RankPackets = () => {
     getData();
   }, []);
 
+  const handleTableButtonClick = (event) => {
+    toggleModal();
+    const MAC = event.target.parentElement.cells[1].outerText;
+    const total = event.target.parentElement.cells[2].outerText;
+    setModalMessage(MAC);
+    console.log("MAC:" + MAC + "  total: ", total);
+  };
+
+  const infoModal = (
+    <Modal isOpen={openModal} toggle={toggleModal}>
+      <ModalHeader toggle={toggleModal}>Crear Usuario</ModalHeader>
+      <ModalBody>{modalMessage}</ModalBody>
+      <ModalFooter className="modal-footer-container">
+        <div className="btn-container">
+          <Button color="success" onClick={toggleModal}>
+            Aceptar
+          </Button>
+        </div>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <>
       {tableData ? (
-        <TableComponent header={tableHeader} data={tableData} />
+        <TableComponent
+          header={tableHeader}
+          data={tableData}
+          btnClick={handleTableButtonClick}
+        />
       ) : null}
+      {infoModal}
 
-      <button onClick={getTopology}>TOPOLOGOIA</button>
-      <button onClick={modifySwitch}>MODIFICAR</button>
-      <button onClick={deleteSwitch}>BORRAR</button>
-      <button onClick={createSwitch}>CREAR SWITCH</button>
-      <button onClick={createUser}>CREAR USUARIO</button>
-      <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
-      <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
-      <button onClick={handleSend}>ENVIAR MAIL</button>
-      <button onClick={getRankingPacketsByMAC}>GET PAQUETES</button>
-      <button onClick={getRankingPacketsByAppProtocol}>
-        GET PAQUETES PROT APP
-      </button>
-      <button onClick={getRankingPacketsByTransportProtocol}>
-        GET PAQUETES PROT TRANSP
-      </button>
-      <button onClick={getRankingPacketsByNetworkProtocol}>
-        GET PAQUETES PROT RED
-      </button>
       <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBar} />
