@@ -72,6 +72,9 @@ const Header = () => {
         <a className="menu-item" href="/d3">
           D3 Graph
         </a>
+        <a className="menu-item" href="/rankpackets">
+          Ranking paquetes
+        </a>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
         </a> */}

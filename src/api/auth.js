@@ -371,3 +371,114 @@ export async function handleSend(e) {
     console.error("[handleSend]:", error);
   }
 }
+
+export async function getRankingPacketsByMAC(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/srcmac-emision`;
+
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getRankingPacketsByAppProtocol(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/protoapp-emision`;
+
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response.json());
+        return response;
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getRankingPacketsByTransportProtocol(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/prototp-emision`;
+
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response.json());
+        return response;
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getRankingPacketsByNetworkProtocol(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/protored-emision`;
+
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response.json());
+        return response;
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}

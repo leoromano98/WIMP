@@ -1,13 +1,3 @@
-// import "./map.css";
-
-// const Map = () => {
-
-//   return (
-//     <h1>LOGIN PAGE!</h1>
-//   );
-// };
-
-// export default Map;
 import React, { Component } from "react";
 import { Map, Leaflet } from "leaflet";
 import L from "leaflet";
@@ -160,6 +150,13 @@ export default class MapDisplay extends Component {
       });
     }
 
+    const header = [
+      { key: "estado", text: "Estado" },
+      { key: "modelo", text: "Modelo" },
+      { key: "nombre", text: "Nombre" },
+      { key: "fecha", text: "Fecha" },
+    ];
+
     var drawLines = this.state.drawLines;
     // const updateLines = () => {
     //   if (this.state.switches.length !== 0) {
@@ -309,7 +306,7 @@ export default class MapDisplay extends Component {
           </Modal.Footer>
         </Modal>
         {this.state.switches.length !== 0 ? (
-          <TableComponent header={Object.keys(tableData[0])} data={tableData} />
+          <TableComponent header={header} data={tableData} />
         ) : null}
       </>
     );

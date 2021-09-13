@@ -13,6 +13,7 @@ import Landing from "./landing/landing";
 import Alerts from "./alerts/alerts";
 import Map from "./map/map";
 import D3 from "./d3/d3";
+import RankPackets from "./rankPackets/rankPackets";
 
 import { AuthContext } from "../utils/context";
 import { isUserLogedApi, triggerLogin } from "../api/auth";
@@ -71,6 +72,9 @@ function App() {
               </Route>
               <Route path="/alerts">
                 <Alerts />
+              </Route>
+              <Route path="/rankpackets">
+                <RankPackets />
               </Route>
               <Route exact path="/login">
                 <Redirect to="/" />

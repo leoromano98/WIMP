@@ -4,8 +4,8 @@
 // Ejemplos y documentacion de gauge ("velocimetro"):
 // https://www.npmjs.com/package/react-gauge-chart
 
-import React, { useState } from "react";
-import "./landing.css";
+import React, { useEffect, useState, setState } from "react";
+import "./rankPackets.css";
 import { Bar, Doughnut } from "react-chartjs-2";
 import GaugeChart from "react-gauge-chart";
 import {
@@ -23,8 +23,8 @@ import {
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
 } from "../../api/auth";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import TableComponent from "../../components/Table/Table";
+import { SettingsSharp } from "@material-ui/icons";
 
 // Configuracion para graficos:
 const dataBar = {
@@ -147,11 +147,48 @@ const optionsGrouped = {
   },
 };
 
-const Landing = () => {
-  const [startDate, setStartDate] = useState(new Date());
+const tableHeader = [
+  {
+    key: "index",
+    text: "#",
+  },
+  {
+    key: "_id",
+    text: "MAC Origen",
+  },
+  {
+    key: "total",
+    text: "Cantidad de paquetes",
+  },
+  {
+    key: "button",
+    text: "Informacion",
+  },
+];
+
+const RankPackets = () => {
+  const [tableData, setTableData] = useState();
+
+  useEffect(() => {
+    async function getData() {
+      var response = await getRankingPacketsByMAC();
+      var i = 1;
+      response.forEach((index) => {
+        index["index"] = i;
+        i++;
+      });
+      console.log("response", response);
+      setTableData(response);
+    }
+    getData();
+  }, []);
 
   return (
     <>
+      {tableData ? (
+        <TableComponent header={tableHeader} data={tableData} />
+      ) : null}
+
       <button onClick={getTopology}>TOPOLOGOIA</button>
       <button onClick={modifySwitch}>MODIFICAR</button>
       <button onClick={deleteSwitch}>BORRAR</button>
@@ -170,10 +207,6 @@ const Landing = () => {
       <button onClick={getRankingPacketsByNetworkProtocol}>
         GET PAQUETES PROT RED
       </button>
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-      />
       <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBar} />
@@ -204,4 +237,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default RankPackets;
