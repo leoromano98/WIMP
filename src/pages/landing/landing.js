@@ -18,7 +18,7 @@ import {
   activateSwitch,
   deactivateSwitch,
   handleSend,
-  getRankingPacketsByMAC,
+  getRankingPackets,
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
@@ -160,7 +160,7 @@ const Landing = () => {
       <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
       <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
       <button onClick={handleSend}>ENVIAR MAIL</button>
-      <button onClick={getRankingPacketsByMAC}>GET PAQUETES</button>
+      <button onClick={getRankingPackets}>GET PAQUETES</button>
       <button onClick={getRankingPacketsByAppProtocol}>
         GET PAQUETES PROT APP
       </button>

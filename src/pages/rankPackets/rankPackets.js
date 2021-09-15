@@ -18,42 +18,18 @@ import {
   activateSwitch,
   deactivateSwitch,
   handleSend,
-  getRankingPacketsByMAC,
+  getRankingPackets,
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
+  getPacketsByMAC,
+  getPacketsByIP
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 // Configuracion para graficos:
-const dataBar = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
 
 const optionsBar = {
   scales: {
@@ -67,32 +43,6 @@ const optionsBar = {
   },
 };
 
-const dataDoughnut = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
 
 const optionsBarHorizontal = {
   indexAxis: "y",
@@ -173,9 +123,90 @@ const RankPackets = () => {
   const [modalMessage, setModalMessage] = useState(null);
   const toggleModal = () => setOpenModal(!openModal);
 
+  const [dataBar, setDataBar] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  })
+
+  const [dataDoughnut, setDataDoughnut] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  })
+
+  const [dataIp, setDataIp] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  })
+
   useEffect(() => {
     async function getData() {
-      var response = await getRankingPacketsByMAC();
+      var response = await getRankingPackets();
       var i = 1;
       response.forEach((index) => {
         index["index"] = i;
@@ -184,7 +215,86 @@ const RankPackets = () => {
       console.log("response", response);
       setTableData(response);
     }
+
+    async function getProtocolData() {
+      var response = await getRankingPacketsByAppProtocol();
+      var i = 1;
+      response.forEach((index) => {
+        console.log(dataBar)
+        var newData = dataBar
+        newData.datasets[0].data.push(index.total);
+        newData.labels.push(index._id);
+        setDataBar(newData)
+        index["index"] = i;
+        i++;
+      });
+    }
+
+    async function getTransportData() {
+      var response = await getRankingPacketsByTransportProtocol();
+      console.log("response2", response);
+      var i = 1;
+      response.forEach((index) => {
+        console.log(dataDoughnut)
+        var newData = dataDoughnut
+        newData.datasets[0].data.push(index.total);
+        newData.labels.push(index._id);
+        setDataDoughnut(newData)
+        index["index"] = i;
+        i++;
+      });
+    }
+
+    async function getNetworkData() {
+      var response = await getRankingPacketsByNetworkProtocol();
+      console.log("response metwork", response);
+      var i = 1;
+      response.forEach((index) => {
+        var newData = dataIp
+        newData.datasets[0].data.push(index.total);
+        newData.labels.push(index._id);
+        setDataIp(newData)
+        index["index"] = i;
+        i++;
+      });
+      console.log('dataip', dataIp)
+    }
+
+    async function getByMAC() {
+      var response = await getPacketsByMAC();
+      // console.log("BY MAC", response);
+      // var i = 1;
+      // response.forEach((index) => {
+      //   var newData = dataIp
+      //   newData.datasets[0].data.push(index.total);
+      //   newData.labels.push(index._id);
+      //   setDataIp(newData)
+      //   index["index"] = i;
+      //   i++;
+      // });
+      // console.log('dataip', dataIp)
+    }
+
+    async function getByIPC() {
+      var response = await getPacketsByIP();
+      console.log("BY ip", response);
+      // var i = 1;
+      // response.forEach((index) => {
+      //   var newData = dataIp
+      //   newData.datasets[0].data.push(index.total);
+      //   newData.labels.push(index._id);
+      //   setDataIp(newData)
+      //   index["index"] = i;
+      //   i++;
+      // });
+      // console.log('dataip', dataIp)
+    }
+    getByIPC()
+    getTransportData()
+    getProtocolData()
     getData();
+    getNetworkData();
+    getByMAC()
   }, []);
 
   const handleTableButtonClick = (event) => {
@@ -222,25 +332,33 @@ const RankPackets = () => {
 
       <div className="chart-row-container">
         <div className="bar-container">
-          <Bar data={dataBar} options={optionsBar} />
+          {dataBar.datasets[0].data.length !== 0 ?
+            <Bar data={dataBar} options={optionsBar} /> : null
+          }
         </div>
         <div className="doughnut-container">
-          <Doughnut data={dataDoughnut} />
+          {dataDoughnut.datasets[0].data.length !== 0 ?
+            <Doughnut data={dataDoughnut} /> : null
+          }
         </div>
       </div>
 
-      <div className="chart-row-container">
+
+
+      {/* <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBarHorizontal} />
         </div>
         <div className="doughnut-container">
           <Bar data={dataGrouped} options={optionsGrouped} />
         </div>
-      </div>
+      </div> */}
 
       <div className="chart-row-container">
         <div className="gauge-container">
-          <GaugeChart id="gauge-chart1" />
+          {dataIp.datasets[0].data.length !== 0 ?
+            <Doughnut data={dataIp} options={optionsBar} /> : null
+          }
         </div>
         <div className="gauge-container">
           <GaugeChart id="gauge-chart2" />

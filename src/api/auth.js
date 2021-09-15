@@ -372,7 +372,7 @@ export async function handleSend(e) {
   }
 }
 
-export async function getRankingPacketsByMAC(MAC) {
+export async function getRankingPackets(MAC) {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/srcmac-emision`;
@@ -415,8 +415,7 @@ export async function getRankingPacketsByAppProtocol(MAC) {
   return fetch(url, params)
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        console.log(response.json());
-        return response;
+        return response.json();
       }
     })
     .then((result) => {
@@ -443,8 +442,7 @@ export async function getRankingPacketsByTransportProtocol(MAC) {
   return fetch(url, params)
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        console.log(response.json());
-        return response;
+        return response.json();
       }
     })
     .then((result) => {
@@ -458,7 +456,7 @@ export async function getRankingPacketsByTransportProtocol(MAC) {
 export async function getRankingPacketsByNetworkProtocol(MAC) {
   var token = getTokenApi();
 
-  const url = `${API_HOST}/paquetes/protored-emision`;
+  const url = `${API_HOST}/paquetes/protoip-emision`;
 
   const params = {
     method: "GET",
@@ -471,8 +469,68 @@ export async function getRankingPacketsByNetworkProtocol(MAC) {
   return fetch(url, params)
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        console.log(response.json());
-        return response;
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getPacketsByMAC(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/srcmac-detalle`;
+  const body={
+    srcMac: '60:6d:c7:df:17:8b'
+  }
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: body
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        // return response.json();
+        console.log('BY MAC', response.json())
+      }
+    })
+    .then((result) => {
+      console.log('BY MAC', result)
+
+      return result;
+    })
+    .catch((err) => {
+      console.log('BY MAC', err)
+
+      return err;
+    });
+}
+
+export async function getPacketsByIP(MAC) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/paquetes/srcip-emision`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
       }
     })
     .then((result) => {
