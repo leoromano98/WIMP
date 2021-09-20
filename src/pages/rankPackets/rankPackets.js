@@ -23,11 +23,12 @@ import {
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
   getPacketsByMAC,
-  getPacketsByIP
+  getPacketsByIP,
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 // Configuracion para graficos:
 
@@ -42,7 +43,6 @@ const optionsBar = {
     ],
   },
 };
-
 
 const optionsBarHorizontal = {
   indexAxis: "y",
@@ -121,13 +121,14 @@ const RankPackets = () => {
   const [tableData, setTableData] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
   const toggleModal = () => setOpenModal(!openModal);
 
   const [dataBar, setDataBar] = useState({
     labels: [],
     datasets: [
       {
-        label: "# of Votes",
+        label: "Cantidad de paquetes por protocolo",
         data: [],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -148,7 +149,7 @@ const RankPackets = () => {
         borderWidth: 1,
       },
     ],
-  })
+  });
 
   const [dataDoughnut, setDataDoughnut] = useState({
     labels: [],
@@ -175,7 +176,7 @@ const RankPackets = () => {
         borderWidth: 1,
       },
     ],
-  })
+  });
 
   const [dataIp, setDataIp] = useState({
     labels: [],
@@ -202,7 +203,7 @@ const RankPackets = () => {
         borderWidth: 1,
       },
     ],
-  })
+  });
 
   useEffect(() => {
     async function getData() {
@@ -212,7 +213,6 @@ const RankPackets = () => {
         index["index"] = i;
         i++;
       });
-      console.log("response", response);
       setTableData(response);
     }
 
@@ -220,11 +220,10 @@ const RankPackets = () => {
       var response = await getRankingPacketsByAppProtocol();
       var i = 1;
       response.forEach((index) => {
-        console.log(dataBar)
-        var newData = dataBar
+        var newData = dataBar;
         newData.datasets[0].data.push(index.total);
         newData.labels.push(index._id);
-        setDataBar(newData)
+        setDataBar(newData);
         index["index"] = i;
         i++;
       });
@@ -235,11 +234,10 @@ const RankPackets = () => {
       console.log("response2", response);
       var i = 1;
       response.forEach((index) => {
-        console.log(dataDoughnut)
-        var newData = dataDoughnut
+        var newData = dataDoughnut;
         newData.datasets[0].data.push(index.total);
         newData.labels.push(index._id);
-        setDataDoughnut(newData)
+        setDataDoughnut(newData);
         index["index"] = i;
         i++;
       });
@@ -250,14 +248,14 @@ const RankPackets = () => {
       console.log("response metwork", response);
       var i = 1;
       response.forEach((index) => {
-        var newData = dataIp
+        var newData = dataIp;
         newData.datasets[0].data.push(index.total);
         newData.labels.push(index._id);
-        setDataIp(newData)
+        setDataIp(newData);
         index["index"] = i;
         i++;
       });
-      console.log('dataip', dataIp)
+      console.log("dataip", dataIp);
     }
 
     async function getByMAC() {
@@ -289,12 +287,20 @@ const RankPackets = () => {
       // });
       // console.log('dataip', dataIp)
     }
-    getByIPC()
-    getTransportData()
-    getProtocolData()
+    getByIPC();
+    getTransportData();
+    getProtocolData();
     getData();
     getNetworkData();
-    getByMAC()
+    // getByMAC();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log("This will run after 1 second!");
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleTableButtonClick = (event) => {
@@ -321,31 +327,38 @@ const RankPackets = () => {
 
   return (
     <>
-      {tableData ? (
-        <TableComponent
-          header={tableHeader}
-          data={tableData}
-          btnClick={handleTableButtonClick}
-        />
-      ) : null}
-      {infoModal}
-
-      <div className="chart-row-container">
-        <div className="bar-container">
-          {dataBar.datasets[0].data.length !== 0 ?
-            <Bar data={dataBar} options={optionsBar} /> : null
-          }
+      {loading ? (
+        <div class="overlay">
+          <CircularProgress className="loading-circle" />
         </div>
-        <div className="doughnut-container">
-          {dataDoughnut.datasets[0].data.length !== 0 ?
-            <Doughnut data={dataDoughnut} /> : null
-          }
-        </div>
-      </div>
+      ) : (
+        <>
+          {tableData ? (
+            <TableComponent
+              header={tableHeader}
+              data={tableData}
+              btnClick={handleTableButtonClick}
+            />
+          ) : (
+            <CircularProgress className="loading-circle" />
+          )}
+          {infoModal}
+          <div className="chart-row-container">
+            <div className="bar-container">
+              <h5>Cantidad de paquetes por protocolo</h5>
+              <Bar data={dataBar} options={optionsBar} />
+            </div>
+            <div className="doughnut-container">
+              <h5>Cantidad de paquetes por protocolo de transporte</h5>
+              <Doughnut data={dataDoughnut} />
+            </div>
+            <div className="gauge-container">
+              <h5>Cantidad de paquetes IP</h5>
+              <Doughnut data={dataIp} options={optionsBar} />
+            </div>
+          </div>
 
-
-
-      {/* <div className="chart-row-container">
+          {/* <div className="chart-row-container">
         <div className="bar-container">
           <Bar data={dataBar} options={optionsBarHorizontal} />
         </div>
@@ -354,16 +367,13 @@ const RankPackets = () => {
         </div>
       </div> */}
 
-      <div className="chart-row-container">
-        <div className="gauge-container">
-          {dataIp.datasets[0].data.length !== 0 ?
-            <Doughnut data={dataIp} options={optionsBar} /> : null
-          }
-        </div>
-        <div className="gauge-container">
-          <GaugeChart id="gauge-chart2" />
-        </div>
-      </div>
+          <div className="chart-row-container">
+            <div className="gauge-container">
+              <GaugeChart id="gauge-chart2" />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

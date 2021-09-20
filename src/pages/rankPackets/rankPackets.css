@@ -1,18 +1,30 @@
-.bar-container{
-    width: 40%;
-    display: flex;
-    align-items: center;
+.bar-container,
+.doughnut-container,
+.gauge-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
-.doughnut-container{
-    width: 30%;
-    display: flex;
-    align-items: center;
+.bar-container {
+  /* width: 40%; */
 }
 
-.chart-row-container{
-    width: 70%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
+.doughnut-container {
+  /* width: 30%; */
+}
+
+.chart-row-container {
+  width: 90%;
+  margin: 45px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-row-container > div {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 400px;
+  padding: 10px;
 }

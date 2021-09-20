@@ -29,6 +29,27 @@
   color: #61dafb;
 }
 
+.overlay {
+  opacity: 0.5;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.loading-circle {
+  width: 110px !important;
+  display: flex !important;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 100% !important;
+  margin: 0 auto;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
