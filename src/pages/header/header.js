@@ -11,11 +11,13 @@ import {
 } from "reactstrap";
 import { isUserLogedApi, logoutApi } from "../../api/auth";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
+import { UncontrolledAlert } from "reactstrap";
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const [alarms, setAlarms] = useState([]);
 
   function showSettings(event) {
     event.preventDefault();
@@ -23,6 +25,19 @@ const Header = () => {
 
   var user = isUserLogedApi();
   var username = user ? user.username : "Invitado";
+
+  const showAlarm = () => {
+    const newAlarm = (
+      <UncontrolledAlert color="danger" className="alert-style">
+        I am an alert and I can be dismissed!
+      </UncontrolledAlert>
+    );
+    setAlarms([...alarms, newAlarm]);
+  };
+
+  var showAlarms = alarms.map((index) => {
+    return <>{index}</>;
+  });
 
   return (
     <>
@@ -56,6 +71,7 @@ const Header = () => {
           </Dropdown>
         </div>
       </div>
+      <div class="alarms-container">{showAlarms}</div>
       <Menu id={"sidebar"} className={"my-menu"}>
         <a className="menu-item" href="/landing">
           Home
@@ -75,6 +91,9 @@ const Header = () => {
         <a className="menu-item" href="/rankpackets">
           Ranking paquetes
         </a>
+        <div className="menu-item test" onClick={showAlarm}>
+          Test alarma
+        </div>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
         </a> */}

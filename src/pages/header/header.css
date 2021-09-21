@@ -113,3 +113,27 @@
 .account-dropdown button svg {
   font-size: 52px;
 }
+
+.alarms-container {
+  display: flex;
+  position: absolute;
+  right: 0;
+  flex-direction: column;
+}
+
+.alert {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  width: 500px;
+  height: 50px;
+  line-height: 50px;
+  margin: 10px;
+  float: right;
+  padding: 0 20px !important;
+}
+
+.test {
+  text-align: center;
+  cursor: pointer;
+}
