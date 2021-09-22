@@ -116,7 +116,7 @@
 
 .alarms-container {
   display: flex;
-  position: absolute;
+  position: fixed;
   right: 0;
   flex-direction: column;
 }

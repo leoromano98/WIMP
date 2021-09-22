@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import "./login.css";
-import { getTokenApi, signInApi, setTokenApi, createUser } from "../../api/auth";
+import {
+  getTokenApi,
+  signInApi,
+  setTokenApi,
+  createUser,
+} from "../../api/auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   InputGroup,
@@ -115,24 +120,24 @@ const Login = ({ parentCallback }) => {
     if (inputsError) {
       console.log("inputs error!");
     }
-    if(createSuccess){
-      console.log('created new user!')
+    if (createSuccess) {
+      console.log("created new user!");
     }
   }, [userError, emailError, passwordError, inputsError]);
 
   const registrationClickHandler = () => {
     if (validateForm()) {
       var response = createUser(newEmail, newUser, newPassword);
-      console.log(response)
-      if(response.ok){
-        alert('usuario creado!');
+      console.log(response);
+      if (response.ok) {
+        alert("usuario creado!");
         setCreateSuccess(true);
       }
     }
   };
 
   const loginEnterHandler = (event) => {
-    if (event.key === "Enter") {
+    if (event?.key === "Enter") {
       loginClickHandler();
     }
   };
@@ -176,7 +181,7 @@ const Login = ({ parentCallback }) => {
 
   const toggleNested = () => {
     setNestedModal(!nestedModal);
-  }
+  };
 
   let circleLoading = null;
   if (loading) {
@@ -234,13 +239,14 @@ const Login = ({ parentCallback }) => {
           </FormGroup>
         </Form>
         <Modal isOpen={createSuccess} toggle={toggleNested}>
-            <ModalHeader>Nested Modal title</ModalHeader>
-            <ModalBody>Stuff and things</ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={toggleNested}>Done</Button>{' '}
-              
-            </ModalFooter>
-          </Modal>
+          <ModalHeader>Nested Modal title</ModalHeader>
+          <ModalBody>Stuff and things</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={toggleNested}>
+              Done
+            </Button>{" "}
+          </ModalFooter>
+        </Modal>
       </ModalBody>
       <ModalFooter className="modal-footer-container">
         {inputsError ? (

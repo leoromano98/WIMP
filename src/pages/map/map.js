@@ -60,6 +60,7 @@ export default class MapDisplay extends Component {
     newLng: null,
     switches: [],
     new: null,
+    modifyParent: null,
   };
 
   async componentDidMount() {
@@ -87,9 +88,7 @@ export default class MapDisplay extends Component {
   });
 
   updateLines = () => {
-    console.log("updatelines");
     if (this.state.switches.length !== 0) {
-      console.log();
       const drawLines = this.state.switches.map((index) => {
         if (index._pid) {
           let parentIndex = this.state.switches.findIndex(
@@ -138,8 +137,6 @@ export default class MapDisplay extends Component {
       );
     });
 
-    console.log(this.state.switches);
-
     if (this.state.switches.length !== 0) {
       var tableData = JSON.parse(JSON.stringify(this.state.switches));
       tableData.forEach((element) => {
@@ -155,6 +152,7 @@ export default class MapDisplay extends Component {
       { key: "modelo", text: "Modelo" },
       { key: "nombre", text: "Nombre" },
       { key: "fecha", text: "Fecha" },
+      { key: "button", text: "Informacion" },
     ];
 
     var drawLines = this.state.drawLines;
@@ -188,6 +186,7 @@ export default class MapDisplay extends Component {
       this.setState({
         showModal: false,
         newSwitch: null,
+        switchToModify: null,
       });
     };
 
@@ -202,7 +201,6 @@ export default class MapDisplay extends Component {
         const padre = this.state.switches.find(
           (index) => index.nombre === this.state.newParent
         );
-        console.log(padre);
         newSwitch["idPadre"] = padre._id;
         newSwitch["_pid"] = padre._id;
       }
@@ -245,6 +243,39 @@ export default class MapDisplay extends Component {
       }
     };
 
+    const handleTableButtonClick = (event) => {
+      // toggleModal();
+      // const modelo = event.target.parentElement.cells[1].outerText;
+      var aux = null;
+      if (this.state.switchToModify && this.state.switchToModify._pid) {
+        aux = this.state.switches.find(
+          (index) => index.id === this.state.switchToModify._pid
+        )?.nombre;
+      }
+      this.setState({
+        modifyParent: aux,
+      });
+      const nombre = event.target.parentElement.cells[2].outerText;
+      const modify = this.state.switches.find(
+        (index) => index.nombre === nombre
+      );
+      this.setState({
+        switchToModify: modify,
+        showModal: true,
+      });
+    };
+
+    const getParent = () => {
+      var aux = null;
+      if (this.state.switchToModify && this.state.switchToModify._pid) {
+        aux = this.state.switches.find(
+          (index) => index.id === this.state.switchToModify._pid
+        )?.nombre;
+      }
+      console.log(aux);
+      return aux;
+    };
+
     let parentOptions = [<option>-</option>];
     this.state.switches.map((index) => {
       return parentOptions.push(<option>{index.nombre}</option>);
@@ -278,6 +309,11 @@ export default class MapDisplay extends Component {
                   type="text"
                   placeholder="Switch 10"
                   onChange={handleNameChange}
+                  value={
+                    this.state.switchToModify
+                      ? this.state.switchToModify.nombre
+                      : ""
+                  }
                 />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlInput1">
@@ -286,11 +322,20 @@ export default class MapDisplay extends Component {
                   type="text"
                   placeholder="Ubiquiti 10"
                   onChange={handleModelChange}
+                  value={
+                    this.state.switchToModify
+                      ? this.state.switchToModify.modelo
+                      : ""
+                  }
                 />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlSelect1">
                 <Form.Label>Padre de: </Form.Label>
-                <Form.Control as="select" onChange={handleParentChange}>
+                <Form.Control
+                  as="select"
+                  onChange={handleParentChange}
+                  value={this.state.modifyParent}
+                >
                   {parentOptions}
                 </Form.Control>
               </Form.Group>
@@ -306,7 +351,11 @@ export default class MapDisplay extends Component {
           </Modal.Footer>
         </Modal>
         {this.state.switches.length !== 0 ? (
-          <TableComponent header={header} data={tableData} />
+          <TableComponent
+            header={header}
+            data={tableData}
+            btnClick={handleTableButtonClick}
+          />
         ) : null}
       </>
     );
