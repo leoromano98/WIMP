@@ -144,16 +144,20 @@ export function createSwitch(newSwitch) {
     });
 }
 
-export function modifySwitch() {
+export function modifySwitch(data) {
   var token = getTokenApi();
 
-  var data = {
-    idSwitch: "610409d67d4b4bdbf3b636cc",
-    lat: 100,
-    lng: 200,
-    nombre: "Pingudo5",
-    modelo: "Pingudo3000 Super Sayayin 3",
+  var body = {
+    idSwitch: data._id,
+    lat: data.lat,
+    lng: data.lng,
+    nombre: data.nombre,
+    modelo: data.modelo,
   };
+
+  if (data._pid) {
+    body.idPadre = data._pid;
+  }
 
   const url = `${API_HOST}/switches/modificar`;
   console.log(token);
@@ -164,7 +168,7 @@ export function modifySwitch() {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(body),
   };
 
   return fetch(url, params)
@@ -484,32 +488,32 @@ export async function getPacketsByMAC(MAC) {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/srcmac-detalle`;
-  const body={
-    srcMac: '60:6d:c7:df:17:8b'
-  }
+  const body = {
+    srcMac: "60:6d:c7:df:17:8b",
+  };
   const params = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
-    body: body
+    body: body,
   };
 
   return fetch(url, params)
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
         // return response.json();
-        console.log('BY MAC', response.json())
+        console.log("BY MAC", response.json());
       }
     })
     .then((result) => {
-      console.log('BY MAC', result)
+      console.log("BY MAC", result);
 
       return result;
     })
     .catch((err) => {
-      console.log('BY MAC', err)
+      console.log("BY MAC", err);
 
       return err;
     });

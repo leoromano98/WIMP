@@ -1,3 +1,8 @@
+// @DOC:
+// this.state.showModal === 0 => no mostrar modal
+// this.state.showModal === 1 => mostrar AGREGAR switch
+// this.state.showModal === 2 =>  mostrar MODIFICAR switch
+
 import React, { Component } from "react";
 import { Map, Leaflet } from "leaflet";
 import L from "leaflet";
@@ -16,7 +21,7 @@ import marker from "../../assets/img/switch.svg";
 import TableComponent from "../../components/Table/Table";
 import { Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import { getTopology, createSwitch } from "../../api/auth";
+import { getTopology, createSwitch, modifySwitch } from "../../api/auth";
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -39,7 +44,7 @@ function MyComponent({ saveMarkers }) {
 
 export default class MapDisplay extends Component {
   state = {
-    showModal: false,
+    showModal: 0,
     newSwitch: {
       name: "a",
       position: {
@@ -72,11 +77,15 @@ export default class MapDisplay extends Component {
     this.updateLines();
   }
 
+  // @DOC: Funcion que se ejecuta al hacer clic en el mapa
   saveMarkers = (newMarkerCoords) => {
     this.setState({
-      showModal: true,
+      showModal: 1,
       newLat: newMarkerCoords[0],
       newLng: newMarkerCoords[1],
+      newName: null,
+      newModel: null,
+      newParent: null,
     });
   };
 
@@ -155,6 +164,21 @@ export default class MapDisplay extends Component {
       { key: "button", text: "Informacion" },
     ];
 
+    const getParentId = (nameParent) => {
+      var parentId = this.state.switches.find(
+        (index) => index.nombre === nameParent
+      )?._id;
+      return parentId;
+    };
+
+    const getParentName = (parentId) => {
+      var parentName = this.state.switches.find(
+        (index) => index._id === parentId
+      )?.nombre;
+      console.log(parentName);
+      return parentName;
+    };
+
     var drawLines = this.state.drawLines;
     // const updateLines = () => {
     //   if (this.state.switches.length !== 0) {
@@ -184,39 +208,64 @@ export default class MapDisplay extends Component {
 
     const handleClose = () => {
       this.setState({
-        showModal: false,
+        showModal: 0,
         newSwitch: null,
         switchToModify: null,
+        modifyParent: null,
       });
     };
 
     const handleAccept = () => {
-      let newSwitch = {
-        nombre: this.state.newName,
-        modelo: this.state.newModel,
-        lat: this.state.newLat,
-        lng: this.state.newLng,
-      };
-      if (this.state.newParent) {
-        const padre = this.state.switches.find(
-          (index) => index.nombre === this.state.newParent
+      // If agregar switch
+      if (this.state.showModal === 1) {
+        let newSwitch = {
+          nombre: this.state.newName,
+          modelo: this.state.newModel,
+          lat: this.state.newLat,
+          lng: this.state.newLng,
+        };
+        if (this.state.newParent) {
+          const padre = this.state.switches.find(
+            (index) => index.nombre === this.state.newParent
+          );
+          newSwitch["idPadre"] = padre._id;
+          newSwitch["_pid"] = padre._id;
+        }
+
+        createSwitch(newSwitch);
+
+        const array = this.state.switches;
+        array.push(newSwitch);
+        this.setState(
+          {
+            switches: array,
+            showModal: 0,
+            newSwitch: null,
+          },
+          this.updateLines()
         );
-        newSwitch["idPadre"] = padre._id;
-        newSwitch["_pid"] = padre._id;
+      } else {
+        //Else modificar switch
+        const findIndex = this.state.switches.findIndex(
+          (index) => index._id === this.state.switchToModify._id
+        );
+        var auxSwitches = this.state.switches;
+        var newData = this.state.switchToModify;
+        newData.nombre = this.state.newName
+          ? this.state.newName
+          : newData.nombre;
+        newData.modelo = this.state.newModel
+          ? this.state.newModel
+          : newData.modelo;
+        if (this.state.newParent) {
+          newData._pid = getParentId(this.state.newParent);
+        } else {
+          delete newData["_pid"];
+        }
+        auxSwitches[findIndex] = newData;
+
+        modifySwitch(newData);
       }
-
-      createSwitch(newSwitch);
-
-      const array = this.state.switches;
-      array.push(newSwitch);
-      this.setState(
-        {
-          switches: array,
-          showModal: false,
-          newSwitch: null,
-        },
-        this.updateLines()
-      );
     };
 
     const handleNameChange = (event) => {
@@ -243,37 +292,30 @@ export default class MapDisplay extends Component {
       }
     };
 
+    // @DOC: Para modificar switch
     const handleTableButtonClick = (event) => {
       // toggleModal();
       // const modelo = event.target.parentElement.cells[1].outerText;
-      var aux = null;
-      if (this.state.switchToModify && this.state.switchToModify._pid) {
-        aux = this.state.switches.find(
-          (index) => index.id === this.state.switchToModify._pid
-        )?.nombre;
-      }
-      this.setState({
-        modifyParent: aux,
-      });
+
       const nombre = event.target.parentElement.cells[2].outerText;
       const modify = this.state.switches.find(
         (index) => index.nombre === nombre
       );
-      this.setState({
-        switchToModify: modify,
-        showModal: true,
-      });
-    };
-
-    const getParent = () => {
       var aux = null;
-      if (this.state.switchToModify && this.state.switchToModify._pid) {
+      if (modify._pid) {
         aux = this.state.switches.find(
-          (index) => index.id === this.state.switchToModify._pid
-        )?.nombre;
+          (index) => index._id === modify._pid
+        ).nombre;
       }
-      console.log(aux);
-      return aux;
+
+      this.setState({
+        newName: modify.nombre,
+        newModel: modify.modelo,
+        newParent: getParentName(modify._pid),
+        switchToModify: modify,
+        showModal: 2,
+        // modifyParent: aux,
+      });
     };
 
     let parentOptions = [<option>-</option>];
@@ -297,9 +339,11 @@ export default class MapDisplay extends Component {
 
           <MyComponent saveMarkers={this.saveMarkers} />
         </MapContainer>
-        <Modal show={this.state.showModal} onHide={handleClose}>
+        <Modal show={this.state.showModal > 0} onHide={handleClose}>
           <Modal.Header className="modal-header">
-            <Modal.Title>Agregar switch</Modal.Title>
+            <Modal.Title>
+              {this.state.showModal === 1 ? "Agregar" : "Modificar"} switch
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -309,11 +353,7 @@ export default class MapDisplay extends Component {
                   type="text"
                   placeholder="Switch 10"
                   onChange={handleNameChange}
-                  value={
-                    this.state.switchToModify
-                      ? this.state.switchToModify.nombre
-                      : ""
-                  }
+                  value={this.state.newName}
                 />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlInput1">
@@ -322,11 +362,7 @@ export default class MapDisplay extends Component {
                   type="text"
                   placeholder="Ubiquiti 10"
                   onChange={handleModelChange}
-                  value={
-                    this.state.switchToModify
-                      ? this.state.switchToModify.modelo
-                      : ""
-                  }
+                  value={this.state.newModel}
                 />
               </Form.Group>
               <Form.Group controlId="exampleForm.ControlSelect1">
@@ -334,7 +370,7 @@ export default class MapDisplay extends Component {
                 <Form.Control
                   as="select"
                   onChange={handleParentChange}
-                  value={this.state.modifyParent}
+                  value={this.state.newParent}
                 >
                   {parentOptions}
                 </Form.Control>
