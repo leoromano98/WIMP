@@ -70,10 +70,10 @@ export default class MapDisplay extends Component {
 
   async componentDidMount() {
     var response = await getTopology();
+    console.log("Switches: ", response);
     this.setState({
       switches: response,
     });
-    console.log("Switches: ", response);
     this.updateLines();
   }
 
