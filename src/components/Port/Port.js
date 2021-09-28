@@ -3,7 +3,6 @@ import "./Port.css";
 import { UncontrolledAlert } from "reactstrap";
 
 const Port = (props) => {
-  console.log("Port", props.portData);
   var portCSS;
   if (props.portData) {
     if (props.portData.isConnected) {
@@ -13,10 +12,18 @@ const Port = (props) => {
     }
   }
 
+  const handlePortClick = () => {
+    props.onClick(props.portData);
+  };
+
   return (
     <>
       {props.portData ? (
-        <div id={"port-" + props.portData.port} className={portCSS}>
+        <div
+          id={"port-" + props.portData.port}
+          className={portCSS}
+          onClick={handlePortClick}
+        >
           {props.portData.port}
         </div>
       ) : null}

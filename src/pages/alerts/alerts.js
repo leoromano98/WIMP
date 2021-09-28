@@ -59,9 +59,12 @@ const Alerts = () => {
     <div className="login-container">
       <div className="form-container">
         <h1 className="form-title">alertas</h1>
-        {switchData ? <SwitchLayout switchData={switchData} /> : null}
-        {switch2Data ? <SwitchLayout switchData={switch2Data} /> : null}
-        {switchData ? <SwitchLayout switchData={switchData} /> : null}
+        {switchData ? (
+          <SwitchLayout name="nombre suich" switchData={switchData} />
+        ) : null}
+        {switch2Data ? (
+          <SwitchLayout name="nombre suich 2" switchData={switch2Data} />
+        ) : null}
       </div>
     </div>
   );
