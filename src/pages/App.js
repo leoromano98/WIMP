@@ -14,6 +14,7 @@ import Alerts from "./alerts/alerts";
 import Map from "./map/map";
 import D3 from "./d3/d3";
 import RankPackets from "./rankPackets/rankPackets";
+import AccessPoints from "./AccessPoints/AccessPoints";
 
 import { AuthContext } from "../utils/context";
 import { isUserLogedApi, triggerLogin } from "../api/auth";
@@ -61,6 +62,9 @@ function App() {
         <Switch>
           {user ? (
             <>
+              <Route path="/accespoints">
+                <AccessPoints />
+              </Route>
               <Route path="/d3">
                 <D3 />
               </Route>
@@ -79,7 +83,6 @@ function App() {
               <Route exact path="/login">
                 <Redirect to="/" />
               </Route>
-
               <Route exact path="/">
                 <Redirect to="/landing" />
               </Route>

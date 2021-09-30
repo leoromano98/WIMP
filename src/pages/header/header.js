@@ -94,6 +94,9 @@ const Header = () => {
         <div className="menu-item test" onClick={showAlarm}>
           Test alarma
         </div>
+        <a className="menu-item" href="/accesspoints">
+          Access Points
+        </a>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
         </a> */}

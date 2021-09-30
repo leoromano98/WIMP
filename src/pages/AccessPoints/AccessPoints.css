@@ -1,0 +1,40 @@
+.graph-container {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.graph-container > div > svg {
+  width: 100% !important;
+  height: 80vh !important;
+  border: 2px solid lightgrey;
+  border-radius: 5px;
+}
+
+.input-container {
+  margin-bottom: 20px;
+}
+
+.form-title {
+  margin-bottom: 20px;
+}
+
+.overlay {
+  opacity: 0.5;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
+}
+
+.loading-circle {
+  width: 110px !important;
+  display: flex !important;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  height: 100% !important;
+  margin: 0 auto;
+}
