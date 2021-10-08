@@ -42,6 +42,53 @@ function MyComponent({ saveMarkers }) {
   return null;
 }
 
+const formatDate = (pDate) => {
+  const date = new Date(pDate);
+  const dia = date.getDay();
+  const mes = date.getMonth();
+  const anio = date.getFullYear();
+  const horas = date.getHours();
+  const minutos = date.getMinutes();
+  const segundos = date.getSeconds();
+  return (
+    dia +
+    "/" +
+    mes +
+    "/" +
+    anio +
+    " - " +
+    horas +
+    ":" +
+    minutos +
+    ":" +
+    segundos
+  );
+};
+
+// @DOC: Definir estado del dispositivo.
+// mark1 = tiempo en minutos que cambia a estado 'advertencia'
+// mark2 = tiempo en minutos que cambia a estado 'desconectado'
+// ---CONECTADO---|---ADVERTENCIA---|---DESCONECTADO---
+//              mark1             mark2
+const putState = (timestamp) => {
+  const time = new Date(timestamp);
+  const now = new Date();
+  console.log(now.getTime(), time.getTime());
+  const difference = (now.getTime() - time.getTime()) / 1000;
+  const mark1 = 15;
+  const mark2 = 300;
+  console.log(difference, mark1 / 60);
+  console.log(difference, mark2 / 60);
+  if (difference < mark1 / 60) {
+    return "Activo";
+  } else {
+    if (difference < mark2 / 60) {
+      return "Advertencia";
+    }
+    return "Desconectado";
+  }
+};
+
 export default class MapDisplay extends Component {
   state = {
     showModal: 0,
@@ -71,6 +118,16 @@ export default class MapDisplay extends Component {
   async componentDidMount() {
     var response = await getTopology();
     console.log("Switches: ", response);
+    const now = new Date();
+    response.forEach((index) => {
+      index.formatedDate = formatDate(index.timestamp);
+      index.state = putState(index.timestamp);
+      if (!index.lat || !index.lng) {
+        index.lat = 0;
+        index.lng = 0;
+      }
+    });
+    formatDate(response[0].timestamp);
     this.setState({
       switches: response,
     });
@@ -157,10 +214,14 @@ export default class MapDisplay extends Component {
     }
 
     const header = [
-      { key: "estado", text: "Estado" },
-      { key: "modelo", text: "Modelo" },
-      { key: "nombre", text: "Nombre" },
-      { key: "fecha", text: "Fecha" },
+      { key: "state", text: "Estado" },
+      { key: "model", text: "Modelo" },
+      { key: "name", text: "Nombre" },
+      { key: "cpu", text: "CPU" },
+      { key: "fanlevel", text: "FAN" },
+      { key: "mem", text: "MEM" },
+      { key: "temp", text: "TEMP" },
+      { key: "formatedDate", text: "Ult. Actualizacion" },
       { key: "button", text: "Informacion" },
     ];
 
