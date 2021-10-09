@@ -44,8 +44,8 @@ function MyComponent({ saveMarkers }) {
 
 const formatDate = (pDate) => {
   const date = new Date(pDate);
-  const dia = date.getDay();
-  const mes = date.getMonth();
+  const dia = date.getDate();
+  const mes = date.getMonth() + 1;
   const anio = date.getFullYear();
   const horas = date.getHours();
   const minutos = date.getMinutes();
@@ -73,16 +73,13 @@ const formatDate = (pDate) => {
 const putState = (timestamp) => {
   const time = new Date(timestamp);
   const now = new Date();
-  console.log(now.getTime(), time.getTime());
-  const difference = (now.getTime() - time.getTime()) / 1000;
+  const difference = (now.getTime() - time.getTime()) / 1000; //obtengo diferencia en segundos entre un tiempo y otro
   const mark1 = 15;
   const mark2 = 300;
-  console.log(difference, mark1 / 60);
-  console.log(difference, mark2 / 60);
-  if (difference < mark1 / 60) {
+  if (difference < mark1 * 60) {
     return "Activo";
   } else {
-    if (difference < mark2 / 60) {
+    if (difference < mark2 * 60) {
       return "Advertencia";
     }
     return "Desconectado";
