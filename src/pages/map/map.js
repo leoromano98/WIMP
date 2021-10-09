@@ -30,15 +30,16 @@ let myIcon = new L.Icon({
   iconSize: [70, 45],
 });
 
-//@DOC: On click, add icon to map (switch)
+//@DOC: Click en el mapa, añade icono (switch)
 function MyComponent({ saveMarkers }) {
-  const map = useMapEvents({
-    click: (e) => {
-      const { lat, lng } = e.latlng;
-      saveMarkers([lat, lng]);
-      L.marker([lat, lng], { icon: myIcon }).addTo(map);
-    },
-  });
+  // const map = useMapEvents({
+  //   click: (e) => {
+  //     const { lat, lng } = e.latlng;
+  //     saveMarkers([lat, lng]);
+  //     L.marker([lat, lng], { icon: myIcon }).addTo(map);
+  //   },
+  // });
+  // if(this.state.)
   return null;
 }
 
@@ -75,7 +76,7 @@ const putState = (timestamp) => {
   const now = new Date();
   const difference = (now.getTime() - time.getTime()) / 1000; //obtengo diferencia en segundos entre un tiempo y otro
   const mark1 = 15;
-  const mark2 = 1500000;
+  const mark2 = 30;
   if (difference < mark1 * 60) {
     return "Activo";
   } else {
