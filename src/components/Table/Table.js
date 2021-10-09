@@ -18,6 +18,10 @@ const TableComponent = (props) => {
   const dataTable = () => {
     props.data.forEach((index) => {
       const values = Object.entries(index);
+      const style = {
+        backgroundColor: "unset",
+        fontWeight: "bold",
+      };
       data.push(
         <tr>
           {props.header.map((head) => {
@@ -31,7 +35,22 @@ const TableComponent = (props) => {
                   return <td>Inactivo</td>;
                 }
               } else {
-                return <td>{find ? find[1] : null}</td>;
+                if (head.colors) {
+                  //Si existe head.colors, es porque asigno verde amarillo o rojo
+                  switch (find[1]) {
+                    case "Activo":
+                      style.backgroundColor = "#66b266";
+                      break;
+                    case "Advertencia":
+                      style.backgroundColor = "#eeef14";
+                      break;
+                    default:
+                      style.backgroundColor = "#ff3232"; //Descoenctado
+                      break;
+                  }
+                  return <td style={style}>{find[1]}</td>;
+                }
+                return <td>{find ? find[1] : null}</td>; //Si no existe head.colors, llevo dato sin asignar color
               }
             } else {
               //Si no hay coincidencias, es porque no hay dato para mostrar ENTONCES es un boton

@@ -75,7 +75,7 @@ const putState = (timestamp) => {
   const now = new Date();
   const difference = (now.getTime() - time.getTime()) / 1000; //obtengo diferencia en segundos entre un tiempo y otro
   const mark1 = 15;
-  const mark2 = 300;
+  const mark2 = 1500000;
   if (difference < mark1 * 60) {
     return "Activo";
   } else {
@@ -211,7 +211,7 @@ export default class MapDisplay extends Component {
     }
 
     const header = [
-      { key: "state", text: "Estado" },
+      { key: "state", text: "Estado", colors: "true" },
       { key: "model", text: "Modelo" },
       { key: "name", text: "Nombre" },
       { key: "cpu", text: "CPU" },

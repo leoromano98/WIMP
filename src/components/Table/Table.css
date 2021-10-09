@@ -2,3 +2,8 @@
   width: 90% !important;
   margin: 0 auto !important;
 }
+
+td,
+th {
+  text-align: center !important;
+}
