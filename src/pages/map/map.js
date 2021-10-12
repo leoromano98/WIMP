@@ -36,14 +36,18 @@ let myIcon = new L.Icon({
 function MyComponent({ saveMarkers }) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
+  const group = L.markerClusterGroup();
+
   const map = useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
       saveMarkers([lat, lng]);
-      L.marker([lat, lng], { icon: myIcon }).addTo(map);
-      map.clearLayers();
+      // L.marker([lat, lng], { icon: myIcon }).addTo(map);
+      const marker = L.marker([lat, lng], { icon: myIcon });
+      group.addLayer(marker);
     },
   });
+  map.addLayer(group);
   // if(this.state.)
   return null;
 }
