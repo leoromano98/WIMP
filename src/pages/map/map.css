@@ -16,7 +16,11 @@
   transform: translate(-50%, -50%) !important;
 }
 
-.modal-header{
+.modal-header {
   background-color: #37718e;
   color: white;
+}
+
+.overlay {
+  z-index: 0 !important;
 }

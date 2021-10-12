@@ -17,13 +17,14 @@ const TableComponent = (props) => {
   // Esta funcion se encarga de ordenar los datos de acuerdo a header.key
   const dataTable = () => {
     props.data.forEach((index) => {
+      console.log(index);
       const values = Object.entries(index);
       const style = {
         backgroundColor: "unset",
         fontWeight: "bold",
       };
       data.push(
-        <tr>
+        <tr id={index._id}>
           {props.header.map((head) => {
             const find = values.find((element) => element[0] === head.key); //Busco coincidencias entre header.key y el key de los datos
             if (find) {
@@ -54,7 +55,11 @@ const TableComponent = (props) => {
               }
             } else {
               //Si no hay coincidencias, es porque no hay dato para mostrar ENTONCES es un boton
-              return <button onClick={props.btnClick}>Mostrar</button>;
+              return (
+                <button id={index.name} onClick={head.handler}>
+                  {head.text}
+                </button>
+              );
             }
           })}
         </tr>

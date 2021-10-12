@@ -3,6 +3,8 @@
 // this.state.showModal === 1 => mostrar AGREGAR switch
 // this.state.showModal === 2 =>  mostrar MODIFICAR switch
 
+// showSwitches : dibuja los switches ya guardados
+
 import React, { Component } from "react";
 import { Map, Leaflet } from "leaflet";
 import L from "leaflet";
@@ -32,13 +34,16 @@ let myIcon = new L.Icon({
 
 //@DOC: Click en el mapa, añade icono (switch)
 function MyComponent({ saveMarkers }) {
-  // const map = useMapEvents({
-  //   click: (e) => {
-  //     const { lat, lng } = e.latlng;
-  //     saveMarkers([lat, lng]);
-  //     L.marker([lat, lng], { icon: myIcon }).addTo(map);
-  //   },
-  // });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const map = useMapEvents({
+    click: (e) => {
+      const { lat, lng } = e.latlng;
+      saveMarkers([lat, lng]);
+      L.marker([lat, lng], { icon: myIcon }).addTo(map);
+      map.clearLayers();
+    },
+  });
   // if(this.state.)
   return null;
 }
@@ -103,6 +108,7 @@ export default class MapDisplay extends Component {
       lng: -65.23149,
       zoom: 17,
     },
+    selectedSwitch: null,
     newName: null,
     newModel: null,
     newParent: null,
@@ -113,7 +119,7 @@ export default class MapDisplay extends Component {
     modifyParent: null,
   };
 
-  async componentDidMount() {
+  async getSwitches() {
     var response = await getTopology();
     console.log("Switches: ", response);
     const now = new Date();
@@ -132,16 +138,42 @@ export default class MapDisplay extends Component {
     this.updateLines();
   }
 
+  componentDidMount() {
+    this.getSwitches();
+  }
+
+  //@DOC: Click en el mapa, añade icono (switch)
+  // MyComponent = ({ saveMarkers }) => {
+  //   console.log("si!");
+  //   // const map = useMapEvents({
+  //   //   click: (e) => {
+  //   //     const { lat, lng } = e.latlng;
+  //   //     saveMarkers([lat, lng]);
+  //   //     L.marker([lat, lng], { icon: myIcon }).addTo(map);
+  //   //   },
+  //   // });
+  //   // if(this.state.)
+  //   return null;
+  // };
+
   // @DOC: Funcion que se ejecuta al hacer clic en el mapa
   saveMarkers = (newMarkerCoords) => {
+    // this.setState({
+    //   showModal: 1,
+    //   newLat: newMarkerCoords[0],
+    //   newLng: newMarkerCoords[1],
+    //   newName: null,
+    //   newModel: null,
+    //   newParent: null,
+    // });
+    alert("guardar lat y lng por hTTP ");
+    console.log(newMarkerCoords[0], newMarkerCoords[1]);
     this.setState({
-      showModal: 1,
-      newLat: newMarkerCoords[0],
-      newLng: newMarkerCoords[1],
-      newName: null,
-      newModel: null,
-      newParent: null,
+      selectedSwitch: null,
     });
+
+    //TODO: PUT lat y lng; hacer get de todos los sw; recargar mapa
+    this.getSwitches();
   };
 
   myIcon = new L.Icon({
@@ -178,6 +210,22 @@ export default class MapDisplay extends Component {
       });
       this.setState({
         drawLines: drawLines,
+      });
+    }
+  };
+
+  handleInfoButton = (event) => {
+    console.log("a", event.target.id);
+  };
+
+  handlePositionButton = (event) => {
+    console.log("B ", event.target.id);
+    const findSwitch = this.state.switches.find(
+      (element) => element.name === event.target.id
+    );
+    if (findSwitch) {
+      this.setState({
+        selectedSwitch: findSwitch,
       });
     }
   };
@@ -220,7 +268,18 @@ export default class MapDisplay extends Component {
       { key: "mem", text: "MEM" },
       { key: "temp", text: "TEMP" },
       { key: "formatedDate", text: "Ult. Actualizacion" },
-      { key: "button", text: "Informacion" },
+      {
+        key: "info",
+        text: "Informacion",
+        isButton: true,
+        handler: this.handleInfoButton,
+      },
+      {
+        key: "position",
+        text: "Asignar ubicacion",
+        isButton: true,
+        handler: this.handlePositionButton,
+      },
     ];
 
     const getParentId = (nameParent) => {
@@ -377,6 +436,10 @@ export default class MapDisplay extends Component {
       });
     };
 
+    const handleOverlayClick = () => {
+      this.setState({ selectedSwitch: null });
+    };
+
     let parentOptions = [<option>-</option>];
     this.state.switches.map((index) => {
       return parentOptions.push(<option>{index.nombre}</option>);
@@ -384,6 +447,11 @@ export default class MapDisplay extends Component {
 
     return (
       <>
+        <div
+          className="overlay"
+          style={{ display: this.state.selectedSwitch ? "block" : "none" }}
+          onClick={handleOverlayClick}
+        ></div>
         <MapContainer
           center={position}
           zoom={this.state.map.zoom}
@@ -395,14 +463,13 @@ export default class MapDisplay extends Component {
           />
           {showSwitches}
           {this.state.drawLines}
-
-          <MyComponent saveMarkers={this.saveMarkers} />
+          {this.state.selectedSwitch ? (
+            <MyComponent saveMarkers={this.saveMarkers} />
+          ) : null}
         </MapContainer>
-        <Modal show={this.state.showModal > 0} onHide={handleClose}>
+        {/* <Modal show={this.state.showModal > 0} onHide={handleClose}>
           <Modal.Header className="modal-header">
-            <Modal.Title>
-              {this.state.showModal === 1 ? "Agregar" : "Modificar"} switch
-            </Modal.Title>
+            <Modal.Title>Asignar posicion?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -435,6 +502,7 @@ export default class MapDisplay extends Component {
                 </Form.Control>
               </Form.Group>
             </Form>
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleClose}>
@@ -444,7 +512,7 @@ export default class MapDisplay extends Component {
               Aceptar
             </Button>
           </Modal.Footer>
-        </Modal>
+        </Modal> */}
         {this.state.switches.length !== 0 ? (
           <TableComponent
             header={header}
