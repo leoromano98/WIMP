@@ -289,11 +289,11 @@ const Clients = () => {
       // });
       // console.log('dataip', dataIp)
     }
-    getByIPC();
-    getTransportData();
-    getProtocolData();
-    getData();
-    getNetworkData();
+    // getByIPC();
+    // getTransportData();
+    // getProtocolData();
+    // getData();
+    // getNetworkData();
     // getByMAC();
   }, []);
 
@@ -328,57 +328,68 @@ const Clients = () => {
   );
 
   const iterateTopology = (array) => {
-    const findMac = "48:c7:96:28:1d:93";
+    const findMac = "b0:52:16:5c:62:0b";
+    // const findMac = "48:c7:96:28:1d:93";
+    let nodoAux = array;
     const tree = [];
     console.log("!", array);
     if (array instanceof Array) {
-      array.forEach((index) => {
+      array.every((index) => {
         const nodo = iterateTopology(index);
+        nodoAux = nodo;
         console.log("array", nodo); //repite
-        if (nodo?.mac === findMac) {
-          nodo[0].name = index.name; //Traer TODOS los datos
-          const newTree = tree.concat(nodo);
-          console.log("newTree", newTree);
-          return newTree; //finrepite
-        } else {
-          return array;
+        console.log("nodo[0].mac", nodo[0].mac); //repite
+        console.log("index", index); //repite
+        console.log("mac buscada", findMac); //repite
+        if (nodo[0]?.mac === findMac) {
+          console.log("VERDADERO REY", index); //repite
+          const addNode = [{ mac: index.mac, ip: index.ip }];
+          nodo.push(addNode[0]);
+          return false;
         }
+        console.log("nuevo nodo", nodo);
+        return nodo; //finrepite
       });
     } else {
-      if (array.ports) {
+      if (array?.tipo === "SW") {
         const nodo = iterateTopology(array.ports);
         console.log("ports", nodo); //repite
-        if (nodo?.mac === findMac) {
-          nodo[0].name = array.ports.name; //Traer TODOS los datos
-          const newTree = tree.concat(nodo);
-          console.log("newTree", newTree);
-          return newTree; //finrepite
-        } else {
-          return array.ports;
+        if (nodo[0]?.mac === findMac) {
+          // tree.push(nodo);
+          const addNode = [{ mac: array.mac, ip: array.ip }];
+          nodo.push(addNode[0]);
         }
+        console.log("nuevo nodo", nodo);
+        return nodo; //finrepite
       } else {
-        if (array.clientesap) {
-          const nodo = iterateTopology(array.clientesap);
-          console.log("clientesap", nodo); //repite
-          if (nodo?.mac === findMac) {
-            nodo[0].name = array.clientesap.name; //Traer TODOS los datos
-            const newTree = tree.concat(nodo);
-            console.log("newTree", newTree);
-            return newTree; //finrepite
+        if (array?.tipo === "AP") {
+          let nodo = null;
+          if (array.clientesap) {
+            nodo = iterateTopology(array.clientesap);
           } else {
-            return array.clientesap;
+            return [{ ip: array.ip, mac: array.mac }];
           }
+          console.log("clientesap", nodo); //repite
+          if (nodo[0]?.mac === findMac) {
+            // tree.push(nodo);
+            const addNode = [{ mac: array.mac, ip: array.ip }];
+            nodo.push(addNode[0]);
+          }
+          console.log("nuevo nodo", nodo);
+          return nodo; //finrepite
         } else {
-          console.log("json", {
+          // if (array.mac === findMac) {
+          console.log("json ", {
             ip: array.ip,
             mac: array.mac,
           });
           return [{ ip: array.ip, mac: array.mac }];
+          // }
         }
       }
     }
-    console.log("resultado", tree);
-    return tree;
+    console.log("resultado", nodoAux);
+    return nodoAux;
   };
 
   return (
