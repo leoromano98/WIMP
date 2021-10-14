@@ -28,7 +28,16 @@ import {
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  InputGroup,
+  InputGroupAddon,
+  Input,
+} from "reactstrap";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 // Configuracion para graficos:
@@ -123,6 +132,8 @@ const Clients = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [MAC, setMAC] = useState("");
+  const [topologyArray, setTopologyArray] = useState(null);
   const toggleModal = () => setOpenModal(!openModal);
 
   const [dataBar, setDataBar] = useState({
@@ -327,62 +338,79 @@ const Clients = () => {
     </Modal>
   );
 
-  const iterateTopology = (array) => {
-    const findMac = "b0:52:16:5c:62:0b";
-    // const findMac = "48:c7:96:28:1d:93";
+  const iterateTopology = (array, findMAC) => {
+    // const findMac = "b0:52:16:5c:62:0b";
+    const findMac = findMAC;
     let nodoAux = array;
     const tree = [];
-    console.log("!", array);
     if (array instanceof Array) {
       array.every((index) => {
-        const nodo = iterateTopology(index);
+        const nodo = iterateTopology(index, findMac);
         nodoAux = nodo;
-        console.log("array", nodo); //repite
-        console.log("nodo[0].mac", nodo[0].mac); //repite
-        console.log("index", index); //repite
-        console.log("mac buscada", findMac); //repite
         if (nodo[0]?.mac === findMac) {
-          console.log("VERDADERO REY", index); //repite
-          const addNode = [{ mac: index.mac, ip: index.ip }];
+          const addNode = [
+            {
+              mac: index.mac,
+              ip: index.ip,
+              tipo: index.tipo,
+              name: index.name,
+              model: array.model,
+            },
+          ];
           nodo.push(addNode[0]);
           return false;
         }
-        console.log("nuevo nodo", nodo);
         return nodo; //finrepite
       });
     } else {
       if (array?.tipo === "SW") {
-        const nodo = iterateTopology(array.ports);
-        console.log("ports", nodo); //repite
+        const nodo = iterateTopology(array.ports, findMac);
         if (nodo[0]?.mac === findMac) {
           // tree.push(nodo);
-          const addNode = [{ mac: array.mac, ip: array.ip }];
+          const addNode = [
+            {
+              mac: array.mac,
+              ip: array.ip,
+              tipo: array.tipo,
+              name: array.name,
+              model: array.model,
+            },
+          ];
           nodo.push(addNode[0]);
         }
-        console.log("nuevo nodo", nodo);
         return nodo; //finrepite
       } else {
         if (array?.tipo === "AP") {
           let nodo = null;
           if (array.clientesap) {
-            nodo = iterateTopology(array.clientesap);
+            nodo = iterateTopology(array.clientesap, findMac);
           } else {
-            return [{ ip: array.ip, mac: array.mac }];
+            return [
+              {
+                ip: array.ip,
+                mac: array.mac,
+                tipo: array.tipo,
+                name: array.name,
+                model: array.model,
+              },
+            ];
           }
-          console.log("clientesap", nodo); //repite
           if (nodo[0]?.mac === findMac) {
             // tree.push(nodo);
-            const addNode = [{ mac: array.mac, ip: array.ip }];
+            const addNode = [
+              {
+                mac: array.mac,
+                ip: array.ip,
+                tipo: array.tipo,
+                name: array.name,
+                model: array.model,
+              },
+            ];
             nodo.push(addNode[0]);
           }
-          console.log("nuevo nodo", nodo);
           return nodo; //finrepite
         } else {
           // if (array.mac === findMac) {
-          console.log("json ", {
-            ip: array.ip,
-            mac: array.mac,
-          });
           return [{ ip: array.ip, mac: array.mac }];
           // }
         }
@@ -392,11 +420,35 @@ const Clients = () => {
     return nodoAux;
   };
 
+  const handleSearchButton = () => {
+    const getTopology = iterateTopology(auxTopology.netsws.netsws, MAC);
+    getTopology.forEach((item, index, object) => {
+      if (item.model === undefined || item.name === undefined) {
+        console.log("aca");
+        object.splice(index, 1);
+      }
+    });
+    setTopologyArray(getTopology);
+  };
+
+  const handleInputMACChange = (event) => {
+    setMAC(event.target.value);
+  };
+
   return (
     <>
-      <button onClick={() => iterateTopology(auxTopology.netsws.netsws)}>
+      <button onClick={() => iterateTopology(auxTopology.netsws.netsws, MAC)}>
         ITERAR
       </button>
+      <div className="search-mac-container">
+        Buscar cliente por direccion MAC:
+        <InputGroup>
+          <Input onChange={handleInputMACChange} />
+          <InputGroupAddon addonType="append">
+            <Button onClick={handleSearchButton}>BUSCAR</Button>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
       {loading ? (
         <div class="overlay">
           <CircularProgress className="loading-circle" />
