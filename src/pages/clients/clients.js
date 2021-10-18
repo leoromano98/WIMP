@@ -39,6 +39,7 @@ import {
   Input,
 } from "reactstrap";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
 
 // Configuracion para graficos:
 
@@ -348,15 +349,8 @@ const Clients = () => {
         const nodo = iterateTopology(index, findMac);
         nodoAux = nodo;
         if (nodo[0]?.mac === findMac) {
-          const addNode = [
-            {
-              mac: index.mac,
-              ip: index.ip,
-              tipo: index.tipo,
-              name: index.name,
-              model: array.model,
-            },
-          ];
+          console.log("anadie", index);
+          const addNode = [index];
           nodo.push(addNode[0]);
           return false;
         }
@@ -367,15 +361,7 @@ const Clients = () => {
         const nodo = iterateTopology(array.ports, findMac);
         if (nodo[0]?.mac === findMac) {
           // tree.push(nodo);
-          const addNode = [
-            {
-              mac: array.mac,
-              ip: array.ip,
-              tipo: array.tipo,
-              name: array.name,
-              model: array.model,
-            },
-          ];
+          const addNode = [array];
           nodo.push(addNode[0]);
         }
         return nodo; //finrepite
@@ -385,27 +371,11 @@ const Clients = () => {
           if (array.clientesap) {
             nodo = iterateTopology(array.clientesap, findMac);
           } else {
-            return [
-              {
-                ip: array.ip,
-                mac: array.mac,
-                tipo: array.tipo,
-                name: array.name,
-                model: array.model,
-              },
-            ];
+            return [array];
           }
           if (nodo[0]?.mac === findMac) {
             // tree.push(nodo);
-            const addNode = [
-              {
-                mac: array.mac,
-                ip: array.ip,
-                tipo: array.tipo,
-                name: array.name,
-                model: array.model,
-              },
-            ];
+            const addNode = [array];
             nodo.push(addNode[0]);
           }
           return nodo; //finrepite
@@ -422,10 +392,11 @@ const Clients = () => {
 
   const handleSearchButton = () => {
     const getTopology = iterateTopology(auxTopology.netsws.netsws, MAC);
-    getTopology.forEach((item, index, object) => {
-      if (item.model === undefined || item.name === undefined) {
+    getTopology.forEach((element) => {
+      const findIndex = getTopology.findIndex((x) => x.mac === element.mac);
+      if (findIndex >= 0) {
         console.log("aca");
-        object.splice(index, 1);
+        getTopology.splice(findIndex, 1);
       }
     });
     setTopologyArray(getTopology);
@@ -434,6 +405,26 @@ const Clients = () => {
   const handleInputMACChange = (event) => {
     setMAC(event.target.value);
   };
+
+  let connections = [];
+  if (topologyArray) {
+    for (var i = 0; i < topologyArray.length; i++) {
+      if (topologyArray[i].tipo === "SW") {
+        connections.push(
+          <SwitchLayout
+            switchData={topologyArray[i]}
+            isTopology={true}
+            port={topologyArray[i - 1].num}
+          />
+        );
+      }
+    }
+
+    // port: i,
+    // isConnected: false,
+    // mac: "EE:EE:EE:EE:EE",
+    // ip: "192.168.100." + i,
+  }
 
   return (
     <>
@@ -455,15 +446,7 @@ const Clients = () => {
         </div>
       ) : (
         <>
-          {tableData ? (
-            <TableComponent
-              header={tableHeader}
-              data={tableData}
-              btnClick={handleTableButtonClick}
-            />
-          ) : (
-            <CircularProgress className="loading-circle" />
-          )}
+          {connections}
           {infoModal}
         </>
       )}

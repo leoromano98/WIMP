@@ -219,7 +219,7 @@ export function deleteSwitch() {
 
 export function getTopology() {
   var token = getTokenApi();
-  const url = `${API_HOST}/switches/topologia`;
+  const url = `${API_HOST}/topologia`;
   console.log(token);
 
   const params = {
