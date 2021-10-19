@@ -22,6 +22,7 @@ import {
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
+  getAlertas,
 } from "../../api/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -171,6 +172,8 @@ const Landing = () => {
       <button onClick={getRankingPacketsByNetworkProtocol}>
         GET PAQUETES PROT RED
       </button>
+      <button onClick={getAlertas}>ALERTAS</button>
+
       <DatePicker
         selected={startDate}
         onChange={(date) => setStartDate(date)}

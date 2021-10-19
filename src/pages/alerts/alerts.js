@@ -1,70 +1,47 @@
-// Documentacion de alertas
-// https://reactstrap.github.io/components/alerts/
-
 import { useState, useEffect } from "react";
 import "./alerts.css";
-import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
-
+import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
+import RadioButtons from "../../components/RadioButtons/RadioButtons";
 const Alerts = () => {
   const [notifications, setNotifications] = useState([]);
+  const [MAC, setMAC] = useState(null);
+  const [selectedList, setSelectedList] = useState("ranking");
 
-  const [switchData, setSwitchData] = useState(null);
-  const [switch2Data, setSwitch2Data] = useState(null);
+  const handleInputMACChange = (event) => {
+    setMAC(event.target.value);
+  };
 
-  // @DOC: Para actualizar datos del switch
-  useEffect(() => {
-    var data = [];
-    for (var i = 1; i <= 12; i++) {
-      data.push({
-        port: i,
-        isConnected: true,
-        mac: "EE:EE:EE:EE:EE",
-        ip: "192.168.100." + i,
-      });
-    }
-    for (i; i <= 24; i++) {
-      data.push({
-        port: i,
-        isConnected: false,
-        mac: "EE:EE:EE:EE:EE",
-        ip: "192.168.100." + i,
-      });
-    }
-    setSwitchData(data);
-  }, []);
+  const handleSearchButton = () => {
+    // Filter table
+  };
 
-  // @DOC: Para actualizar datos del switch
-  useEffect(() => {
-    var data2 = [];
-    for (var i = 1; i <= 6; i++) {
-      data2.push({
-        port: i,
-        isConnected: true,
-        mac: "EE:EE:EE:EE:EE",
-        ip: "192.168.100." + i,
-      });
-    }
-    for (i; i <= 12; i++) {
-      data2.push({
-        port: i,
-        isConnected: false,
-        mac: "EE:EE:EE:EE:EE",
-        ip: "192.168.100." + i,
-      });
-    }
-    setSwitch2Data(data2);
-  }, []);
+  const handleSelectedList = (radioId) => {
+    setSelectedList(radioId);
+    console.log(radioId);
+  };
+
+  const radioOptions = [
+    {
+      id: "ranking",
+      text: "Ranking",
+    },
+    {
+      id: "listar",
+      text: "Listar",
+    },
+  ];
 
   return (
-    <div className="login-container">
-      <div className="form-container">
-        <h1 className="form-title">alertas</h1>
-        {switchData ? (
-          <SwitchLayout name="nombre suich" switchData={switchData} />
-        ) : null}
-        {switch2Data ? (
-          <SwitchLayout name="nombre suich 2" switchData={switch2Data} />
-        ) : null}
+    <div className="alerts-container">
+      <RadioButtons options={radioOptions} selected={handleSelectedList} />
+      <div className="search-mac-container">
+        Buscar cliente por direccion MAC:
+        <InputGroup>
+          <Input onChange={handleInputMACChange} />
+          <InputGroupAddon addonType="append">
+            <Button onClick={handleSearchButton}>BUSCAR</Button>
+          </InputGroupAddon>
+        </InputGroup>
       </div>
     </div>
   );

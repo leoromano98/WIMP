@@ -545,6 +545,58 @@ export async function getPacketsByIP(MAC) {
     });
 }
 
+export async function getAlertas() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/alertas`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getAlertasRanking() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/alertas/ranking`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
 export const auxTopology = {
   _id: { $oid: "6161a9cb56963dbd0c0118a3" },
   ident: 27017,
