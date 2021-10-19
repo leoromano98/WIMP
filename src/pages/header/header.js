@@ -97,6 +97,9 @@ const Header = () => {
         <a className="menu-item" href="/accesspoints">
           Access Points
         </a>
+        <a className="menu-item" href="/clients">
+          Ubicar cliente
+        </a>
         {/* <a onClick={showSettings} className="menu-item--small" href="">
           Settings
         </a> */}

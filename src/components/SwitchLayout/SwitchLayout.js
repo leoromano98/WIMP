@@ -44,7 +44,6 @@ const SwitchLayout = (props) => {
   useEffect(() => {
     if (props.isTopology) {
       let numberPorts;
-      console.log("COUNTRY", props);
       switch (props.switchData.model) {
         case "US48":
           numberPorts = 52;

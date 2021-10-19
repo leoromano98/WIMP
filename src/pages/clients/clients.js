@@ -40,6 +40,8 @@ import {
 } from "reactstrap";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
+import APLayout from "../../components/APLayout/APLayout";
+import ClientLayout from "../../components/ClientLayout/ClientLayout";
 
 // Configuracion para graficos:
 
@@ -132,7 +134,7 @@ const Clients = () => {
   const [tableData, setTableData] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [MAC, setMAC] = useState("");
   const [topologyArray, setTopologyArray] = useState(null);
   const toggleModal = () => setOpenModal(!openModal);
@@ -309,14 +311,6 @@ const Clients = () => {
     // getByMAC();
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log("This will run after 1 second!");
-      setLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const handleTableButtonClick = (event) => {
     toggleModal();
     const MAC = event.target.parentElement.cells[1].outerText;
@@ -409,15 +403,25 @@ const Clients = () => {
   let connections = [];
   if (topologyArray) {
     for (var i = 0; i < topologyArray.length; i++) {
-      if (topologyArray[i].tipo === "SW") {
-        connections.push(
-          <SwitchLayout
-            switchData={topologyArray[i]}
-            isTopology={true}
-            port={topologyArray[i - 1].num}
-          />
-        );
+      let disp;
+      switch (topologyArray[i].tipo) {
+        case "SW":
+          disp = (
+            <SwitchLayout
+              switchData={topologyArray[i]}
+              isTopology={true}
+              port={topologyArray[i - 1].num}
+            />
+          );
+          break;
+        case "AP":
+          disp = <APLayout apData={topologyArray[i]} />;
+          break;
+        default:
+          disp = <ClientLayout clientData={topologyArray[i]} />;
+          break;
       }
+      connections.push(disp);
     }
 
     // port: i,
@@ -428,9 +432,6 @@ const Clients = () => {
 
   return (
     <>
-      <button onClick={() => iterateTopology(auxTopology.netsws.netsws, MAC)}>
-        ITERAR
-      </button>
       <div className="search-mac-container">
         Buscar cliente por direccion MAC:
         <InputGroup>

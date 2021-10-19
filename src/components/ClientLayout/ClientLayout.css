@@ -1,0 +1,25 @@
+.client-container {
+  width: 300px;
+  margin: 20px auto;
+}
+
+.monitor {
+  width: 100%;
+  height: 250px;
+  margin: 20px auto 5px;
+  border: 20px solid grey;
+  border-radius: 25px;
+  padding: 65px 0;
+}
+
+.keyboard {
+  width: 100%;
+  height: 80px;
+  background-color: grey;
+  border-radius: 25px;
+}
+
+.client-mac {
+  font-weight: 600;
+  color: green;
+}
