@@ -17,7 +17,6 @@ const TableComponent = (props) => {
   // Esta funcion se encarga de ordenar los datos de acuerdo a header.key
   const dataTable = () => {
     props.data.forEach((index) => {
-      console.log(index);
       const values = Object.entries(index);
       const style = {
         backgroundColor: "unset",
@@ -68,7 +67,6 @@ const TableComponent = (props) => {
   };
 
   dataTable();
-  console.log("data", data);
 
   return (
     <Table striped hover className="table">

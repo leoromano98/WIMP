@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
+import { getAlertas, getAlertasRanking } from "../../api/auth";
 import "./alerts.css";
 import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
 import RadioButtons from "../../components/RadioButtons/RadioButtons";
+import TableComponent from "../../components/Table/Table";
 const Alerts = () => {
   const [notifications, setNotifications] = useState([]);
   const [MAC, setMAC] = useState(null);
   const [selectedList, setSelectedList] = useState("ranking");
+  const [tableData, setTableData] = useState(null);
+  const [tableHeader, setTableHeader] = useState(null);
 
   const handleInputMACChange = (event) => {
     setMAC(event.target.value);
@@ -31,6 +35,46 @@ const Alerts = () => {
     },
   ];
 
+  useEffect(() => {
+    async function func() {
+      let data = null;
+      let header = null;
+      if (selectedList === "ranking") {
+        data = await getAlertas();
+        header = [
+          {
+            key: "MAC",
+            text: "_id",
+          },
+          {
+            key: "cant",
+            text: "cant",
+          },
+        ];
+      } else {
+        data = await getAlertasRanking();
+        header = [
+          {
+            key: "mac",
+            text: "MAC",
+          },
+          {
+            key: "evento",
+            text: "Evento",
+          },
+          {
+            key: "timestamp",
+            text: "Fecha y hora",
+          },
+        ];
+      }
+      console.log(data);
+      setTableData(data);
+      setTableHeader(header);
+    }
+    func();
+  }, [selectedList]);
+
   return (
     <div className="alerts-container">
       <RadioButtons options={radioOptions} selected={handleSelectedList} />
@@ -43,6 +87,10 @@ const Alerts = () => {
           </InputGroupAddon>
         </InputGroup>
       </div>
+
+      {tableData && tableHeader ? (
+        <TableComponent header={tableHeader} data={tableData} />
+      ) : null}
     </div>
   );
 };

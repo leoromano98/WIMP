@@ -17,7 +17,6 @@ const RadioButtons = (props) => {
               type="radio"
               name="radio"
               onClick={handleSelectedButton}
-              // checked={index.id === "ranking" ? true : undefined}
               defaultChecked={index.id === "ranking"}
             />{" "}
             {index.text}
