@@ -4,19 +4,27 @@ import "./alerts.css";
 import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
 import RadioButtons from "../../components/RadioButtons/RadioButtons";
 import TableComponent from "../../components/Table/Table";
+import CircularProgress from "@material-ui/core/CircularProgress";
 const Alerts = () => {
   const [notifications, setNotifications] = useState([]);
-  const [MAC, setMAC] = useState(null);
   const [selectedList, setSelectedList] = useState("ranking");
   const [tableData, setTableData] = useState(null);
+  const [filterData, setFilterData] = useState(null);
   const [tableHeader, setTableHeader] = useState(null);
 
   const handleInputMACChange = (event) => {
-    setMAC(event.target.value);
-  };
-
-  const handleSearchButton = () => {
-    // Filter table
+    const busqueda = event.target.value.toLowerCase();
+    const filter = tableData.filter((index) => {
+      if (selectedList === "ranking") {
+        return index._id.toLowerCase().includes(busqueda);
+      } else {
+        return (
+          index.mac.toLowerCase().includes(busqueda) ||
+          index.evento.toLowerCase().includes(busqueda)
+        );
+      }
+    });
+    setFilterData(filter);
   };
 
   const handleSelectedList = (radioId) => {
@@ -36,6 +44,8 @@ const Alerts = () => {
   ];
 
   useEffect(() => {
+    setTableData(null);
+    setFilterData(null);
     async function func() {
       let data = null;
       let header = null;
@@ -68,8 +78,8 @@ const Alerts = () => {
           },
         ];
       }
-      console.log(data);
       setTableData(data);
+      setFilterData(data);
       setTableHeader(header);
     }
     func();
@@ -79,18 +89,20 @@ const Alerts = () => {
     <div className="alerts-container">
       <RadioButtons options={radioOptions} selected={handleSelectedList} />
       <div className="search-mac-container">
-        Buscar cliente por direccion MAC:
+        Filtrar por direccion MAC{" "}
+        {selectedList === "listar" ? " o por evento" : null}:
         <InputGroup>
           <Input onChange={handleInputMACChange} />
-          <InputGroupAddon addonType="append">
-            <Button onClick={handleSearchButton}>BUSCAR</Button>
-          </InputGroupAddon>
         </InputGroup>
       </div>
 
-      {tableData && tableHeader ? (
-        <TableComponent header={tableHeader} data={tableData} />
-      ) : null}
+      {filterData && tableHeader ? (
+        <TableComponent header={tableHeader} data={filterData} />
+      ) : (
+        <div class="overlay">
+          <CircularProgress className="loading-circle" />
+        </div>
+      )}
     </div>
   );
 };
