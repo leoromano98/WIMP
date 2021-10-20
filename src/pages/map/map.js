@@ -41,27 +41,37 @@ let myIcon = new L.Icon({
 function MyComponent({ saveMarkers }) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  const group = L.markerClusterGroup();
-
   const map = useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
       saveMarkers([lat, lng]);
-      // L.marker([lat, lng], { icon: myIcon }).addTo(map);
-      const marker = L.marker([lat, lng], { icon: myIcon });
-      group.addLayer(marker);
+      L.marker([lat, lng], { icon: myIcon }).addTo(map);
     },
   });
-  map.addLayer(group);
-  // if(this.state.)
   return null;
 }
 
-// @DOC: Definir estado del dispositivo.
+// @DOC: Definir estado del dispositivo. (AL FINAL SE USA OTRO METODO)
 // mark1 = tiempo en minutos que cambia a estado 'advertencia'
 // mark2 = tiempo en minutos que cambia a estado 'desconectado'
 // ---CONECTADO---|---ADVERTENCIA---|---DESCONECTADO---
 //              mark1             mark2
+// const putState = (timestamp) => {
+//   const time = new Date(timestamp);
+//   const now = new Date();
+//   const difference = (now.getTime() - time.getTime()) / 1000; //obtengo diferencia en segundos entre un tiempo y otro
+//   const mark1 = 15;
+//   const mark2 = 30;
+//   if (difference < mark1 * 60) {
+//     return "Activo";
+//   } else {
+//     if (difference < mark2 * 60) {
+//       return "Advertencia";
+//     }
+//     return "Desconectado";
+//   }
+// };
+
 const putState = (timestamp) => {
   const time = new Date(timestamp);
   const now = new Date();
@@ -107,19 +117,31 @@ export default class MapDisplay extends Component {
 
   async getSwitches() {
     var response = await getTopology();
-    console.log("Switches: ", response);
-    const now = new Date();
-    response.forEach((index) => {
+    const switches = response[0].netsws.netsws;
+    console.log("switches", switches);
+    switches.forEach((index) => {
       index.formatedDate = formatDate(index.timestamp);
-      index.state = putState(index.timestamp);
+      if (index?.mem < 0) {
+        index.state = "Inactivo";
+      } else {
+        index.state = "Activo";
+      }
+      if (!index.fanlevel) {
+        index.fanlevel = "-";
+      }
+      if (!index.cpu) {
+        index.cpu = "-";
+      }
+      if (!index.temp) {
+        index.temp = "-";
+      }
       if (!index.lat || !index.lng) {
         index.lat = 0;
         index.lng = 0;
       }
     });
-    formatDate(response[0].timestamp);
     this.setState({
-      switches: response,
+      switches: switches,
     });
     this.updateLines();
   }
@@ -205,10 +227,11 @@ export default class MapDisplay extends Component {
   };
 
   handlePositionButton = (event) => {
-    console.log("B ", event.target.id);
+    console.log("B ", event.target.id, this.state.switches);
     const findSwitch = this.state.switches.find(
       (element) => element.name === event.target.id
     );
+    console.log(findSwitch);
     if (findSwitch) {
       this.setState({
         selectedSwitch: findSwitch,
@@ -254,12 +277,12 @@ export default class MapDisplay extends Component {
       { key: "mem", text: "MEM" },
       { key: "temp", text: "TEMP" },
       { key: "formatedDate", text: "Ult. Actualizacion" },
-      {
-        key: "info",
-        text: "Informacion",
-        isButton: true,
-        handler: this.handleInfoButton,
-      },
+      // {
+      //   key: "info",
+      //   text: "Informacion",
+      //   isButton: true,
+      //   handler: this.handleInfoButton,
+      // },
       {
         key: "position",
         text: "Asignar ubicacion",
