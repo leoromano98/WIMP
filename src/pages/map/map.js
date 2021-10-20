@@ -28,6 +28,7 @@ import {
   createSwitch,
   modifySwitch,
   formatDate,
+  ubicarSwitch,
 } from "../../api/auth";
 
 let myIcon = new L.Icon({
@@ -175,7 +176,16 @@ export default class MapDisplay extends Component {
     //   newParent: null,
     // });
     alert("guardar lat y lng por hTTP ");
-    console.log(newMarkerCoords[0], newMarkerCoords[1]);
+    ubicarSwitch(
+      this.state.selectedSwitch.mac,
+      newMarkerCoords[0],
+      newMarkerCoords[1]
+    );
+    console.log(
+      newMarkerCoords[0],
+      newMarkerCoords[1],
+      this.state.selectedSwitch.mac
+    );
     this.setState({
       selectedSwitch: null,
     });

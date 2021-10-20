@@ -649,6 +649,42 @@ export async function getAnomaliasRanking() {
     });
 }
 
+export async function ubicarSwitch(mac, lat, lng) {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/switches/ubicar`;
+  const body = {
+    mac: mac,
+    lat: lat,
+    lng: lng,
+  };
+  console.log("body", body);
+  const params = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(body),
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        // return response.json();
+        console.log(response.json());
+      }
+    })
+    .then((result) => {
+      console.log(result);
+      // return result;
+    })
+    .catch((err) => {
+      console.log(err);
+      // return err;
+    });
+}
+
 export const formatDate = (pDate) => {
   const date = new Date(pDate);
   const dia = date.getDate();
