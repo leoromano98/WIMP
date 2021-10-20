@@ -40,19 +40,19 @@ const Alerts = () => {
       let data = null;
       let header = null;
       if (selectedList === "ranking") {
-        data = await getAlertas();
+        data = await getAlertasRanking();
         header = [
           {
-            key: "MAC",
-            text: "_id",
+            key: "_id",
+            text: "MAC",
           },
           {
             key: "cant",
-            text: "cant",
+            text: "Cantidad",
           },
         ];
       } else {
-        data = await getAlertasRanking();
+        data = await getAlertas();
         header = [
           {
             key: "mac",
