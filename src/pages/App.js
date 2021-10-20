@@ -15,6 +15,7 @@ import Map from "./map/map";
 import D3 from "./d3/d3";
 import RankPackets from "./rankPackets/rankPackets";
 import Clients from "./clients/clients";
+import Anomalies from "./anomalies/anomalies";
 
 import { AuthContext } from "../utils/context";
 import { isUserLogedApi, triggerLogin } from "../api/auth";
@@ -76,6 +77,9 @@ function App() {
               </Route>
               <Route path="/alerts">
                 <Alerts />
+              </Route>
+              <Route path="/anomalies">
+                <Anomalies />
               </Route>
               <Route path="/rankpackets">
                 <RankPackets />

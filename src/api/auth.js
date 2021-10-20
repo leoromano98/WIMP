@@ -597,6 +597,81 @@ export async function getAlertasRanking() {
     });
 }
 
+export async function getAnomalias() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/anomalias`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export async function getAnomaliasRanking() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/anomalias/ranking`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
+export const formatDate = (pDate) => {
+  const date = new Date(pDate);
+  const dia = date.getDate();
+  const mes = date.getMonth() + 1;
+  const anio = date.getFullYear();
+  const horas = date.getHours();
+  const minutos = date.getMinutes();
+  const segundos = date.getSeconds();
+  return (
+    dia +
+    "/" +
+    mes +
+    "/" +
+    anio +
+    " - " +
+    horas +
+    ":" +
+    minutos +
+    ":" +
+    segundos
+  );
+};
+
 export const auxTopology = {
   _id: { $oid: "6161a9cb56963dbd0c0118a3" },
   ident: 27017,

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { getAlertas, getAlertasRanking, formatDate } from "../../api/auth";
-import "./alerts.css";
+import { getAnomalias, getAnomaliasRanking, formatDate } from "../../api/auth";
+import "./anomalies.css";
 import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
 import RadioButtons from "../../components/RadioButtons/RadioButtons";
 import TableComponent from "../../components/Table/Table";
 import CircularProgress from "@material-ui/core/CircularProgress";
-const Alerts = () => {
+
+const Anomalies = () => {
   const [notifications, setNotifications] = useState([]);
   const [selectedList, setSelectedList] = useState("ranking");
   const [tableData, setTableData] = useState(null);
@@ -20,7 +21,7 @@ const Alerts = () => {
       } else {
         return (
           index.mac.toLowerCase().includes(busqueda) ||
-          index.evento.toLowerCase().includes(busqueda)
+          index.anomaly.toLowerCase().includes(busqueda)
         );
       }
     });
@@ -50,7 +51,7 @@ const Alerts = () => {
       let data = null;
       let header = null;
       if (selectedList === "ranking") {
-        data = await getAlertasRanking();
+        data = await getAnomaliasRanking();
         header = [
           {
             key: "_id",
@@ -62,15 +63,15 @@ const Alerts = () => {
           },
         ];
       } else {
-        data = await getAlertas();
+        data = await getAnomalias();
         header = [
           {
             key: "mac",
             text: "MAC",
           },
           {
-            key: "evento",
-            text: "Evento",
+            key: "anomaly",
+            text: "Anomalia",
           },
           {
             key: "timestamp",
@@ -81,6 +82,7 @@ const Alerts = () => {
           (index) => (index.timestamp = formatDate(index.timestamp))
         );
       }
+      console.log(data);
       setTableData(data);
       setFilterData(data);
       setTableHeader(header);
@@ -93,7 +95,7 @@ const Alerts = () => {
       <RadioButtons options={radioOptions} selected={handleSelectedList} />
       <div className="search-mac-container">
         Filtrar por direccion MAC{" "}
-        {selectedList === "listar" ? " o por evento" : null}:
+        {selectedList === "listar" ? " o por anomalia" : null}:
         <InputGroup>
           <Input onChange={handleInputMACChange} />
         </InputGroup>
@@ -110,4 +112,4 @@ const Alerts = () => {
   );
 };
 
-export default Alerts;
+export default Anomalies;

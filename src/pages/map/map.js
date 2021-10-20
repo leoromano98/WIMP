@@ -23,7 +23,12 @@ import marker from "../../assets/img/switch.svg";
 import TableComponent from "../../components/Table/Table";
 import { Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import { getTopology, createSwitch, modifySwitch } from "../../api/auth";
+import {
+  getTopology,
+  createSwitch,
+  modifySwitch,
+  formatDate,
+} from "../../api/auth";
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -51,29 +56,6 @@ function MyComponent({ saveMarkers }) {
   // if(this.state.)
   return null;
 }
-
-const formatDate = (pDate) => {
-  const date = new Date(pDate);
-  const dia = date.getDate();
-  const mes = date.getMonth() + 1;
-  const anio = date.getFullYear();
-  const horas = date.getHours();
-  const minutos = date.getMinutes();
-  const segundos = date.getSeconds();
-  return (
-    dia +
-    "/" +
-    mes +
-    "/" +
-    anio +
-    " - " +
-    horas +
-    ":" +
-    minutos +
-    ":" +
-    segundos
-  );
-};
 
 // @DOC: Definir estado del dispositivo.
 // mark1 = tiempo en minutos que cambia a estado 'advertencia'

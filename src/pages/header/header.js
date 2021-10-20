@@ -85,6 +85,9 @@ const Header = () => {
         <a className="menu-item" href="/alerts">
           Alertas
         </a>
+        <a className="menu-item" href="/anomalies">
+          Anomalias
+        </a>
         <a className="menu-item" href="/d3">
           D3 Graph
         </a>
