@@ -31,6 +31,7 @@ import {
   formatDate,
   ubicarSwitch,
 } from "../../api/auth";
+import { findDOMNode } from "react-dom";
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -43,11 +44,17 @@ let myIcon = new L.Icon({
 function MyComponent({ saveMarkers }) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
+  var marker
+
   const map = useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
+      marker = new L.marker([lat, lng], { icon: myIcon })
+      map.addLayer(marker)
       saveMarkers([lat, lng]);
-      L.marker([lat, lng], { icon: myIcon }).addTo(map);
+      // L.marker([lat, lng], { icon: myIcon }).addTo(map);
+      console.log('markerbrop', marker)
+      
     },
   });
   return null;
@@ -115,6 +122,7 @@ export default class MapDisplay extends Component {
     switches: [],
     new: null,
     modifyParent: null,
+    rerender: false,
   };
 
   async getSwitches() {
@@ -176,23 +184,34 @@ export default class MapDisplay extends Component {
     //   newModel: null,
     //   newParent: null,
     // });
+
     alert("guardar lat y lng por hTTP ");
     ubicarSwitch(
       this.state.selectedSwitch.mac,
       newMarkerCoords[0],
       newMarkerCoords[1]
     );
-    console.log(
-      newMarkerCoords[0],
-      newMarkerCoords[1],
-      this.state.selectedSwitch.mac
-    );
+
+    // const findIndex = this.state.switches.findIndex(
+    //   (element) => element.mac === this.state.selectedSwitch.mac
+    // );
+    // console.log('kbz', this.state.switches, this.state.selectedSwitch.mac, findIndex)
+
+    // const newSwitches = this.state.switches;
+    // newSwitches[findIndex].lat = newMarkerCoords[0];
+    // newSwitches[findIndex].lng = newMarkerCoords[1];
+
     this.setState({
+      // switches: newSwitches,
       selectedSwitch: null,
+      rerender: !this.state.rerender,
     });
 
     //TODO: PUT lat y lng; hacer get de todos los sw; recargar mapa
     this.getSwitches();
+    this.setState({
+      rerender: !this.state.rerender,
+    });
   };
 
   myIcon = new L.Icon({
@@ -243,7 +262,6 @@ export default class MapDisplay extends Component {
     const findSwitch = this.state.switches.find(
       (element) => element.name === event.target.id
     );
-    console.log(findSwitch);
     if (findSwitch) {
       this.setState({
         selectedSwitch: findSwitch,
@@ -258,14 +276,21 @@ export default class MapDisplay extends Component {
 
     const position = [this.state.map.lat, this.state.map.lng];
 
+
+
     const showSwitches = this.state.switches.map((index) => {
+      
       return (
         <Marker
           position={[index.lat, index.lng]}
           icon={this.myIcon}
           onClick={this.handleClick}
         >
-          <Popup>{index.nombre}</Popup>
+          <Popup>
+            {index.name}
+            <br />
+            {index.mac}
+          </Popup>
         </Marker>
       );
     });
