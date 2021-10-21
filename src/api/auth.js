@@ -649,6 +649,32 @@ export async function getAnomaliasRanking() {
     });
 }
 
+export async function listarSwitches() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/switches`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
 export async function ubicarSwitch(mac, lat, lng) {
   var token = getTokenApi();
 
@@ -658,7 +684,6 @@ export async function ubicarSwitch(mac, lat, lng) {
     lat: lat,
     lng: lng,
   };
-  console.log("body", body);
   const params = {
     method: "PATCH",
     headers: {
@@ -671,17 +696,14 @@ export async function ubicarSwitch(mac, lat, lng) {
   return fetch(url, params)
     .then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        // return response.json();
-        console.log(response.json());
+        return response.json();
       }
     })
     .then((result) => {
-      console.log(result);
-      // return result;
+      return result;
     })
     .catch((err) => {
-      console.log(err);
-      // return err;
+      return err;
     });
 }
 

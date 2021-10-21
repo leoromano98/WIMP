@@ -25,6 +25,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import {
   getTopology,
+  listarSwitches,
   createSwitch,
   modifySwitch,
   formatDate,
@@ -117,8 +118,8 @@ export default class MapDisplay extends Component {
   };
 
   async getSwitches() {
-    var response = await getTopology();
-    const switches = response[0].netsws.netsws;
+    var response = await listarSwitches();
+    const switches = response;
     console.log("switches", switches);
     switches.forEach((index) => {
       index.formatedDate = formatDate(index.timestamp);
@@ -208,6 +209,7 @@ export default class MapDisplay extends Component {
           let parentIndex = this.state.switches.findIndex(
             (i) => index._pid === i._id
           );
+          console.log("parentIndex", parentIndex);
           if (parentIndex >= 0) {
             return (
               <Polyline
