@@ -5,7 +5,7 @@
 
 // showSwitches : dibuja los switches ya guardados
 
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { Map, Leaflet } from "leaflet";
 import L from "leaflet";
 import {
@@ -32,6 +32,7 @@ import {
   ubicarSwitch,
 } from "../../api/auth";
 import { findDOMNode } from "react-dom";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 let myIcon = new L.Icon({
   iconUrl: marker,
@@ -44,17 +45,16 @@ let myIcon = new L.Icon({
 function MyComponent({ saveMarkers }) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  var marker
+  var marker;
 
   const map = useMapEvents({
     click: (e) => {
       const { lat, lng } = e.latlng;
-      marker = new L.marker([lat, lng], { icon: myIcon })
-      map.addLayer(marker)
+      marker = new L.marker([lat, lng], { icon: myIcon });
+      map.addLayer(marker);
       saveMarkers([lat, lng]);
       // L.marker([lat, lng], { icon: myIcon }).addTo(map);
-      console.log('markerbrop', marker)
-      
+      console.log("markerbrop", marker);
     },
   });
   return null;
@@ -122,7 +122,7 @@ export default class MapDisplay extends Component {
     switches: [],
     new: null,
     modifyParent: null,
-    rerender: false,
+    showSwitches: null,
   };
 
   async getSwitches() {
@@ -154,10 +154,50 @@ export default class MapDisplay extends Component {
       switches: switches,
     });
     this.updateLines();
+    return switches;
   }
 
   componentDidMount() {
-    this.getSwitches();
+    this.getSwitches().then((response) => {
+      let positions = [];
+      for(var i = 0 ; i<response.length ; i++){
+        positions.push({ lat: 0, lng: 0 })
+      }
+
+
+      const showSwitches = response.map((index) => {
+        const switchPos = { lat: index.lat, lng: index.lng }
+        positions.push(switchPos);
+      }
+
+      // LA IDEA ES: 1 GUARDAR EN ESTADO LAS POSICIONES VACIAS, 2 CREAR MARCADORES QEU APUNTEN AL ESTADO DE POSICIONES,
+      // 3 ACTUALIZAR ESTADO DE POSICIONES CON LAS VERDADERAS, 4 CUANDO MODIFIQUE ESTADO DE POSICIONES DEBERIAN MOVERSE
+
+      this.setState({
+        positions: positions
+      })
+
+        return (
+          <Marker
+            position={[index.lat, index.lng]}
+            icon={this.myIcon}
+            onClick={this.handleClick}
+            id={index.mac}
+          >
+            <Popup>
+              {index.name}
+              <br />
+              {index.mac}
+            </Popup>
+          </Marker>
+        );
+      });
+
+      this.setState({
+        showSwitches: showSwitches,
+        positions: positions,
+      });
+    });
   }
 
   //@DOC: Click en el mapa, añade icono (switch)
@@ -192,6 +232,17 @@ export default class MapDisplay extends Component {
       newMarkerCoords[1]
     );
 
+    // @LEO
+    // for each .props.id === this.state.selectedSwitch.mac => position = {newposition}
+    const findIndex = this.state.showSwitches.findIndex(
+      (index) => index.props.id === this.state.selectedSwitch.mac
+    );
+    const newShowSwitches = this.state.showSwitches;
+    newShowSwitches[findIndex].props.position = {
+      lat: newMarkerCoords[0],
+      lng: newMarkerCoords[1],
+    };
+
     // const findIndex = this.state.switches.findIndex(
     //   (element) => element.mac === this.state.selectedSwitch.mac
     // );
@@ -202,16 +253,13 @@ export default class MapDisplay extends Component {
     // newSwitches[findIndex].lng = newMarkerCoords[1];
 
     this.setState({
-      // switches: newSwitches,
+      showSwitches: newShowSwitches,
       selectedSwitch: null,
       rerender: !this.state.rerender,
     });
 
     //TODO: PUT lat y lng; hacer get de todos los sw; recargar mapa
     this.getSwitches();
-    this.setState({
-      rerender: !this.state.rerender,
-    });
   };
 
   myIcon = new L.Icon({
@@ -269,6 +317,42 @@ export default class MapDisplay extends Component {
     }
   };
 
+  // DraggableMarker = () => {
+  //   const [draggable, setDraggable] = useState(false)
+  //   const [position, setPosition] = useState(center)
+  //   const markerRef = useRef(null)
+  //   const eventHandlers = useMemo(
+  //     () => ({
+  //       dragend() {
+  //         const marker = markerRef.current
+  //         if (marker != null) {
+  //           setPosition(marker.getLatLng())
+  //         }
+  //       },
+  //     }),
+  //     [],
+  //   )
+  //   const toggleDraggable = useCallback(() => {
+  //     setDraggable((d) => !d)
+  //   }, [])
+
+  //   return (
+  //     <Marker
+  //       draggable={draggable}
+  //       eventHandlers={eventHandlers}
+  //       position={position}
+  //       ref={markerRef}>
+  //       <Popup minWidth={90}>
+  //         <span onClick={toggleDraggable}>
+  //           {draggable
+  //             ? 'Marker is draggable'
+  //             : 'Click here to make marker draggable'}
+  //         </span>
+  //       </Popup>
+  //     </Marker>
+  //   )
+  // }
+
   render() {
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
@@ -276,24 +360,7 @@ export default class MapDisplay extends Component {
 
     const position = [this.state.map.lat, this.state.map.lng];
 
-
-
-    const showSwitches = this.state.switches.map((index) => {
-      
-      return (
-        <Marker
-          position={[index.lat, index.lng]}
-          icon={this.myIcon}
-          onClick={this.handleClick}
-        >
-          <Popup>
-            {index.name}
-            <br />
-            {index.mac}
-          </Popup>
-        </Marker>
-      );
-    });
+    console.log("!!", this.state.showSwitches);
 
     if (this.state.switches.length !== 0) {
       var tableData = JSON.parse(JSON.stringify(this.state.switches));
@@ -507,7 +574,7 @@ export default class MapDisplay extends Component {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {showSwitches}
+          {this.state.showSwitches}
           {this.state.drawLines}
           {this.state.selectedSwitch ? (
             <MyComponent saveMarkers={this.saveMarkers} />
