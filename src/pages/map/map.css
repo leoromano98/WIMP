@@ -24,3 +24,9 @@
 .overlay {
   z-index: 0 !important;
 }
+
+.save-position{
+  position: relative;
+  display:flex !important;
+  margin: 0 auto 50px;
+}

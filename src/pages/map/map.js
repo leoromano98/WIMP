@@ -20,6 +20,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import marker from "../../assets/img/switch.svg";
+import markerLight from "../../assets/img/switchLight.svg";
 import TableComponent from "../../components/Table/Table";
 import { Modal, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
@@ -35,30 +36,37 @@ import { findDOMNode } from "react-dom";
 import zIndex from "@material-ui/core/styles/zIndex";
 
 let myIcon = new L.Icon({
-  iconUrl: marker,
-  iconRetinaUrl: marker,
+  iconUrl: markerLight,
+  iconRetinaUrl: markerLight,
+  popupAnchor: [-0, -0],
+  iconSize: [70, 45],
+});
+
+let myIconLight = new L.Icon({
+  iconUrl: markerLight,
+  iconRetinaUrl: markerLight,
   popupAnchor: [-0, -0],
   iconSize: [70, 45],
 });
 
 //@DOC: Click en el mapa, añade icono (switch)
-function MyComponent({ saveMarkers }) {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+// function MyComponent({ saveMarkers }) {
+//   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  var marker;
+//   var marker;
 
-  const map = useMapEvents({
-    click: (e) => {
-      const { lat, lng } = e.latlng;
-      marker = new L.marker([lat, lng], { icon: myIcon });
-      map.addLayer(marker);
-      saveMarkers([lat, lng]);
-      // L.marker([lat, lng], { icon: myIcon }).addTo(map);
-      console.log("markerbrop", marker);
-    },
-  });
-  return null;
-}
+//   const map = useMapEvents({
+//     click: (e) => {
+//       const { lat, lng } = e.latlng;
+//       marker = new L.marker([lat, lng], { icon: myIcon });
+//       map.addLayer(marker);
+//       saveMarkers([lat, lng]);
+//       // L.marker([lat, lng], { icon: myIcon }).addTo(map);
+//       console.log("markerbrop", marker);
+//     },
+//   });
+//   return null;
+// }
 
 // @DOC: Definir estado del dispositivo. (AL FINAL SE USA OTRO METODO)
 // mark1 = tiempo en minutos que cambia a estado 'advertencia'
@@ -123,6 +131,9 @@ export default class MapDisplay extends Component {
     new: null,
     modifyParent: null,
     showSwitches: null,
+    draggable: true,
+    showSwitchesAux: null,
+    newPos: null,
   };
 
   async getSwitches() {
@@ -201,6 +212,7 @@ export default class MapDisplay extends Component {
       });
       this.setState({
         showSwitches: showSwitches,
+        showSwitchesAux: showSwitches,
       });
     });
   }
@@ -220,47 +232,70 @@ export default class MapDisplay extends Component {
   // };
 
   // @DOC: Funcion que se ejecuta al hacer clic en el mapa
-  saveMarkers = (newMarkerCoords) => {
-    // this.setState({
-    //   showModal: 1,
-    //   newLat: newMarkerCoords[0],
-    //   newLng: newMarkerCoords[1],
-    //   newName: null,
-    //   newModel: null,
-    //   newParent: null,
-    // });
+  // saveMarkers = (newMarkerCoords) => {
+  //   // this.setState({
+  //   //   showModal: 1,
+  //   //   newLat: newMarkerCoords[0],
+  //   //   newLng: newMarkerCoords[1],
+  //   //   newName: null,
+  //   //   newModel: null,
+  //   //   newParent: null,
+  //   // });
 
-    alert("guardar lat y lng por hTTP ");
+  //   ubicarSwitch(
+  //     this.state.selectedSwitch.mac,
+  //     newMarkerCoords[0],
+  //     newMarkerCoords[1]
+  //   );
+
+  //   // @LEO
+  //   // for each .props.id === this.state.selectedSwitch.mac => position = {newposition}
+  //   const findIndex = this.state.showSwitches.findIndex(
+  //     (index) => index.props.id === this.state.selectedSwitch.mac
+  //   );
+  //   const newPositions = this.state.positions;
+  //   newPositions[findIndex] = {
+  //     lat: newMarkerCoords[0],
+  //     lng: newMarkerCoords[1],
+  //   };
+
+  //   this.setState({
+  //     positions: newPositions,
+  //     selectedSwitch: null,
+  //     rerender: !this.state.rerender,
+  //   });
+
+  //   //TODO: PUT lat y lng; hacer get de todos los sw; recargar mapa
+  //   this.getSwitches();
+  // };
+
+  // @LEO: funcion para guardar ubicacion del sw:
+  handleSavePosition = () => {
+    console.log(this.state.showSwitches);
+    const newPosition = this.state.showSwitches.find(
+      (element) => element.props.id === this.state.selectedSwitch.mac
+    )?.props.position;
     ubicarSwitch(
       this.state.selectedSwitch.mac,
-      newMarkerCoords[0],
-      newMarkerCoords[1]
+      this.state.newPos.lat,
+      this.state.newPos.lng
     );
-
-    // @LEO
-    // for each .props.id === this.state.selectedSwitch.mac => position = {newposition}
-    const findIndex = this.state.showSwitches.findIndex(
-      (index) => index.props.id === this.state.selectedSwitch.mac
-    );
-    const newPositions = this.state.positions;
-    newPositions[findIndex] = {
-      lat: newMarkerCoords[0],
-      lng: newMarkerCoords[1],
-    };
 
     this.setState({
-      positions: newPositions,
       selectedSwitch: null,
-      rerender: !this.state.rerender,
     });
-
-    //TODO: PUT lat y lng; hacer get de todos los sw; recargar mapa
-    this.getSwitches();
   };
 
   myIcon = new L.Icon({
     iconUrl: marker,
     iconRetinaUrl: marker,
+    popupAnchor: [-0, -0],
+    iconSize: [70, 45],
+  });
+
+  myIconLight = new L.Icon({
+    iconUrl: markerLight,
+    iconRetinaUrl: markerLight,
     popupAnchor: [-0, -0],
     iconSize: [70, 45],
   });
@@ -302,6 +337,10 @@ export default class MapDisplay extends Component {
   };
 
   handlePositionButton = (event) => {
+    this.setState({
+      draggable: true,
+      showSwitches: null,
+    });
     console.log("B ", event.target.id, this.state.switches);
     const findSwitch = this.state.switches.find(
       (element) => element.name === event.target.id
@@ -310,33 +349,64 @@ export default class MapDisplay extends Component {
     const findIndex = this.state.switches.findIndex(
       (element) => element.name === event.target.id
     );
-    console.log('index',findIndex)
+    console.log("index", findIndex);
 
-    const newShowSwitches = this.state.showSwitches;
-    newShowSwitches[findIndex] = (
-      <Marker
-        position={this.state.positions[findIndex]}
-        icon={this.myIcon}
-        onClick={this.handleClick}
-        id={this.state.switches[findIndex].mac}
-        draggable={true}
-      >
-        {console.log("holi", this.state.positions[findIndex], this.state.switches[findIndex])}
-        <Popup>
-          {this.state.switches[findIndex].name}
-          <br />
-          {this.state.switches[findIndex].mac}
-        </Popup>
-      </Marker>
-    );
+    const newShowSwitches = [];
+
+    var i = 0;
+
+    console.log(this.state.showSwitchesAux);
+
+    this.state.switches.forEach((index) => {
+      newShowSwitches.push(
+        <Marker
+          position={this.state.positions[i]}
+          icon={index.name === event.target.id? this.myIconLight : this.myIcon}
+          onClick={this.handleClick}
+          id={index.mac}
+          draggable={index.name === event.target.id}
+          eventHandlers={{
+            drag: (event) => {
+              this.setState({
+                newPos: event.latlng,
+              });
+            },
+          }}
+        >
+          {console.log(index.name, event.target.id)}
+          {index.name === event.target.id ? console.log("see") : null}
+          <Popup>
+            {index.name}
+            <br />
+            {index.mac}
+          </Popup>
+        </Marker>
+      );
+      i++;
+    });
+    // newShowSwitches[findIndex] = (
+    //   <Marker
+    //     position={this.state.positions[findIndex]}
+    //     icon={this.myIcon}
+    //     onClick={this.handleClick}
+    //     id={this.state.switches[findIndex].mac}
+    //     draggable={this.state.switches[findIndex].mac}
+    //   >
+    //     {console.log("holi", this.state.positions[findIndex], this.state.switches[findIndex])}
+    //     <Popup>
+    //       {this.state.switches[findIndex].name}
+    //       <br />
+    //       {this.state.switches[findIndex].mac}
+    //     </Popup>
+    //   </Marker>
+    // );
 
     this.setState({
       selectedSwitch: findSwitch,
-      showSwitches: newShowSwitches
+      showSwitches: newShowSwitches,
     });
 
-    console.log('mamut', this.state.showSwitches, newShowSwitches)
-
+    console.log("update showsw", this.state.showSwitches);
   };
 
   // DraggableMarker = () => {
@@ -572,7 +642,7 @@ export default class MapDisplay extends Component {
     };
 
     const handleOverlayClick = () => {
-      this.setState({ selectedSwitch: null });
+      // this.setState({ selectedSwitch: null });
     };
 
     let parentOptions = [<option>-</option>];
@@ -598,10 +668,19 @@ export default class MapDisplay extends Component {
           />
           {this.state.showSwitches}
           {this.state.drawLines}
-          {this.state.selectedSwitch ? (
+          {/* {this.state.selectedSwitch ? (
             <MyComponent saveMarkers={this.saveMarkers} />
-          ) : null}
+          ) : null} */}
         </MapContainer>
+        {this.state.selectedSwitch ? (
+          <Button
+            color="success"
+            onClick={this.handleSavePosition}
+            className="save-position"
+          >
+            GUARDAR
+          </Button>
+        ) : null}
         {/* <Modal show={this.state.showModal > 0} onHide={handleClose}>
           <Modal.Header className="modal-header">
             <Modal.Title>Asignar posicion?</Modal.Title>
