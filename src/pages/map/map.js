@@ -136,6 +136,29 @@ export default class MapDisplay extends Component {
 
   // @LEO: funcion para guardar ubicacion del sw:
   handleSavePosition = () => {
+    //inicio
+    var i = 0;
+    const newShowSwitches = [];
+    this.state.switches.forEach((index) => {
+      newShowSwitches.push(
+        <Marker
+          position={this.state.positions[i]}
+          icon={this.myIcon}
+          onClick={this.handleClick}
+          id={index.mac}
+          draggable={false}
+        >
+          <Popup>
+            {index.name}
+            <br />
+            {index.mac}
+          </Popup>
+        </Marker>
+      );
+      i++;
+    });
+    //fiin
+
     ubicarSwitch(
       this.state.selectedSwitch.mac,
       this.state.newPos.lat,
@@ -144,6 +167,7 @@ export default class MapDisplay extends Component {
 
     this.setState({
       selectedSwitch: null,
+      showSwitches: newShowSwitches,
     });
   };
 
@@ -215,14 +239,11 @@ export default class MapDisplay extends Component {
     const newShowSwitches = [];
 
     var i = 0;
-
-    console.log(this.state.showSwitchesAux);
-
     this.state.switches.forEach((index) => {
       newShowSwitches.push(
         <Marker
           position={this.state.positions[i]}
-          icon={index.name === event.target.id? this.myIconLight : this.myIcon}
+          icon={index.name === event.target.id ? this.myIconLight : this.myIcon}
           onClick={this.handleClick}
           id={index.mac}
           draggable={index.name === event.target.id}
