@@ -160,29 +160,35 @@ export default class MapDisplay extends Component {
   componentDidMount() {
     this.getSwitches().then((response) => {
       let positions = [];
-      for(var i = 0 ; i<response.length ; i++){
-        positions.push({ lat: 0, lng: 0 })
-      }
+      const showSwitches = [];
+      // for (var i = 0; i < response.length; i++) {
+      //   positions.push({ lat: 0, lng: 0 });
+      // }
 
-
-      const showSwitches = response.map((index) => {
-        const switchPos = { lat: index.lat, lng: index.lng }
+      response.forEach((index) => {
+        const switchPos = { lat: index.lat, lng: index.lng };
         positions.push(switchPos);
-      }
+      });
 
       // LA IDEA ES: 1 GUARDAR EN ESTADO LAS POSICIONES VACIAS, 2 CREAR MARCADORES QEU APUNTEN AL ESTADO DE POSICIONES,
       // 3 ACTUALIZAR ESTADO DE POSICIONES CON LAS VERDADERAS, 4 CUANDO MODIFIQUE ESTADO DE POSICIONES DEBERIAN MOVERSE
 
       this.setState({
-        positions: positions
-      })
+        positions: positions,
+      });
 
-        return (
+      console.log(this.state.positions);
+
+      var i = 0;
+      response.forEach((index) => {
+        console.log("cabeza", this.state.positions[i], index);
+        showSwitches.push(
           <Marker
-            position={[index.lat, index.lng]}
+            position={this.state.positions[i]}
             icon={this.myIcon}
             onClick={this.handleClick}
             id={index.mac}
+            draggable={false}
           >
             <Popup>
               {index.name}
@@ -191,11 +197,10 @@ export default class MapDisplay extends Component {
             </Popup>
           </Marker>
         );
+        i++;
       });
-
       this.setState({
         showSwitches: showSwitches,
-        positions: positions,
       });
     });
   }
@@ -237,23 +242,14 @@ export default class MapDisplay extends Component {
     const findIndex = this.state.showSwitches.findIndex(
       (index) => index.props.id === this.state.selectedSwitch.mac
     );
-    const newShowSwitches = this.state.showSwitches;
-    newShowSwitches[findIndex].props.position = {
+    const newPositions = this.state.positions;
+    newPositions[findIndex] = {
       lat: newMarkerCoords[0],
       lng: newMarkerCoords[1],
     };
 
-    // const findIndex = this.state.switches.findIndex(
-    //   (element) => element.mac === this.state.selectedSwitch.mac
-    // );
-    // console.log('kbz', this.state.switches, this.state.selectedSwitch.mac, findIndex)
-
-    // const newSwitches = this.state.switches;
-    // newSwitches[findIndex].lat = newMarkerCoords[0];
-    // newSwitches[findIndex].lng = newMarkerCoords[1];
-
     this.setState({
-      showSwitches: newShowSwitches,
+      positions: newPositions,
       selectedSwitch: null,
       rerender: !this.state.rerender,
     });
@@ -310,11 +306,37 @@ export default class MapDisplay extends Component {
     const findSwitch = this.state.switches.find(
       (element) => element.name === event.target.id
     );
-    if (findSwitch) {
-      this.setState({
-        selectedSwitch: findSwitch,
-      });
-    }
+
+    const findIndex = this.state.switches.findIndex(
+      (element) => element.name === event.target.id
+    );
+    console.log('index',findIndex)
+
+    const newShowSwitches = this.state.showSwitches;
+    newShowSwitches[findIndex] = (
+      <Marker
+        position={this.state.positions[findIndex]}
+        icon={this.myIcon}
+        onClick={this.handleClick}
+        id={this.state.switches[findIndex].mac}
+        draggable={true}
+      >
+        {console.log("holi", this.state.positions[findIndex], this.state.switches[findIndex])}
+        <Popup>
+          {this.state.switches[findIndex].name}
+          <br />
+          {this.state.switches[findIndex].mac}
+        </Popup>
+      </Marker>
+    );
+
+    this.setState({
+      selectedSwitch: findSwitch,
+      showSwitches: newShowSwitches
+    });
+
+    console.log('mamut', this.state.showSwitches, newShowSwitches)
+
   };
 
   // DraggableMarker = () => {
