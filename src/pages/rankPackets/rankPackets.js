@@ -108,12 +108,12 @@ const tableHeader = [
     text: "MAC Origen",
   },
   {
-    key: "total",
+    key: "paquetes",
     text: "Cantidad de paquetes",
   },
   {
-    key: "button",
-    text: "Informacion",
+    key: "bytes",
+    text: "Cantidad de bytes",
   },
 ];
 
