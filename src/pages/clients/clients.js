@@ -18,7 +18,6 @@ import {
   activateSwitch,
   deactivateSwitch,
   handleSend,
-  getRankingPackets,
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
@@ -220,17 +219,23 @@ const Clients = () => {
     ],
   });
 
+  async function getByMAC() {
+    var response = await getPacketsByMAC(MAC);
+    console.log("BY MAC", response);
+    // var i = 1;
+    // response.forEach((index) => {
+    //   var newData = dataIp
+    //   newData.datasets[0].data.push(index.total);
+    //   newData.labels.push(index._id);
+    //   setDataIp(newData)
+    //   index["index"] = i;
+    //   i++;
+    // });
+    // console.log('dataip', dataIp)
+  }
+
   useEffect(() => {
-    async function getData() {
-      // var response = await getRankingPackets();
-      // var i = 1;
-      // response.forEach((index) => {
-      //   index["index"] = i;
-      //   i++;
-      // });
-      //TODO: Uncomment top, setTable with response
-      // setTableData(response);
-    }
+
 
     async function getProtocolData() {
       var response = await getRankingPacketsByAppProtocol();
@@ -272,21 +277,6 @@ const Clients = () => {
         i++;
       });
       console.log("dataip", dataIp);
-    }
-
-    async function getByMAC() {
-      var response = await getPacketsByMAC();
-      // console.log("BY MAC", response);
-      // var i = 1;
-      // response.forEach((index) => {
-      //   var newData = dataIp
-      //   newData.datasets[0].data.push(index.total);
-      //   newData.labels.push(index._id);
-      //   setDataIp(newData)
-      //   index["index"] = i;
-      //   i++;
-      // });
-      // console.log('dataip', dataIp)
     }
 
     async function getByIPC() {
@@ -441,6 +431,7 @@ const Clients = () => {
           </InputGroupAddon>
         </InputGroup>
       </div>
+      <button onClick ={getByMAC}>getByMAC</button>
       {loading ? (
         <div class="overlay">
           <CircularProgress className="loading-circle" />

@@ -489,7 +489,7 @@ export async function getPacketsByMAC(MAC) {
 
   const url = `${API_HOST}/paquetes/srcmac-detalle`;
   const body = {
-    srcMac: "60:6d:c7:df:17:8b",
+    Mac: MAC,
   };
   const params = {
     method: "GET",
@@ -497,7 +497,7 @@ export async function getPacketsByMAC(MAC) {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
-    body: body,
+    // body: (body),
   };
 
   return fetch(url, params)
