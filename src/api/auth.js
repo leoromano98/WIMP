@@ -376,7 +376,7 @@ export async function handleSend(e) {
   }
 }
 
-export async function getRankingPackets(MAC) {
+export async function getRankingPackets() {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/srcmac-emision`;
@@ -403,7 +403,7 @@ export async function getRankingPackets(MAC) {
     });
 }
 
-export async function getRankingPacketsByAppProtocol(MAC) {
+export async function getRankingPacketsByAppProtocol() {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/protoapp-emision`;
@@ -430,7 +430,7 @@ export async function getRankingPacketsByAppProtocol(MAC) {
     });
 }
 
-export async function getRankingPacketsByTransportProtocol(MAC) {
+export async function getRankingPacketsByTransportProtocol() {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/prototp-emision`;
@@ -519,7 +519,7 @@ export async function getPacketsByMAC(MAC) {
     });
 }
 
-export async function getPacketsByIP(MAC) {
+export async function getPacketsByIP() {
   var token = getTokenApi();
 
   const url = `${API_HOST}/paquetes/srcip-emision`;
