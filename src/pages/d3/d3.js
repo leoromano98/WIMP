@@ -1,3 +1,7 @@
+// Documentacion D# graph
+// https://www.npmjs.com/package/react-d3-graph
+
+
 import { useState, useEffect } from "react";
 import "./d3.css";
 import { Graph } from "react-d3-graph";
@@ -102,54 +106,44 @@ const onClickLink = function (source, target) {
 };
 
 const D3 = () => {
-  // const loginClickHandler = () => {
-  //   alert("user: " + username + " , pass: " + password);
-  // };
-
-  // const userNameChangeHandler = (event) => {
-  //   setUserName(event.target.value);
-  // };
-
-  // const passwordChangeHandler = (event) => {
-  //   setPassword(event.target.value);
-  // };
-
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   async function getData() {
     var newNodes = await getTopology();
-    while (newNodes === undefined) {}
-    newNodes.map((s) => {
-      if (s.hasOwnProperty("_id")) {
-        s.id = s._id;
-        delete s._id;
-      }
-      return s;
-    });
-    if (newNodes !== undefined) {
-      var newLinks = [];
-      newNodes.forEach((index) => {
-        if (index._pid !== undefined) {
-          newLinks.push({ source: index.id, target: index._pid });
-        }
-      });
-      var newData = {
-        nodes: newNodes,
-        links: newLinks,
-      };
-      setData(newData);
-    }
+    // while (newNodes === undefined) {}
+    // newNodes.map((s) => {
+    //   if (s.hasOwnProperty("_id")) {
+    //     s.id = s._id;
+    //     delete s._id;
+    //   }
+    //   return s;
+    // });
+    // if (newNodes !== undefined) {
+    //   var newLinks = [];
+    //   newNodes.forEach((index) => {
+    //     if (index._pid !== undefined) {
+    //       newLinks.push({ source: index.id, target: index._pid });
+    //     }
+    //   });
+    //   var newData = {
+    //     nodes: newNodes,
+    //     links: newLinks,
+    //   };
+    console.log('newNodes',newNodes)
+    setData(newNodes[0].netsws.netsws);
+    // }
   }
 
   useEffect(() => {
     let mounted = true;
-    getData().then((items) => {
-      if (mounted && items !== undefined) {
-        setData(items);
-      }
-    });
-    return () => (mounted = false);
+    getData()
+    // .then((items) => {
+    //   if (mounted && items !== undefined) {
+    //     setData(items);
+    //   }
+    // });
+    // return () => (mounted = false);
   }, []);
 
   useEffect(() => {
@@ -167,7 +161,7 @@ const D3 = () => {
   return (
     <div className="login-container">
       <div className="graph-container">
-        {console.log("data: ", data, " ", new Date())}
+        {console.log(data)}
         {isLoading ? (
           circleLoading
         ) : (
