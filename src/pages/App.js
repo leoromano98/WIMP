@@ -66,7 +66,7 @@ function App() {
               <Route path="/clients">
                 <Clients />
               </Route>
-              <Route path="/d3">
+              <Route path="/d3/:pSelectedSwitch">
                 <D3 />
               </Route>
               <Route path="/map">
