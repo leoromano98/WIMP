@@ -6,6 +6,9 @@ import "./d3.css";
 import { Graph } from "react-d3-graph";
 import { getTopology } from "../../api/auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import switchSvg from "../../assets/img/switch.svg";
+import clientSvg from "../../assets/img/client.svg";
+import apSvg from "../../assets/img/ap.svg";
 
 // graph payload (with minimalist structure)
 const myConfig = {
@@ -117,13 +120,16 @@ const D3 = () => {
   const [links, setLinks] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
   
-  const displayNodesAndLinks = (array, macSW) => {
-    console.log('!!!',  macSW)
-    console.log("!", array);
+  const displayNodesAndLinks = (array, macSW, clean) => {
+    console.log(macSW, clean)
+    if(clean){
+      setShowGraph(false)
+      setNodes(null)
+      setLinks(null)
+    }
     const auxNodes = nodes;
     const auxLinks = links;
     if (array instanceof Array) {
-      console.log("isarray");
       array.forEach((index) => {
         if(macSW){
           if(macSW === index.mac){
@@ -143,12 +149,11 @@ const D3 = () => {
         }
       });
       if(array.mac){
-        auxNodes.push({ id: array.mac });
+        auxNodes.push({ id: array.mac, svg: switchSvg });
         setNodes(auxNodes);
       }
     } else {
       if (array.tipo === "SW") {
-        console.log("isSW");
         if (array.ports) {
           //puede no tener nada conectado
           array.ports.forEach((index) => {
@@ -158,13 +163,12 @@ const D3 = () => {
               setLinks(auxLinks);
             }
           });
-          auxNodes.push({ id: array.mac });
+          auxNodes.push({ id: array.mac, svg: switchSvg });
           setNodes(auxNodes);
           return array;
         }
       }
       if (array.tipo === "AP") {
-        console.log("isAP");
         if (array.clientesap) {
           array.clientesap.forEach((index) => {
             const hijo = displayNodesAndLinks(index);
@@ -173,13 +177,12 @@ const D3 = () => {
               setLinks(auxLinks);
             }
           });
-          auxNodes.push({ id: array.mac });
+          auxNodes.push({ id: array.mac, svg: apSvg, });
           setNodes(auxNodes);
           return array;
         }
       }
-      console.log("isCLIENTE");
-      auxNodes.push({ id: array.mac });
+      auxNodes.push({ id: array.mac, svg: clientSvg });
       setNodes(auxNodes);
       return array;
     }
@@ -187,7 +190,7 @@ const D3 = () => {
     setLinks(auxLinks);
     console.log(nodes);
     console.log(links);
-  };
+    };
 
   const circleLoading = (
     <div class="overlay">
@@ -214,7 +217,7 @@ const D3 = () => {
               </option>
           })}
           </select>
-        <button onClick={() => displayNodesAndLinks(data, selectedSwitch)}>ARMAR NODOS</button>
+        <button onClick={() => displayNodesAndLinks(data, selectedSwitch, true)}>ARMAR NODOS</button>
         <button onClick={handleShowGraph}>ARMAR NODOS</button>
         {isLoading ? (
           circleLoading
