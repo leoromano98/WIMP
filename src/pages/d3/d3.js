@@ -2,7 +2,7 @@
 // https://www.npmjs.com/package/react-d3-graph
 
 import { useState, useEffect } from "react";
-import { useParams, useHistory  } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import "./d3.css";
 import { Graph } from "react-d3-graph";
 import { getTopology } from "../../api/auth";
@@ -106,23 +106,25 @@ const D3 = () => {
   }
 
   useEffect(() => {
-    console.log('asdlaskdl;as', selectedSwitch)
+    console.log("asdlaskdl;as", selectedSwitch);
     getData();
   }, []);
 
   useEffect(() => {
     if (data.length !== 0 || data !== undefined) {
-      console.log('useEffect', selectedSwitch, data)
+      console.log("useEffect", selectedSwitch, data);
       setIsLoading(false);
-      if (selectedSwitch==='1') {
-        console.log('aca')
+      if (selectedSwitch === "1" || selectedSwitch === undefined) {
+        console.log("aca");
         setSelectedSwitch(data[0]?.mac);
+      } else {
+        console.log("muestro al inicio", selectedSwitch);
+        displayNodesAndLinks(data, selectedSwitch, true);
       }
     }
   }, [data]);
 
   const displayNodesAndLinks = (array, macSW, clean) => {
-    console.log(macSW, clean);
     if (clean) {
       setShowGraph(false);
       setNodes(null);
@@ -205,15 +207,12 @@ const D3 = () => {
   };
 
   const handleShowButton = () => {
-    alert(selectedSwitch)
-    if(selectedSwitch!=='1'){
-      history.push("/d3/"+selectedSwitch);
-    }
+    alert(selectedSwitch);
+    history.push("/d3/" + selectedSwitch);
+    window.location.reload(false);
 
-    displayNodesAndLinks(data, selectedSwitch, true)
+    displayNodesAndLinks(data, selectedSwitch, true);
   };
-
-  
 
   return (
     <div className="login-container">
@@ -236,6 +235,7 @@ const D3 = () => {
         >
           MOSTRAR
         </button>
+        {pSelectedSwitch}
         {isLoading ? (
           circleLoading
         ) : (
