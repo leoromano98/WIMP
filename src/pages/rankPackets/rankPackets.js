@@ -86,13 +86,29 @@ const RankPackets = () => {
     async function getAppLayerData() {
       var response = await getRankingPacketsByAppProtocol();
       console.log("getAppLayerData", response);
-      setDataProtApp(response);
+      let data = [];
+      var i = 0;
+      response.forEach((index) => {
+        if (index._id && i < 5) {
+          data.push(index);
+          i++;
+        }
+      });
+      setDataProtApp(data);
     }
 
     async function getTransportData() {
       var response = await getRankingPacketsByTransportProtocol();
       console.log("getTransportData", response);
-      setDataProtTransp(response);
+      let data = [];
+      let i = 0;
+      response.forEach((index) => {
+        if (index._id && i<2) {
+          data.push(index);
+          i++;
+        }
+      });
+      setDataProtTransp(data);
     }
 
     async function getNetworkData() {
