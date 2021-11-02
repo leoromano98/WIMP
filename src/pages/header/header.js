@@ -94,9 +94,9 @@ const Header = () => {
         <a className="menu-item" href="/rankpackets">
           Ranking paquetes
         </a>
-        <div className="menu-item test" onClick={showAlarm}>
+        {/* <div className="menu-item test" onClick={showAlarm}>
           Test alarma
-        </div>
+        </div> */}
         <a className="menu-item" href="/accesspoints">
           Access Points
         </a>
