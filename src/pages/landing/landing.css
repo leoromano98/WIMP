@@ -16,3 +16,11 @@
     display: flex;
     justify-content: space-between;
 }
+
+.title-container{
+    display:flex;
+    flex-direction: column;
+    margin: 100px auto;
+    width: 800px;
+    text-align: center;
+}

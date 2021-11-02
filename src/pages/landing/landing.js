@@ -23,9 +23,11 @@ import {
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
   getAlertas,
+  isUserLogedApi
 } from "../../api/auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 
 // Configuracion para graficos:
 const dataBar = {
@@ -151,61 +153,71 @@ const optionsGrouped = {
 const Landing = () => {
   const [startDate, setStartDate] = useState(new Date());
 
+  // return (
+  //   <>
+  //     <h3>TESTING</h3>
+  //     <button onClick={getTopology}>TOPOLOGOIA</button>
+  //     <button onClick={modifySwitch}>MODIFICAR</button>
+  //     <button onClick={deleteSwitch}>BORRAR</button>
+  //     <button onClick={createSwitch}>CREAR SWITCH</button>
+  //     <button onClick={createUser}>CREAR USUARIO</button>
+  //     <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
+  //     <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
+  //     <button onClick={handleSend}>ENVIAR MAIL</button>
+  //     <button onClick={getRankingPackets}>GET PAQUETES</button>
+  //     <button onClick={getRankingPacketsByAppProtocol}>
+  //       GET PAQUETES PROT APP
+  //     </button>
+  //     <button onClick={getRankingPacketsByTransportProtocol}>
+  //       GET PAQUETES PROT TRANSP
+  //     </button>
+  //     <button onClick={getRankingPacketsByNetworkProtocol}>
+  //       GET PAQUETES PROT RED
+  //     </button>
+  //     <button onClick={getAlertas}>ALERTAS</button>
+
+  //     <DatePicker
+  //       selected={startDate}
+  //       onChange={(date) => setStartDate(date)}
+  //     />
+  //     <div className="chart-row-container">
+  //       <div className="bar-container">
+  //         <Bar data={dataBar} options={optionsBar} />
+  //       </div>
+  //       <div className="doughnut-container">
+  //         <Doughnut data={dataDoughnut} />
+  //       </div>
+  //     </div>
+
+  //     <div className="chart-row-container">
+  //       <div className="bar-container">
+  //         <Bar data={dataBar} options={optionsBarHorizontal} />
+  //       </div>
+  //       <div className="doughnut-container">
+  //         <Bar data={dataGrouped} options={optionsGrouped} />
+  //       </div>
+  //     </div>
+
+  //     <div className="chart-row-container">
+  //       <div className="gauge-container">
+  //         <GaugeChart id="gauge-chart1" />
+  //       </div>
+  //       <div className="gauge-container">
+  //         <GaugeChart id="gauge-chart2" />
+  //       </div>
+  //     </div>
+  //   </>
+  // );
+
+  var user = isUserLogedApi();
+  var username = user ? user.username : "Invitado";
+
   return (
-    <>
-      <h3>TESTING</h3>
-      <button onClick={getTopology}>TOPOLOGOIA</button>
-      <button onClick={modifySwitch}>MODIFICAR</button>
-      <button onClick={deleteSwitch}>BORRAR</button>
-      <button onClick={createSwitch}>CREAR SWITCH</button>
-      <button onClick={createUser}>CREAR USUARIO</button>
-      <button onClick={activateSwitch}>ACTIVAR USUARIO</button>
-      <button onClick={deactivateSwitch}>DESACTIVAR USUARIO</button>
-      <button onClick={handleSend}>ENVIAR MAIL</button>
-      <button onClick={getRankingPackets}>GET PAQUETES</button>
-      <button onClick={getRankingPacketsByAppProtocol}>
-        GET PAQUETES PROT APP
-      </button>
-      <button onClick={getRankingPacketsByTransportProtocol}>
-        GET PAQUETES PROT TRANSP
-      </button>
-      <button onClick={getRankingPacketsByNetworkProtocol}>
-        GET PAQUETES PROT RED
-      </button>
-      <button onClick={getAlertas}>ALERTAS</button>
-
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-      />
-      <div className="chart-row-container">
-        <div className="bar-container">
-          <Bar data={dataBar} options={optionsBar} />
-        </div>
-        <div className="doughnut-container">
-          <Doughnut data={dataDoughnut} />
-        </div>
-      </div>
-
-      <div className="chart-row-container">
-        <div className="bar-container">
-          <Bar data={dataBar} options={optionsBarHorizontal} />
-        </div>
-        <div className="doughnut-container">
-          <Bar data={dataGrouped} options={optionsGrouped} />
-        </div>
-      </div>
-
-      <div className="chart-row-container">
-        <div className="gauge-container">
-          <GaugeChart id="gauge-chart1" />
-        </div>
-        <div className="gauge-container">
-          <GaugeChart id="gauge-chart2" />
-        </div>
-      </div>
-    </>
-  );
+    <div className="title-container">
+      <h1>Bienvenido <b>{username}</b> !</h1> 
+      <h2>Seleccione una opcion del menu superior izquierdo</h2>
+    </div>
+  )
 };
 
 export default Landing;

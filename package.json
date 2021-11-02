@@ -35,6 +35,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-token-auth": "^1.1.8",
+    "react-xarrows": "^2.0.2",
     "reactstrap": "^8.9.0",
     "recharts": "^2.1.6",
     "socket.io": "^4.1.3",
