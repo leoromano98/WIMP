@@ -12,15 +12,111 @@ const Alerts = () => {
   const [filterData, setFilterData] = useState(null);
   const [tableHeader, setTableHeader] = useState(null);
 
+  useEffect(() => {
+    setTableData(null);
+    setFilterData(null);
+    async function func() {
+      let adaptData = [];
+      let header = null;
+      if (selectedList === "ranking") {
+        const data = await getAlertasRanking();
+        data.forEach((index) => {
+          adaptData.push({
+            cant: index.cant,
+            ip: index._id.ip,
+            mac: index._id.mac,
+            name: index._id.name,
+          });
+        });
+        header = [
+          {
+            key: "name",
+            text: "Nombre",
+          },
+          {
+            key: "mac",
+            text: "MAC",
+          },
+          {
+            key: "ip",
+            text: "IP",
+          },
+          {
+            key: "cant",
+            text: "Cantidad",
+          },
+        ];
+      } else {
+        const data = await getAlertas();
+        data.forEach((index) => {
+          adaptData.push({
+            mac: index.mac,
+            timestamp: index.timestamp,
+            evento: index.evento,
+            ip: index.device?.ip,
+            name: index.device?.name,
+            model: index.device?.model,
+            type: index.device?.type,
+          });
+        });
+        header = [
+          {
+            key: "name",
+            text: "Nombre",
+          },
+          {
+            key: "model",
+            text: "Modelo",
+          },
+          {
+            key: "type",
+            text: "Tipo",
+          },
+          {
+            key: "mac",
+            text: "MAC",
+          },
+          {
+            key: "ip",
+            text: "IP",
+          },
+          {
+            key: "evento",
+            text: "Evento",
+          },
+          {
+            key: "timestamp",
+            text: "Fecha y hora",
+          },
+        ];
+        data.forEach(
+          (index) => (index.timestamp = formatDate(index.timestamp))
+        );
+      }
+      setTableData(adaptData);
+      setFilterData(adaptData);
+      setTableHeader(header);
+      console.log(adaptData);
+    }
+    func();
+  }, [selectedList]);
+
   const handleInputMACChange = (event) => {
     const busqueda = event.target.value.toLowerCase();
     const filter = tableData.filter((index) => {
       if (selectedList === "ranking") {
-        return index._id.toLowerCase().includes(busqueda);
+        return (
+          index.ip.toLowerCase().includes(busqueda) ||
+          index.mac.toLowerCase().includes(busqueda) ||
+          index.name.toLowerCase().includes(busqueda)
+        );
       } else {
         return (
           index.mac.toLowerCase().includes(busqueda) ||
-          index.evento.toLowerCase().includes(busqueda)
+          index.evento.toLowerCase().includes(busqueda) ||
+          index.name?.toLowerCase().includes(busqueda) ||
+          index.model?.toLowerCase().includes(busqueda) ||
+          index.ip?.toLowerCase().includes(busqueda)
         );
       }
     });
@@ -43,57 +139,12 @@ const Alerts = () => {
     },
   ];
 
-  useEffect(() => {
-    setTableData(null);
-    setFilterData(null);
-    async function func() {
-      let data = null;
-      let header = null;
-      if (selectedList === "ranking") {
-        data = await getAlertasRanking();
-        header = [
-          {
-            key: "_id",
-            text: "MAC",
-          },
-          {
-            key: "cant",
-            text: "Cantidad",
-          },
-        ];
-      } else {
-        data = await getAlertas();
-        header = [
-          {
-            key: "mac",
-            text: "MAC",
-          },
-          {
-            key: "evento",
-            text: "Evento",
-          },
-          {
-            key: "timestamp",
-            text: "Fecha y hora",
-          },
-        ];
-        data.forEach(
-          (index) => (index.timestamp = formatDate(index.timestamp))
-        );
-      }
-      setTableData(data);
-      setFilterData(data);
-      setTableHeader(header);
-    }
-    func();
-  }, [selectedList]);
-
   return (
     <div className="alerts-container">
       <RadioButtons options={radioOptions} selected={handleSelectedList} />
       <div className="search-mac-container">
-        Filtrar por direccion MAC{" "}
-        {selectedList === "listar" ? " o por evento" : null}:
+        Filtrar por nombre, MAC{" "}
+        {selectedList === "listar" ? ", IP o por evento" : " o IP"}:
         <InputGroup>
           <Input onChange={handleInputMACChange} />
         </InputGroup>
