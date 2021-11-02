@@ -431,7 +431,6 @@ const Clients = () => {
           </InputGroupAddon>
         </InputGroup>
       </div>
-      <button onClick ={getByMAC}>getByMAC</button>
       {loading ? (
         <div class="overlay">
           <CircularProgress className="loading-circle" />
