@@ -17,7 +17,11 @@ const Anomalies = () => {
     const busqueda = event.target.value.toLowerCase();
     const filter = tableData.filter((index) => {
       if (selectedList === "ranking") {
-        return index._id.toLowerCase().includes(busqueda);
+        return (
+          index.name?.toLowerCase().includes(busqueda) ||
+          index.mac.toLowerCase().includes(busqueda) ||
+          index.ip?.toLowerCase().includes(busqueda)
+        )
       } else {
         return (
           index.mac.toLowerCase().includes(busqueda) ||
@@ -48,14 +52,31 @@ const Anomalies = () => {
     setTableData(null);
     setFilterData(null);
     async function func() {
+      let adaptData = [];
       let data = null;
       let header = null;
       if (selectedList === "ranking") {
         data = await getAnomaliasRanking();
+        data.forEach((index) => {
+          adaptData.push({
+            cant: index.cant,
+            mac: index._id.mac,
+            name: index._id.name ? index._id.name : "-",
+            ip: index._id.ip ? index._id.ip : "-",
+          });
+        });
         header = [
           {
-            key: "_id",
+            key: "name",
+            text: "Nombre",
+          },
+          {
+            key: "mac",
             text: "MAC",
+          },
+          {
+            key: "ip",
+            text: "IP",
           },
           {
             key: "cant",
@@ -63,7 +84,7 @@ const Anomalies = () => {
           },
         ];
       } else {
-        data = await getAnomalias();
+        adaptData = await getAnomalias();
         header = [
           {
             key: "mac",
@@ -78,13 +99,12 @@ const Anomalies = () => {
             text: "Fecha y hora",
           },
         ];
-        data.forEach(
+        adaptData.forEach(
           (index) => (index.timestamp = formatDate(index.timestamp))
         );
       }
-      console.log(data);
-      setTableData(data);
-      setFilterData(data);
+      setTableData(adaptData);
+      setFilterData(adaptData);
       setTableHeader(header);
     }
     func();
@@ -92,13 +112,18 @@ const Anomalies = () => {
 
   return (
     <div className="alerts-container">
-      <RadioButtons options={radioOptions} selected={handleSelectedList} />
-      <div className="search-mac-container">
-        Filtrar por direccion MAC{" "}
-        {selectedList === "listar" ? " o por anomalia" : null}:
-        <InputGroup>
-          <Input onChange={handleInputMACChange} />
-        </InputGroup>
+      <div className="checkbox-search-contianer">
+        <RadioButtons options={radioOptions} selected={handleSelectedList} />
+        <div className="search-mac-container">
+          Filtrar por
+          {selectedList === "ranking"
+            ? " nombre, MAC o IP "
+            : " MAC o anomalia"}
+          :
+          <InputGroup>
+            <Input onChange={handleInputMACChange} />
+          </InputGroup>
+        </div>
       </div>
 
       {filterData && tableHeader ? (
