@@ -28,3 +28,9 @@
   margin: 20px auto;
   font-size: 15px;
 }
+
+.checkbox-search-contianer{
+  display: flex;
+  width: 600px;
+  margin: 10px auto;
+}

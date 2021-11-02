@@ -141,13 +141,15 @@ const Alerts = () => {
 
   return (
     <div className="alerts-container">
-      <RadioButtons options={radioOptions} selected={handleSelectedList} />
-      <div className="search-mac-container">
-        Filtrar por nombre, MAC{" "}
-        {selectedList === "listar" ? ", IP o por evento" : " o IP"}:
-        <InputGroup>
-          <Input onChange={handleInputMACChange} />
-        </InputGroup>
+      <div className="checkbox-search-contianer">
+        <RadioButtons options={radioOptions} selected={handleSelectedList} />
+        <div className="search-mac-container">
+          Filtrar por nombre, MAC{" "}
+          {selectedList === "listar" ? ", IP o por evento" : " o IP"}:
+          <InputGroup>
+            <Input onChange={handleInputMACChange} />
+          </InputGroup>
+        </div>
       </div>
 
       {filterData && tableHeader ? (
