@@ -124,14 +124,9 @@ const D3 = () => {
     }
   }, [data]);
 
-  const displayNodesAndLinks = (array, macSW, clean) => {
-    if (clean) {
-      setShowGraph(false);
-      setNodes(null);
-      setLinks(null);
-    }
-    const auxNodes = nodes;
+  const displayNodesAndLinks = (array, macSW) => {
     const auxLinks = links;
+    const auxNodes = nodes;
     if (array instanceof Array) {
       array.forEach((index) => {
         if (macSW) {
@@ -188,10 +183,10 @@ const D3 = () => {
       setNodes(auxNodes);
       return array;
     }
-    setNodes(auxNodes);
+    console.log("1", auxLinks);
+    console.log("2", auxNodes);
     setLinks(auxLinks);
-    console.log(nodes);
-    console.log(links);
+    setNodes(auxNodes);
     setShowGraph(true);
   };
 
@@ -207,11 +202,39 @@ const D3 = () => {
   };
 
   const handleShowButton = () => {
-    alert(selectedSwitch);
-    history.push("/d3/" + selectedSwitch);
-    window.location.reload(false);
+    console.log(nodes, links);
+    if (nodes.length !== 0) {
+      console.log("entro if");  
+      setIsLoading(true);
 
-    displayNodesAndLinks(data, selectedSwitch, true);
+      // remove old nodes
+      let auxNodes = nodes;
+      let auxLinks = links;
+      nodes.forEach(index=>{
+        const findIndex = nodes.findIndex(el => el===index)
+        const id = index.id
+        auxLinks = auxLinks.filter((l) => l.source !== id && l.target !== id);
+        auxNodes.splice(findIndex, 1);
+      })
+      //finish remove
+      setLinks(auxLinks);
+      setNodes(auxNodes);
+      displayNodesAndLinks(data, selectedSwitch);
+
+      setIsLoading(false);
+    } else {
+      console.log("entro else");
+      displayNodesAndLinks(data, selectedSwitch);
+    }
+  };
+
+  const handleRemoveButton = () => {
+    let auxNodes = nodes;
+    const id = nodes[0].id;
+    auxNodes.splice(0, 1);
+    let auxLinks = links.filter((l) => l.source !== id && l.target !== id);
+    setLinks(auxLinks);
+    setNodes(auxNodes);
   };
 
   return (
@@ -234,6 +257,12 @@ const D3 = () => {
           onClick={handleShowButton}
         >
           MOSTRAR
+        </button>
+        <button
+          // onClick={() => displayNodesAndLinks(data, selectedSwitch, true)}
+          onClick={handleRemoveButton}
+        >
+          QUITAR 1 NODO
         </button>
         {pSelectedSwitch}
         {isLoading ? (
