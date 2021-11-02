@@ -95,10 +95,19 @@ export default class MapDisplay extends Component {
     this.getSwitches().then((response) => {
       let positions = [];
       const showSwitches = [];
+      let auxPos = 0.0005;
 
       response.forEach((index) => {
-        const switchPos = { lat: index.lat, lng: index.lng };
-        positions.push(switchPos);
+        if (!index.lat || !index.lng) {
+          const switchPos = {
+            lat: -26.84174 + auxPos,
+            lng: -65.23149 + auxPos,
+          };
+          positions.push(switchPos);
+          auxPos += 0.001;
+        } else {
+          positions.push({ lat: index.lat, lng: index.lng });
+        }
       });
 
       this.setState({
