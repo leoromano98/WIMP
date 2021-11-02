@@ -2,6 +2,7 @@ import { ViewColumnSharp } from "@material-ui/icons";
 import React from "react";
 import { Table } from "reactstrap";
 import "./Table.css";
+import { Button } from "reactstrap";
 
 // Recibe 2 props:
 //  props.header: Array con los nombres de cada columna. Cada elemento tiene
@@ -55,9 +56,11 @@ const TableComponent = (props) => {
             } else {
               //Si no hay coincidencias, es porque no hay dato para mostrar ENTONCES es un boton
               return (
-                <button id={index.name} onClick={head.handler}>
-                  {head.text}
-                </button>
+                <td>
+                  <Button id={index.name} onClick={head.handler}>
+                    {head.text}
+                  </Button>
+                </td>
               );
             }
           })}
