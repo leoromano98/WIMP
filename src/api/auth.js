@@ -519,32 +519,6 @@ export async function getPacketsByMAC(MAC) {
     });
 }
 
-export async function getPacketsByIP() {
-  var token = getTokenApi();
-
-  const url = `${API_HOST}/paquetes/srcip-emision`;
-  const params = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token,
-    },
-  };
-
-  return fetch(url, params)
-    .then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        return response.json();
-      }
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((err) => {
-      return err;
-    });
-}
-
 export async function getAlertas() {
   var token = getTokenApi();
 

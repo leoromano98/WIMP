@@ -129,16 +129,10 @@ const RankPackets = () => {
       setDataIp(response);
     }
 
-    async function getByIP() {
-      var response = await getPacketsByIP();
-      console.log("getPacketsByIP", response);
-    }
-
     getRankingPacketsByMac();
     getTransportData();
     getAppLayerData();
     getNetworkData();
-    getByIP();
   }, []);
 
   useEffect(() => {
