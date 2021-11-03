@@ -295,12 +295,14 @@ export default class MapDisplay extends Component {
 
     if (this.state.switches.length !== 0) {
       var tableData = JSON.parse(JSON.stringify(this.state.switches));
-      tableData.forEach((element) => {
-        delete element["_id"];
-        delete element["_pid"];
-        delete element["lat"];
-        delete element["lng"];
-      });
+      tableData.forEach(index=>{
+        if(index.fanlevel<=0 || index.mem<=0 || index.cpu<=0 || index.temp<=0 || index.uptime<=0){
+          index.state = 'Inactivo'
+        }
+        else{
+          index.state = 'Activo'
+        }
+      })
     }
 
     const header = [

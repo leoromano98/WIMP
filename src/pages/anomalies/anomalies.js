@@ -84,11 +84,36 @@ const Anomalies = () => {
           },
         ];
       } else {
-        adaptData = await getAnomalias();
+        data = await getAnomalias();
+        data.forEach(index=>{
+          if(!index.name){
+
+          }
+          adaptData.push({
+            mac: index.mac,
+            anomaly: index.anomaly,
+            name: index.device?.name ? index.device.name : "-",
+            ip: index.device?.ip ? index.device.ip : "-",
+            type: index.device?.type ? index.device.type : "Desconectado",
+            timestamp: index.timestamp
+          })
+        })
         header = [
+          {
+            key: "name",
+            text: "Nombre",
+          },
           {
             key: "mac",
             text: "MAC",
+          },
+          {
+            key: "ip",
+            text: "IP",
+          },
+          {
+            key: "type",
+            text: "Tipo",
           },
           {
             key: "anomaly",

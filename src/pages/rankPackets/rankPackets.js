@@ -21,8 +21,7 @@ import {
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
-  getPacketsByMAC,
-  getPacketsByIP,
+  getPacketsByMAC
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
