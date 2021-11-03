@@ -21,10 +21,12 @@
   margin: 45px auto;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .chart-row-container > div {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   width: 550px;
   padding: 10px;
+  margin-bottom: 20px;
 }

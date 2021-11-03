@@ -47,8 +47,12 @@ const tableHeader = [
     text: "#",
   },
   {
-    key: "_id",
+    key: "mac",
     text: "MAC Origen",
+  },
+  {
+    key: "ip",
+    text: "IP Origen",
   },
   {
     key: "paquetes",
@@ -75,12 +79,20 @@ const RankPackets = () => {
   useEffect(() => {
     async function getRankingPacketsByMac() {
       var response = await getRankingPackets();
+      console.log("KASJDLASKJDKLAS", response);
+      const adaptData = [];
       var i = 1;
       response.forEach((index) => {
-        index["index"] = i;
+        adaptData.push({
+          index: i,
+          mac: index._id.srcmac,
+          ip: index._id.srcip,
+          bytes: index.bytes,
+          paquetes: index.paquetes,
+        });
         i++;
       });
-      setTableData(response);
+      setTableData(adaptData);
     }
 
     async function getAppLayerData() {
@@ -103,7 +115,7 @@ const RankPackets = () => {
       let data = [];
       let i = 0;
       response.forEach((index) => {
-        if (index._id && i<2) {
+        if (index._id && i < 2) {
           data.push(index);
           i++;
         }
@@ -236,12 +248,10 @@ const RankPackets = () => {
                 <Tooltip />
               </PieChart>
             </div>
-          </div>
 
-          <div className="chart-row-container">
-            <div className="gauge-container">
+            {/* <div className="gauge-container">
               <GaugeChart id="gauge-chart2" />
-            </div>
+            </div> */}
           </div>
 
           {tableData ? (
