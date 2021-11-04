@@ -64,7 +64,7 @@ export default class MapDisplay extends Component {
     const switches = response;
     console.log("switches", switches);
     switches.forEach((index) => {
-      index.formatedDate = formatDate(index.timestamp);
+      index.formatedDate = formatDate(index.timestamp, "-03:00");
       if (index?.mem < 0) {
         index.state = "Inactivo";
       } else {

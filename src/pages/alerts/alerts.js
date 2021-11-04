@@ -51,7 +51,7 @@ const Alerts = () => {
         data.forEach((index) => {
           adaptData.push({
             mac: index.mac,
-            timestamp: index.timestamp,
+            timestamp: formatDate(index.timestamp),
             evento: index.evento,
             ip: index.device?.ip,
             name: index.device?.name,
@@ -89,9 +89,6 @@ const Alerts = () => {
             text: "Fecha y hora",
           },
         ];
-        data.forEach(
-          (index) => (index.timestamp = formatDate(index.timestamp))
-        );
       }
       setTableData(adaptData);
       setFilterData(adaptData);

@@ -95,7 +95,7 @@ const Anomalies = () => {
             name: index.device?.name ? index.device.name : "-",
             ip: index.device?.ip ? index.device.ip : "-",
             type: index.device?.type ? index.device.type : "Desconectado",
-            timestamp: index.timestamp
+            timestamp: formatDate(index.timestamp)
           })
         })
         header = [
@@ -124,9 +124,6 @@ const Anomalies = () => {
             text: "Fecha y hora",
           },
         ];
-        adaptData.forEach(
-          (index) => (index.timestamp = formatDate(index.timestamp))
-        );
       }
       setTableData(adaptData);
       setFilterData(adaptData);
