@@ -7,7 +7,7 @@
 import React, { useState } from "react";
 import "./clients.css";
 import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
-import { auxTopology } from "../../api/auth";
+import { listTopology } from "../../api/auth";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
 import APLayout from "../../components/APLayout/APLayout";
@@ -16,19 +16,17 @@ import ClientLayout from "../../components/ClientLayout/ClientLayout";
 const Clients = () => {
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [MAC, setMAC] = useState("");
+  const [MACorIP, setMACorIP] = useState("");
   const [topologyArray, setTopologyArray] = useState(null);
 
-  const iterateTopology = (array, findMAC) => {
-    // const findMac = "b0:52:16:5c:62:0b";
-    const findMac = findMAC;
+  const iterateTopology = (array, IPorMAC) => {
+    const pIPorMAC = IPorMAC;
     let nodoAux = array;
-    const tree = [];
     if (array instanceof Array) {
       array.every((index) => {
-        const nodo = iterateTopology(index, findMac);
+        const nodo = iterateTopology(index, pIPorMAC);
         nodoAux = nodo;
-        if (nodo[0]?.mac === findMac) {
+        if (nodo[0]?.mac === pIPorMAC || nodo[0]?.ip === pIPorMAC) {
           console.log("anadie", index);
           const addNode = [index];
           nodo.push(addNode[0]);
@@ -38,9 +36,8 @@ const Clients = () => {
       });
     } else {
       if (array?.tipo === "SW") {
-        const nodo = iterateTopology(array.ports, findMac);
-        if (nodo[0]?.mac === findMac) {
-          // tree.push(nodo);
+        const nodo = iterateTopology(array.ports, pIPorMAC);
+        if (nodo[0]?.mac === pIPorMAC || nodo[0]?.ip === pIPorMAC ) {
           const addNode = [array];
           nodo.push(addNode[0]);
         }
@@ -49,20 +46,17 @@ const Clients = () => {
         if (array?.tipo === "AP") {
           let nodo = null;
           if (array.clientesap) {
-            nodo = iterateTopology(array.clientesap, findMac);
+            nodo = iterateTopology(array.clientesap, pIPorMAC);
           } else {
             return [array];
           }
-          if (nodo[0]?.mac === findMac) {
-            // tree.push(nodo);
+          if (nodo[0]?.mac === pIPorMAC || nodo[0]?.ip === pIPorMAC) {
             const addNode = [array];
             nodo.push(addNode[0]);
           }
           return nodo; //finrepite
         } else {
-          // if (array.mac === findMac) {
-          return [{ ip: array.ip, mac: array.mac }];
-          // }
+          return [{ ip: array?.ip, mac: array?.mac }];
         }
       }
     }
@@ -70,10 +64,13 @@ const Clients = () => {
     return nodoAux;
   };
 
-  const handleSearchButton = () => {
+  const handleSearchButton = async () => {
     setLoading(true);
+    setTopologyArray(null);
     setNotFound(false);
-    const getTopology = iterateTopology(auxTopology.netsws.netsws, MAC);
+    const fullTopology = await listTopology();
+    const searchMACorIP = MACorIP.replaceAll('-',':').toLowerCase()
+    const getTopology = iterateTopology(fullTopology[0].netsws.netsws, searchMACorIP);
     getTopology.forEach((element) => {
       const findIndex = getTopology.findIndex((x) => x.mac === element.mac);
       if (findIndex >= 0) {
@@ -93,7 +90,7 @@ const Clients = () => {
   };
 
   const handleInputMACChange = (event) => {
-    setMAC(event.target.value);
+    setMACorIP(event.target.value);
   };
 
   let connections = [];
