@@ -107,6 +107,40 @@ export function createUser(email, usuario, password) {
     });
 }
 
+
+export function changePassword(oldPassword, newPassword, newPasswordConfirm) {
+  var token = getTokenApi();
+
+  var data = {
+    password: oldPassword,
+    nuevapassword: newPassword,
+    confirmacion: newPasswordConfirm,
+  };
+
+  const url = `${API_HOST}/usuarios/cambiar-password`;
+  console.log(token);
+
+  const params = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(data),
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response);
+        return response;
+      }
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
 export function createSwitch(newSwitch) {
   var token = getTokenApi();
 

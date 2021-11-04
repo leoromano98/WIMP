@@ -131,6 +131,9 @@
   margin: 10px;
   float: right;
   padding: 0 20px !important;
+  position: absolute !important;
+  top: 80px;
+  right: 0;
 }
 
 .test {
