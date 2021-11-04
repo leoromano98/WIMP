@@ -126,7 +126,7 @@ const Clients = () => {
   return (
     <>
       <div className="search-mac-container">
-        Buscar cliente por direccion MAC:
+        Buscar cliente por direccion MAC o IP:
         <InputGroup>
           <Input onChange={handleInputMACChange} />
           <InputGroupAddon addonType="append">
