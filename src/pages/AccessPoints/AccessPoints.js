@@ -14,8 +14,8 @@ const AccessPoints = () => {
     { key: "state", text: "Estado", colors: "true" },
     { key: "model", text: "Modelo" },
     { key: "name", text: "Nombre" },
-    { key: "cpu", text: "CPU" },
-    { key: "mem", text: "MEM" },
+    { key: "cpu", text: "%CPU" },
+    { key: "mem", text: "%MEM" },
     { key: "timestamp", text: "Ult. Actualizacion" },
   ];
 
