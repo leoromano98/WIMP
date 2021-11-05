@@ -683,6 +683,33 @@ export async function listarSwitches() {
     });
 }
 
+
+export async function getAPs() {
+  var token = getTokenApi();
+
+  const url = `${API_HOST}/aps`;
+  const params = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  return fetch(url, params)
+    .then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      }
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      return err;
+    });
+}
+
 export async function ubicarSwitch(mac, lat, lng) {
   var token = getTokenApi();
 

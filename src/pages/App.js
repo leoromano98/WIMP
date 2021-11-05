@@ -16,6 +16,7 @@ import D3 from "./d3/d3";
 import RankPackets from "./rankPackets/rankPackets";
 import Clients from "./clients/clients";
 import Anomalies from "./anomalies/anomalies";
+import AccessPoints from "./AccessPoints/AccessPoints";
 
 import { AuthContext } from "../utils/context";
 import { isUserLogedApi, triggerLogin } from "../api/auth";
@@ -83,6 +84,9 @@ function App() {
               </Route>
               <Route path="/rankpackets">
                 <RankPackets />
+              </Route>
+              <Route path="/accesspoints">
+                <AccessPoints />
               </Route>
               <Route exact path="/login">
                 <Redirect to="/" />

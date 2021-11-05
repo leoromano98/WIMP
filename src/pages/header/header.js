@@ -280,11 +280,17 @@ const Header = () => {
         <a className="menu-item" href="/landing">
           Home
         </a>
-        {/* <a className="menu-item" href="/login">
-          Login
-        </a> */}
+        <a className="menu-item" href="/rankpackets">
+          Ranking paquetes
+        </a>
         <a className="menu-item" href="/map">
           Mapa
+        </a>
+        <a className="menu-item" href="/d3">
+          Topología
+        </a>
+        <a className="menu-item" href="/accesspoints">
+          Access Points
         </a>
         <a className="menu-item" href="/alerts">
           Alertas
@@ -292,18 +298,10 @@ const Header = () => {
         <a className="menu-item" href="/anomalies">
           Anomalias
         </a>
-        <a className="menu-item" href="/d3">
-          D3 Graph
-        </a>
-        <a className="menu-item" href="/rankpackets">
-          Ranking paquetes
-        </a>
         {/* <div className="menu-item test" onClick={showAlarm}>
           Test alarma
         </div> */}
-        <a className="menu-item" href="/accesspoints">
-          Access Points
-        </a>
+        
         <a className="menu-item" href="/clients">
           Ubicar cliente
         </a>
