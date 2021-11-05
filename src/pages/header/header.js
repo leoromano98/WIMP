@@ -292,7 +292,7 @@ const Header = () => {
         <a className="menu-item" href="/anomalies">
           Anomalias
         </a>
-        <a className="menu-item" href="/d3/1">
+        <a className="menu-item" href="/d3">
           D3 Graph
         </a>
         <a className="menu-item" href="/rankpackets">

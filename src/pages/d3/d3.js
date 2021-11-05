@@ -95,11 +95,9 @@ const onClickLink = function (source, target) {
 const D3 = () => {
   let history = useHistory();
 
-  let { pSelectedSwitch } = useParams();
-  console.log("pSelectedSwitch", pSelectedSwitch);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedSwitch, setSelectedSwitch] = useState(pSelectedSwitch);
+  const [selectedSwitch, setSelectedSwitch] = useState(null);
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
@@ -266,15 +264,20 @@ const D3 = () => {
   return (
     <div className="login-container">
       <div className="graph-container">
+        Seleccione un dispositivo
         <Dropdown
           isOpen={dropdownOpen}
           toggle={toggle}
           className="account-dropdown"
           direction="right"
         >
-          <DropdownToggle caret>Seleccione dispositivo</DropdownToggle>
+          <DropdownToggle caret>
+            {selectedSwitch
+              ? data.find((e) => e.mac === selectedSwitch).name
+              : "Nombre del dispositvo"}
+          </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Elegir MAC</DropdownItem>
+            <DropdownItem header>Elegir dispositivo</DropdownItem>
 
             {data.map((index) => {
               return (
@@ -282,19 +285,17 @@ const D3 = () => {
                   onClick={handleDropdownItemClick}
                   value={index.mac}
                 >
-                  {index.mac}
+                  {index.name}
                 </DropdownItem>
               );
             })}
           </DropdownMenu>
         </Dropdown>
-        <button
-          // onClick={() => displayNodesAndLinks(data, selectedSwitch, true)}
+        {/* <button
           onClick={handleRemoveButton}
         >
           QUITAR 1 NODO
-        </button>
-        {pSelectedSwitch}
+        </button> */}
         {isLoading ? (
           circleLoading
         ) : (
