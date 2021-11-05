@@ -10,7 +10,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import switchSvg from "../../assets/img/switch.svg";
 import clientSvg from "../../assets/img/client.svg";
 import apSvg from "../../assets/img/ap.svg";
-
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
 // graph payload (with minimalist structure)
 const myConfig = {
   automaticRearrangeAfterDropNode: true,
@@ -99,6 +104,9 @@ const D3 = () => {
   const [links, setLinks] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+
   async function getData() {
     var newNodes = await getTopology();
     console.log("newNodes", newNodes);
@@ -114,15 +122,8 @@ const D3 = () => {
     if (data.length !== 0 || data !== undefined) {
       console.log("useEffect", selectedSwitch, data);
       setIsLoading(false);
-      if (selectedSwitch === "1" || selectedSwitch === undefined) {
-        console.log("aca");
-        setSelectedSwitch(data[0]?.mac);
-      } else {
-        console.log("muestro al inicio", selectedSwitch);
-        displayNodesAndLinks(data, selectedSwitch, true);
-      }
     }
-  }, [data]);
+  }, []);
 
   const displayNodesAndLinks = (array, macSW) => {
     const auxLinks = links;
@@ -196,26 +197,21 @@ const D3 = () => {
     </div>
   );
 
-  const handleSelectSwitch = (event) => {
-    setSelectedSwitch(event.target.value);
-    console.log(event.target.value);
-  };
-
   const handleShowButton = () => {
     console.log(nodes, links);
     if (nodes.length !== 0) {
-      console.log("entro if");  
+      console.log("entro if");
       setIsLoading(true);
 
       // remove old nodes
       let auxNodes = nodes;
       let auxLinks = links;
-      nodes.forEach(index=>{
-        const findIndex = nodes.findIndex(el => el===index)
-        const id = index.id
+      nodes.forEach((index) => {
+        const findIndex = nodes.findIndex((el) => el === index);
+        const id = index.id;
         auxLinks = auxLinks.filter((l) => l.source !== id && l.target !== id);
         auxNodes.splice(findIndex, 1);
-      })
+      });
       //finish remove
       setLinks(auxLinks);
       setNodes(auxNodes);
@@ -235,29 +231,63 @@ const D3 = () => {
     let auxLinks = links.filter((l) => l.source !== id && l.target !== id);
     setLinks(auxLinks);
     setNodes(auxNodes);
+    return auxLinks.length === 0 && auxNodes.length === 0;
+  };
+
+  const handleDropdownItemClick = (event) => {
+    const selected = event.target.value;
+    setSelectedSwitch(selected);
+    // handleShowButton();
+    if (nodes.length !== 0) {
+      console.log("entro if");
+      setIsLoading(true);
+
+      // remove old nodes
+      let auxNodes = nodes;
+      let auxLinks = links;
+      let flag = false;
+      // while (!flag) {
+      //   flag = handleRemoveButton();
+      // }
+
+      console.log("llego1");
+      setLinks(auxLinks);
+      setNodes(auxNodes);
+      console.log("llego2");
+      displayNodesAndLinks(data, selected);
+
+      setIsLoading(false);
+    } else {
+      console.log("entro else");
+      displayNodesAndLinks(data, selected);
+    }
   };
 
   return (
     <div className="login-container">
       <div className="graph-container">
-        <select onChange={handleSelectSwitch}>
-          {data.map((index) => {
-            return (
-              <option
-                value={index.mac}
-                defaultValue={index.mac === data[0].mac}
-              >
-                {index.mac}
-              </option>
-            );
-          })}
-        </select>
-        <button
-          // onClick={() => displayNodesAndLinks(data, selectedSwitch, true)}
-          onClick={handleShowButton}
+        <Dropdown
+          isOpen={dropdownOpen}
+          toggle={toggle}
+          className="account-dropdown"
+          direction="right"
         >
-          MOSTRAR
-        </button>
+          <DropdownToggle caret>Seleccione dispositivo</DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem header>Elegir MAC</DropdownItem>
+
+            {data.map((index) => {
+              return (
+                <DropdownItem
+                  onClick={handleDropdownItemClick}
+                  value={index.mac}
+                >
+                  {index.mac}
+                </DropdownItem>
+              );
+            })}
+          </DropdownMenu>
+        </Dropdown>
         <button
           // onClick={() => displayNodesAndLinks(data, selectedSwitch, true)}
           onClick={handleRemoveButton}
