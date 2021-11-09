@@ -12,6 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
 import APLayout from "../../components/APLayout/APLayout";
 import ClientLayout from "../../components/ClientLayout/ClientLayout";
+import { Animated } from "react-animated-css";
 
 const Clients = () => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ const Clients = () => {
     } else {
       if (array?.tipo === "SW") {
         const nodo = iterateTopology(array.ports, pIPorMAC);
-        if (nodo[0]?.mac === pIPorMAC || nodo[0]?.ip === pIPorMAC ) {
+        if (nodo[0]?.mac === pIPorMAC || nodo[0]?.ip === pIPorMAC) {
           const addNode = [array];
           nodo.push(addNode[0]);
         }
@@ -69,8 +70,11 @@ const Clients = () => {
     setTopologyArray(null);
     setNotFound(false);
     const fullTopology = await listTopology();
-    const searchMACorIP = MACorIP.replaceAll('-',':').toLowerCase()
-    const getTopology = iterateTopology(fullTopology[0].netsws.netsws, searchMACorIP);
+    const searchMACorIP = MACorIP.replaceAll("-", ":").toLowerCase();
+    const getTopology = iterateTopology(
+      fullTopology[0].netsws.netsws,
+      searchMACorIP
+    );
     getTopology.forEach((element) => {
       const findIndex = getTopology.findIndex((x) => x.mac === element.mac);
       if (findIndex >= 0) {
@@ -100,18 +104,42 @@ const Clients = () => {
       switch (topologyArray[i].tipo) {
         case "SW":
           disp = (
-            <SwitchLayout
-              switchData={topologyArray[i]}
-              isTopology={true}
-              port={topologyArray[i - 1].num}
-            />
+            <Animated
+              animationIn="lightSpeedIn"
+              animationInDuration={1200}
+              isVisible={true}
+            >
+              <SwitchLayout
+                switchData={topologyArray[i]}
+                isTopology={true}
+                port={topologyArray[i - 1].num}
+              />
+            </Animated>
           );
           break;
         case "AP":
-          disp = <APLayout apData={topologyArray[i]} />;
+          disp = (
+            <Animated
+              animationIn="lightSpeedIn"
+              animationInDuration={800}
+              isVisible={true}
+            >
+              <APLayout apData={topologyArray[i]} />;
+            </Animated>
+          );
+
           break;
         default:
-          disp = <ClientLayout clientData={topologyArray[i]} />;
+          disp = (
+            <Animated
+              animationIn="lightSpeedIn"
+              animationInDuration={400}
+              isVisible={true}
+            >
+              <ClientLayout clientData={topologyArray[i]} />;
+            </Animated>
+          );
+
           break;
       }
       connections.push(disp);

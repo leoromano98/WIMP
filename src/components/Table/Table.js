@@ -3,6 +3,7 @@ import React from "react";
 import { Table } from "reactstrap";
 import "./Table.css";
 import { Button } from "reactstrap";
+import { Animated } from "react-animated-css";
 
 // Recibe 2 props:
 //  props.header: Array con los nombres de cada columna. Cada elemento tiene
@@ -72,12 +73,18 @@ const TableComponent = (props) => {
   dataTable();
 
   return (
-    <Table striped hover className="table">
-      <thead>
-        <tr>{header}</tr>
-      </thead>
-      <tbody>{data}</tbody>
-    </Table>
+    <Animated
+      animationIn="zoomIn"
+      animationInDuration={600}
+      isVisible={true}
+    >
+      <Table striped hover className="table">
+        <thead>
+          <tr>{header}</tr>
+        </thead>
+        <tbody>{data}</tbody>
+      </Table>
+    </Animated>
   );
 };
 
