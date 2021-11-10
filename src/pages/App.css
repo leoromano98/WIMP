@@ -58,3 +58,8 @@
     transform: rotate(360deg);
   }
 }
+
+.title-page {
+  text-align: center;
+  margin: 20px;
+}

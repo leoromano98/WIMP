@@ -21,7 +21,7 @@ import {
   getRankingPacketsByAppProtocol,
   getRankingPacketsByTransportProtocol,
   getRankingPacketsByNetworkProtocol,
-  getPacketsByMAC
+  getPacketsByMAC,
 } from "../../api/auth";
 import TableComponent from "../../components/Table/Table";
 import { SettingsSharp } from "@material-ui/icons";
@@ -38,6 +38,7 @@ import {
   PieChart,
   Pie,
 } from "recharts";
+import { Animated } from "react-animated-css";
 
 // Configuracion para graficos:
 const tableHeader = [
@@ -163,6 +164,7 @@ const RankPackets = () => {
 
   return (
     <>
+      <h1 className="title-page">Estadísticas de captura de paquetes</h1>
       {loading ? (
         <div class="overlay">
           <CircularProgress className="loading-circle" />
@@ -170,83 +172,92 @@ const RankPackets = () => {
       ) : (
         <>
           {infoModal}
-          <div className="chart-row-container">
-            <div className="bar-container">
-              <h5>Cantidad de paquetes por protocolo de aplicacion</h5>
-              <BarChart
-                width={500}
-                height={300}
-                data={dataProtApp}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="_id" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="total" fill="#82ca9d" />
-              </BarChart>
-            </div>
-            <div className="doughnut-container">
-              <h5>Cantidad de paquetes por protocolo de transporte</h5>
-              <BarChart
-                width={500}
-                height={300}
-                data={dataProtTransp}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="_id" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="total" fill="#82ca9d" />
-              </BarChart>
-            </div>
-            <div className="gauge-container">
-              <h5>Cantidad de paquetes IP</h5>
-              {/* <Doughnut data={dataIp} options={optionsBar} /> */}
-              <PieChart width={400} height={400}>
-                <Pie
-                  nameKey="_id"
-                  dataKey="total"
-                  isAnimationActive={false}
-                  data={dataIp}
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label
-                />
-                <Pie
-                  nameKey="_id"
-                  dataKey="total"
-                  data={dataIp}
-                  cx={500}
-                  cy={200}
-                  innerRadius={40}
-                  outerRadius={80}
-                  fill="#82ca9d"
-                />
-                <Tooltip />
-              </PieChart>
-            </div>
+          <Animated
+            animationIn="zoomIn"
+            animationInDuration={600}
+            isVisible={true}
+          >
+            <div className="chart-row-container">
+              <div className="bar-container">
+                <h5>Cantidad de paquetes por protocolo de aplicacion</h5>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={dataProtApp}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="_id" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="total" fill="#82ca9d" />
+                </BarChart>
+              </div>
+              <div className="doughnut-container">
+                <h5>Cantidad de paquetes por protocolo de transporte</h5>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={dataProtTransp}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="_id" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="total" fill="#82ca9d" />
+                </BarChart>
+              </div>
+              <div className="gauge-container">
+                <h5>Cantidad de paquetes IP</h5>
+                {/* <Doughnut data={dataIp} options={optionsBar} /> */}
+                <PieChart width={400} height={400}>
+                  <Pie
+                    nameKey="_id"
+                    dataKey="total"
+                    isAnimationActive={false}
+                    data={dataIp}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    fill="#8884d8"
+                    label
+                  />
+                  <Pie
+                    nameKey="_id"
+                    dataKey="total"
+                    data={dataIp}
+                    cx={500}
+                    cy={200}
+                    innerRadius={40}
+                    outerRadius={80}
+                    fill="#82ca9d"
+                  />
+                  <Tooltip />
+                </PieChart>
+              </div>
 
-            {/* <div className="gauge-container">
+              {/* <div className="gauge-container">
               <GaugeChart id="gauge-chart2" />
             </div> */}
-          </div>
+            </div>
+          </Animated>
 
+          <h1 className="title-page">
+            Listado de dispositivos con mayor emision de paquetes
+          </h1>
           {tableData ? (
             <TableComponent
               header={tableHeader}

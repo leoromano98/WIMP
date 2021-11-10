@@ -259,7 +259,7 @@ const Header = () => {
                       toggleModal();
                     }}
                   >
-                    Cambiar contraseña
+                    Modificar contraseña
                   </DropdownItem>
                   <DropdownItem
                     onClick={() => {
@@ -278,30 +278,29 @@ const Header = () => {
       <div class="alarms-container">{showAlarms}</div>
       <Menu id={"sidebar"} className={"my-menu"}>
         <a className="menu-item" href="/landing">
-          Home
+          Bienvenida
         </a>
         <a className="menu-item" href="/rankpackets">
-          Ranking paquetes
+          Captura de paquetes
         </a>
         <a className="menu-item" href="/d3">
-          Topología
+          Visor de topología
         </a>
         <a className="menu-item" href="/map">
-          Switches
+          Mapa de switches
         </a>
         <a className="menu-item" href="/accesspoints">
-          Access Points
+          Lista de access points
         </a>
         <a className="menu-item" href="/alerts">
-          Alertas
+          Lista de alertas 
         </a>
         <a className="menu-item" href="/anomalies">
-          Anomalias
+          Lista de anomalías
         </a>
         {/* <div className="menu-item test" onClick={showAlarm}>
           Test alarma
         </div> */}
-        
         <a className="menu-item" href="/clients">
           Ubicar cliente
         </a>

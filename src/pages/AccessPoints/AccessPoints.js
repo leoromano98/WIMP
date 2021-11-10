@@ -24,11 +24,10 @@ const AccessPoints = () => {
     console.log(data);
     data.forEach((index) => {
       index.timestamp = formatDate(index.timestamp);
-      if(index.mem <= 0 || index.uptime === 0 || index.cpu === 0){
-        index.state = "Inactivo"
-      }
-      else{
-        index.state = "Activo"
+      if (index.mem <= 0 || index.uptime === 0 || index.cpu === 0) {
+        index.state = "Inactivo";
+      } else {
+        index.state = "Activo";
       }
     });
     setTableData(data);
@@ -40,6 +39,9 @@ const AccessPoints = () => {
 
   return (
     <div className="login-container">
+      <h1 className="title-page">
+        Listado de access point de la red
+      </h1>
       {tableData ? <TableComponent header={header} data={tableData} /> : null}
     </div>
   );

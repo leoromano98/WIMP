@@ -153,6 +153,9 @@ const Clients = () => {
 
   return (
     <>
+      <h1 className="title-page">
+        Trazar topología de un cliente
+      </h1>
       <div className="search-mac-container">
         Buscar cliente por direccion MAC o IP:
         <InputGroup>

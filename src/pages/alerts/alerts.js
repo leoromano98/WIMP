@@ -138,6 +138,9 @@ const Alerts = () => {
 
   return (
     <div className="alerts-container">
+      <h1 className="title-page">
+      {selectedList === "ranking" ? "Ranking de dispositivos con mayor disparo de alertas" : "Listado de alertas disparadas por dispositivo"}
+        </h1>
       <div className="checkbox-search-contianer">
         <RadioButtons options={radioOptions} selected={handleSelectedList} />
         <div className="search-mac-container">

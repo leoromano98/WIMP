@@ -27,6 +27,7 @@ import {
 } from "../../api/auth";
 import { findDOMNode } from "react-dom";
 import zIndex from "@material-ui/core/styles/zIndex";
+import { Animated } from "react-animated-css";
 
 export default class MapDisplay extends Component {
   state = {
@@ -295,14 +296,19 @@ export default class MapDisplay extends Component {
 
     if (this.state.switches.length !== 0) {
       var tableData = JSON.parse(JSON.stringify(this.state.switches));
-      tableData.forEach(index=>{
-        if(index.fanlevel<=0 || index.mem<=0 || index.cpu<=0 || index.temp<=0 || index.uptime<=0){
-          index.state = 'Inactivo'
+      tableData.forEach((index) => {
+        if (
+          index.fanlevel <= 0 ||
+          index.mem <= 0 ||
+          index.cpu <= 0 ||
+          index.temp <= 0 ||
+          index.uptime <= 0
+        ) {
+          index.state = "Inactivo";
+        } else {
+          index.state = "Activo";
         }
-        else{
-          index.state = 'Activo'
-        }
-      })
+      });
     }
 
     const header = [
@@ -374,27 +380,35 @@ export default class MapDisplay extends Component {
           className="overlay"
           style={{ display: this.state.selectedSwitch ? "block" : "none" }}
         ></div>
-        <MapContainer
-          center={position}
-          zoom={this.state.map.zoom}
-          className="map-container"
+        <h1 className="title-page">Ubicación geográfica de switches</h1>
+        <Animated
+          animationIn="zoomIn"
+          animationInDuration={600}
+          isVisible={true}
         >
-          <TileLayer
-            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {this.state.showSwitches}
-          {this.state.drawLines}
-        </MapContainer>
+          <MapContainer
+            center={position}
+            zoom={this.state.map.zoom}
+            className="map-container"
+          >
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {this.state.showSwitches}
+            {this.state.drawLines}
+          </MapContainer>
+        </Animated>
         {this.state.selectedSwitch ? (
           <Button
             color="success"
             onClick={this.handleSavePosition}
             className="save-position"
-          >
+            >
             GUARDAR
           </Button>
         ) : null}
+        <h1 className="title-page">Listado de switches de la red</h1>
         {this.state.switches.length !== 0 ? (
           <TableComponent
             header={header}

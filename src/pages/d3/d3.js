@@ -263,6 +263,7 @@ const D3 = () => {
 
   return (
     <div className="login-container">
+      <h1 className="title-page">Visor dinámico de topología de red</h1>
       <div className="graph-container">
         Seleccione un dispositivo
         <Dropdown
