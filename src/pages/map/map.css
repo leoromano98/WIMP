@@ -28,5 +28,5 @@
 .save-position{
   position: relative;
   display:flex !important;
-  margin: 0 auto 50px;
+  margin: 20px auto;
 }
