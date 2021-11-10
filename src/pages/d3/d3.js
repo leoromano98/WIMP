@@ -269,7 +269,7 @@ const D3 = () => {
         <Dropdown
           isOpen={dropdownOpen}
           toggle={toggle}
-          className="account-dropdown"
+          className="graph-dropdown"
           direction="right"
         >
           <DropdownToggle caret>
