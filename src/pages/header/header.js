@@ -283,11 +283,11 @@ const Header = () => {
         <a className="menu-item" href="/rankpackets">
           Captura de paquetes
         </a>
-        <a className="menu-item" href="/d3">
-          Visor de topología
-        </a>
         <a className="menu-item" href="/map">
           Mapa de switches
+        </a>
+        <a className="menu-item" href="/d3">
+          Visor de topología
         </a>
         <a className="menu-item" href="/accesspoints">
           Lista de access points
