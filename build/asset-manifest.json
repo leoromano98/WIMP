@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ffbf4bce.chunk.css",
+    "main.js": "/static/js/main.90ec1c00.chunk.js",
+    "main.js.map": "/static/js/main.90ec1c00.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.0b625133.js",
+    "runtime-main.js.map": "/static/js/runtime-main.0b625133.js.map",
+    "static/css/2.155391bf.chunk.css": "/static/css/2.155391bf.chunk.css",
+    "static/js/2.54241752.chunk.js": "/static/js/2.54241752.chunk.js",
+    "static/js/2.54241752.chunk.js.map": "/static/js/2.54241752.chunk.js.map",
+    "static/js/3.3431a382.chunk.js": "/static/js/3.3431a382.chunk.js",
+    "static/js/3.3431a382.chunk.js.map": "/static/js/3.3431a382.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.155391bf.chunk.css.map": "/static/css/2.155391bf.chunk.css.map",
+    "static/css/main.ffbf4bce.chunk.css.map": "/static/css/main.ffbf4bce.chunk.css.map",
+    "static/js/2.54241752.chunk.js.LICENSE.txt": "/static/js/2.54241752.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/Raleway-VariableFont_wght.3fefe681.ttf",
+    "static/media/ap.eb42543b.svg": "/static/media/ap.eb42543b.svg",
+    "static/media/client.37ad450b.svg": "/static/media/client.37ad450b.svg",
+    "static/media/logoWIMP.7fe5da03.png": "/static/media/logoWIMP.7fe5da03.png",
+    "static/media/switch.14716a73.svg": "/static/media/switch.14716a73.svg",
+    "static/media/switchLight.5037cfc1.svg": "/static/media/switchLight.5037cfc1.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0b625133.js",
+    "static/css/2.155391bf.chunk.css",
+    "static/js/2.54241752.chunk.js",
+    "static/css/main.ffbf4bce.chunk.css",
+    "static/js/main.90ec1c00.chunk.js"
+  ]
+}
