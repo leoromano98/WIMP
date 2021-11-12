@@ -1,0 +1,89 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150" width="400" height="150">
+	<title>switch-svg</title>
+	<defs>
+		<image  width="400" height="150" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAACWAQMAAADKX0wmAAAAAXNSR0IB2cksfwAAAAZQTFRFYL//YL//54m5ewAAAAJ0Uk5T//6/su9RAAAALklEQVR4nO3OMQ0AIBAAsR8YkIF/lbjgEtIq6AwAAADwzK4DqVUHYqcOAAAAP7hRlAAtC605PwAAAABJRU5ErkJggg=="/>
+		<filter x="-50%" y="-50%" width="200%" height="200%" id="flt1"> <feGaussianBlur stdDeviation="6.054" /> </filter>
+		<radialGradient id="grd1" gradientUnits="userSpaceOnUse"  cx="199.463" cy="100.712" r="178.018">
+			<stop offset="0" stop-color="#343434"  />
+			<stop offset="1" stop-color="#000000" stop-opacity="0" />
+		</radialGradient>
+		<linearGradient id="grd2" gradientUnits="userSpaceOnUse"  x1="54.093" y1="56.806" x2="369.914" y2="56.806">
+			<stop offset="0" stop-color="#a0a0b4"  />
+			<stop offset="1" stop-color="#a0a0b4" stop-opacity="0" />
+		</linearGradient>
+		<linearGradient id="grd3" gradientUnits="userSpaceOnUse"  x1="297.993" y1="72.524" x2="368.693" y2="72.524">
+			<stop offset="0" stop-color="#a0a0b4"  />
+			<stop offset="1" stop-color="#a0a0b4" stop-opacity="0" />
+		</linearGradient>
+		<linearGradient id="grd4" gradientUnits="userSpaceOnUse"  x1="105.795" y1="84.282" x2="346.041" y2="139.706">
+			<stop offset="0" stop-color="#a0a0b4"  />
+			<stop offset="1" stop-color="#a0a0b4" stop-opacity="0" />
+		</linearGradient>
+		<linearGradient id="grd5" gradientUnits="userSpaceOnUse"  x1="195.181" y1="85.714" x2="274.755" y2="85.714">
+			<stop offset="0" stop-color="#b1b1c5"  />
+			<stop offset="1" stop-color="#b1b1c5" stop-opacity="0" />
+		</linearGradient>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { opacity: 0.761;filter: url(#flt1);fill: url(#grd1) } 
+		.shp1 { fill: #ffffff } 
+		.shp2 { fill: url(#grd2);stroke: #000000;stroke-width: 0.5 } 
+		.shp3 { fill: url(#grd3);stroke: #000000;stroke-width: 0.635 } 
+		.shp4 { fill: url(#grd4);stroke: #000000;stroke-linejoin:round;stroke-width: 1.13 } 
+		.shp5 { fill: #000000;stroke: #3d3d3d;stroke-linejoin:round;stroke-width: 0.661 } 
+		.shp6 { fill: url(#grd5);stroke: #3d3d3d;stroke-linejoin:round;stroke-width: 0.476 } 
+		.shp7 { opacity: 0.533;fill: #27ff00;stroke: #3d3d3d;stroke-linejoin:round;stroke-width: 0.281 } 
+	</style>
+	<use id="Layer 2" style="opacity: 0.671" href="#img1" x="0" y="0" />
+	<g id="layer1">
+		<path id="path8470" class="shp0" d="M376.85 100.71C376.84 109.39 358.15 117.7 324.89 123.84C291.62 129.97 246.51 133.41 199.46 133.41C152.42 133.41 107.3 129.97 74.04 123.84C40.77 117.7 22.08 109.39 22.08 100.71C22.08 92.04 40.77 83.72 74.04 77.59C107.3 71.46 152.42 68.01 199.46 68.01C246.51 68.01 291.62 71.46 324.89 77.59C358.15 83.72 376.84 92.04 376.84 100.71L376.85 100.71Z" />
+		<path id="path8508" fill-rule="evenodd" class="shp1" d="M54.54 66.88L126.65 44.69L369.32 45.16L368.86 76.59L299.99 99.7L54.08 100.16L54.54 66.88L54.54 66.88Z" />
+		<path id="path7643" fill-rule="evenodd" class="shp2" d="M126.52 45.31L369.81 45.4L299.36 68.3L54.42 68.03L126.52 45.31L126.52 45.31Z" />
+		<path id="path7653" fill-rule="evenodd" class="shp3" d="M299.96 100.44L368.28 76.34L369.6 45.65L299.37 68.38L299.96 100.44L299.96 100.44Z" />
+		<path id="rect5011" class="shp4" d="M54.68 68.16L299.59 68.16L299.59 100.39L54.68 100.39L54.68 68.16Z" />
+		<g id="g7785">
+			<path id="rect7663" class="shp5" d="M65.69 76.9L73.8 76.9L73.8 84.02L65.69 84.02L65.69 76.9Z" />
+			<path id="rect7745" class="shp5" d="M78.35 76.9L86.47 76.9L86.47 84.02L78.35 84.02L78.35 76.9Z" />
+			<path id="rect7747" class="shp5" d="M154.33 76.9L162.44 76.9L162.44 84.02L154.33 84.02L154.33 76.9Z" />
+			<path id="rect7749" class="shp5" d="M141.67 76.9L149.78 76.9L149.78 84.02L141.67 84.02L141.67 76.9Z" />
+			<path id="rect7751" class="shp5" d="M129.01 76.9L137.12 76.9L137.12 84.02L129.01 84.02L129.01 76.9Z" />
+			<path id="rect7753" class="shp5" d="M116.34 76.9L124.45 76.9L124.45 84.02L116.34 84.02L116.34 76.9Z" />
+			<path id="rect7755" class="shp5" d="M103.68 76.9L111.79 76.9L111.79 84.02L103.68 84.02L103.68 76.9Z" />
+			<path id="rect7757" class="shp5" d="M91.01 76.9L99.12 76.9L99.12 84.02L91.01 84.02L91.01 76.9Z" />
+		</g>
+		<g id="g7775">
+			<path id="rect7759" class="shp5" d="M65.65 86.4L73.76 86.4L73.76 93.52L65.65 93.52L65.65 86.4Z" />
+			<path id="rect7761" class="shp5" d="M78.31 86.4L86.42 86.4L86.42 93.52L78.31 93.52L78.31 86.4Z" />
+			<path id="rect7763" class="shp5" d="M154.29 86.4L162.4 86.4L162.4 93.52L154.29 93.52L154.29 86.4Z" />
+			<path id="rect7765" class="shp5" d="M141.62 86.4L149.73 86.4L149.73 93.52L141.62 93.52L141.62 86.4Z" />
+			<path id="rect7767" class="shp5" d="M128.96 86.4L137.07 86.4L137.07 93.52L128.96 93.52L128.96 86.4Z" />
+			<path id="rect7769" class="shp5" d="M116.29 86.4L124.41 86.4L124.41 93.52L116.29 93.52L116.29 86.4Z" />
+			<path id="rect7771" class="shp5" d="M103.64 86.4L111.75 86.4L111.75 93.52L103.64 93.52L103.64 86.4Z" />
+			<path id="rect7773" class="shp5" d="M90.97 86.4L99.08 86.4L99.08 93.52L90.97 93.52L90.97 86.4Z" />
+		</g>
+		<g id="g7859">
+			<path id="rect7795" class="shp6" d="M195.42 78.1L274.53 78.1L274.53 93.33L195.42 93.33L195.42 78.1Z" />
+			<g id="g7831">
+				<path id="rect7805" class="shp7" d="M202.72 81.14L206.62 81.14L206.62 85.04L202.72 85.04L202.72 81.14Z" />
+				<path id="rect7817" class="shp7" d="M211.38 81.14L215.28 81.14L215.28 85.04L211.38 85.04L211.38 81.14Z" />
+				<path id="rect7819" class="shp7" d="M220.04 81.14L223.94 81.14L223.94 85.04L220.04 85.04L220.04 81.14Z" />
+				<path id="rect7821" class="shp7" d="M228.69 81.14L232.59 81.14L232.59 85.04L228.69 85.04L228.69 81.14Z" />
+				<path id="rect7823" class="shp7" d="M237.35 81.14L241.25 81.14L241.25 85.04L237.35 85.04L237.35 81.14Z" />
+				<path id="rect7825" class="shp7" d="M246.01 81.14L249.91 81.14L249.91 85.04L246.01 85.04L246.01 81.14Z" />
+				<path id="rect7827" class="shp7" d="M254.66 81.14L258.56 81.14L258.56 85.04L254.66 85.04L254.66 81.14Z" />
+				<path id="rect7829" class="shp7" d="M263.32 81.14L267.22 81.14L267.22 85.04L263.32 85.04L263.32 81.14Z" />
+			</g>
+			<g id="g7841">
+				<path id="rect7843" class="shp7" d="M202.72 86.68L206.62 86.68L206.62 90.58L202.72 90.58L202.72 86.68Z" />
+				<path id="rect7845" class="shp7" d="M211.38 86.68L215.28 86.68L215.28 90.58L211.38 90.58L211.38 86.68Z" />
+				<path id="rect7847" class="shp7" d="M220.04 86.68L223.94 86.68L223.94 90.58L220.04 90.58L220.04 86.68Z" />
+				<path id="rect7849" class="shp7" d="M228.69 86.68L232.59 86.68L232.59 90.58L228.69 90.58L228.69 86.68Z" />
+				<path id="rect7851" class="shp7" d="M237.35 86.68L241.25 86.68L241.25 90.58L237.35 90.58L237.35 86.68Z" />
+				<path id="rect7853" class="shp7" d="M246.01 86.68L249.91 86.68L249.91 90.58L246.01 90.58L246.01 86.68Z" />
+				<path id="rect7855" class="shp7" d="M254.66 86.68L258.56 86.68L258.56 90.58L254.66 90.58L254.66 86.68Z" />
+				<path id="rect7857" class="shp7" d="M263.32 86.68L267.22 86.68L267.22 90.58L263.32 90.58L263.32 86.68Z" />
+			</g>
+		</g>
+	</g>
+</svg>
