@@ -278,7 +278,7 @@ const Header = () => {
       <div class="alarms-container">{showAlarms}</div>
       <Menu id={"sidebar"} className={"my-menu"}>
         <a className="menu-item" href="/landing">
-          Bienvenida
+          Inicio
         </a>
         <a className="menu-item" href="/rankpackets">
           Captura de paquetes
