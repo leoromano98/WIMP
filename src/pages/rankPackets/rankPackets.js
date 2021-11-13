@@ -39,6 +39,7 @@ import {
   Pie,
 } from "recharts";
 import { Animated } from "react-animated-css";
+import BackHome from "../../components/BackHome/BackHome";
 
 // Configuracion para graficos:
 const tableHeader = [
@@ -164,6 +165,7 @@ const RankPackets = () => {
 
   return (
     <>
+      <BackHome />
       <h1 className="title-page">Estadísticas de captura de paquetes</h1>
       {loading ? (
         <div class="overlay">

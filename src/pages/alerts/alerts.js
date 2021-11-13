@@ -5,6 +5,7 @@ import { Button, InputGroup, InputGroupAddon, Input } from "reactstrap";
 import RadioButtons from "../../components/RadioButtons/RadioButtons";
 import TableComponent from "../../components/Table/Table";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import BackHome from "../../components/BackHome/BackHome";
 const Alerts = () => {
   const [notifications, setNotifications] = useState([]);
   const [selectedList, setSelectedList] = useState("ranking");
@@ -138,6 +139,8 @@ const Alerts = () => {
 
   return (
     <div className="alerts-container">
+      <BackHome />
+      
       <h1 className="title-page">
       {selectedList === "ranking" ? "Ranking de dispositivos con mayor disparo de alertas" : "Listado de alertas disparadas por dispositivo"}
         </h1>
