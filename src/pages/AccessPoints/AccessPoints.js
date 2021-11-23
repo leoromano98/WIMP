@@ -6,6 +6,8 @@ import "./AccessPoints.css";
 import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
 import TableComponent from "../../components/Table/Table";
 import { getAPs, formatDate } from "../../api/auth";
+import BackHome from "../../components/BackHome/BackHome";
+
 const AccessPoints = () => {
   const [tableData, setTableData] = useState(null);
   const [switch2Data, setSwitch2Data] = useState(null);
@@ -39,9 +41,8 @@ const AccessPoints = () => {
 
   return (
     <div className="login-container">
-      <h1 className="title-page">
-        Listado de access point de la red
-      </h1>
+      <BackHome />
+      <h1 className="title-page">Listado de access point de la red</h1>
       {tableData ? <TableComponent header={header} data={tableData} /> : null}
     </div>
   );

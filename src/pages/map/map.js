@@ -28,6 +28,7 @@ import {
 import { findDOMNode } from "react-dom";
 import zIndex from "@material-ui/core/styles/zIndex";
 import { Animated } from "react-animated-css";
+import BackHome from "../../components/BackHome/BackHome";
 
 export default class MapDisplay extends Component {
   state = {
@@ -376,6 +377,7 @@ export default class MapDisplay extends Component {
 
     return (
       <>
+<BackHome />
         <div
           className="overlay"
           style={{ display: this.state.selectedSwitch ? "block" : "none" }}

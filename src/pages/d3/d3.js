@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import BackHome from "../../components/BackHome/BackHome";
 // graph payload (with minimalist structure)
 const myConfig = {
   automaticRearrangeAfterDropNode: true,
@@ -263,6 +264,7 @@ const D3 = () => {
 
   return (
     <div className="login-container">
+<BackHome />
       <h1 className="title-page">Visor dinámico de topología de red</h1>
       <div className="graph-container">
         Seleccione un dispositivo

@@ -13,6 +13,7 @@ import SwitchLayout from "../../components/SwitchLayout/SwitchLayout";
 import APLayout from "../../components/APLayout/APLayout";
 import ClientLayout from "../../components/ClientLayout/ClientLayout";
 import { Animated } from "react-animated-css";
+import BackHome from "../../components/BackHome/BackHome";
 
 const Clients = () => {
   const [loading, setLoading] = useState(false);
@@ -153,9 +154,8 @@ const Clients = () => {
 
   return (
     <>
-      <h1 className="title-page">
-        Trazar topología de un cliente
-      </h1>
+      <BackHome />
+      <h1 className="title-page">Trazar topología de un cliente</h1>
       <div className="search-mac-container">
         Buscar cliente por direccion MAC o IP:
         <InputGroup>

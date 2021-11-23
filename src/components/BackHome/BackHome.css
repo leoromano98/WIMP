@@ -1,0 +1,6 @@
+.back-container {
+  display: flex;
+  width: 95%;
+  justify-content: right;
+  margin-top: 15px;
+}
