@@ -1,5 +1,5 @@
 .netfliy/
 .netfliy\
-build/
+# build/
 mail/node_modules
 node_modules/
