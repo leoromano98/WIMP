@@ -23,7 +23,7 @@ import {
   FormGroup,
   Label,
 } from "reactstrap";
-import { isUserLogedApi, logoutApi, changePassword } from "../../api/auth";
+import { isUserLogedApi, logoutApi, changePassword, createUser} from "../../api/auth";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 
 const Header = () => {
@@ -37,7 +37,21 @@ const Header = () => {
   const [modalErrors, setModalErrors] = useState({});
   const [modalPassword, setModalPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const toggleModal = () => setModalPassword(!modalPassword);
+  const toggleChangePassword = () => setModalPassword(!modalPassword);
+  const [modalRegistration, setModalRegistration] = useState(false);
+  const toggleRegistration = () => setModalRegistration(!modalRegistration);
+  const [newEmail, setNewEmail] = useState("");
+  const [newUser, setNewUser] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [userError, setUserError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [createSuccess, setCreateSuccess] = useState(false);
+  const [nestedModal, setNestedModal] = useState(false);
+  const [inputsError, setInputsError] = useState(false);
+
+  const toggleNested = () => {
+    setNestedModal(!nestedModal);
+  };
 
   function showSettings(event) {
     event.preventDefault();
@@ -71,7 +85,77 @@ const Header = () => {
     setNewPasswordConfirm(event.target.value);
   };
 
-  const validateForm = () => {
+  function ValidateEmail(mail) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    return false;
+  }
+
+  const registrationClickHandler = () => {
+    if (validateNewUserForm()) {
+      var response = createUser(newEmail, newUser, newPassword);
+      console.log(response);
+      if (response.ok) {
+        alert("usuario creado!");
+        setCreateSuccess(true);
+      }
+    }
+  };
+
+  
+  const validateNewUserForm = () => {
+    console.log(newEmail, newUser, newPassword);
+    let userCheck = true;
+    let emailCheck = true;
+    let passwordCheck = true;
+    let inputsCheck = true;
+
+    // Todos los campos obligatorios:
+    if (
+      newEmail.length === 0 ||
+      newUser.length === 0 ||
+      newPassword.length === 0
+    ) {
+      inputsCheck = false;
+      setInputsError(true);
+    } else {
+      setInputsError(false);
+    }
+
+    // Usuario > 3
+    if (newUser.length < 4) {
+      userCheck = false;
+      setUserError(true);
+    } else {
+      setUserError(false);
+    }
+
+    // Email valido:
+    if (!ValidateEmail(newEmail)) {
+      emailCheck = false;
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+
+    //Password >7
+    if (newPassword.length < 8) {
+      userCheck = false;
+      passwordCheck = false;
+
+      setPasswordError(true);
+    } else {
+      setPasswordError(false);
+    }
+
+    if (inputsCheck && userCheck && passwordCheck && emailCheck) {
+      return true;
+    }
+    return false;
+  };
+
+  const validateChangePasswordForm = () => {
     let errors = {
       oldPassword: false,
       newPassword: false,
@@ -120,7 +204,7 @@ const Header = () => {
   };
 
   const changePasswordHandler = async () => {
-    if (validateForm()) {
+    if (validateChangePasswordForm()) {
       var response = await changePassword(
         oldPassword,
         newPassword,
@@ -129,7 +213,7 @@ const Header = () => {
       console.log(response);
       if (response?.ok) {
         setShowAlert(true);
-        toggleModal();
+        toggleChangePassword();
         logoutApi();
         const timer = setTimeout(() => {
           window.location.reload();
@@ -143,9 +227,17 @@ const Header = () => {
     }
   };
 
-  let registrationModal = (
-    <Modal isOpen={modalPassword} toggle={toggleModal}>
-      <ModalHeader toggle={toggleModal}>Modificar contraseña</ModalHeader>
+  const handleNewEmailChange = (event) => {
+    setNewEmail(event.target.value);
+  };
+
+  const handleNewUserChange = (event) => {
+    setNewUser(event.target.value);
+  };
+
+  let changePasswordModal = (
+    <Modal isOpen={modalPassword} toggle={toggleChangePassword}>
+      <ModalHeader toggle={toggleChangePassword}>Modificar contraseña</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup controlId="exampleForm.ControlInput1">
@@ -217,7 +309,7 @@ const Header = () => {
           <div className="error-msg">Las contraseñas no son iguales.</div>
         ) : null}
         <div className="btn-container">
-          <Button color="danger" onClick={toggleModal}>
+          <Button color="danger" onClick={toggleChangePassword}>
             Cancel
           </Button>
           <Button color="success" onClick={changePasswordHandler}>
@@ -228,8 +320,82 @@ const Header = () => {
     </Modal>
   );
 
+  let registrationModal = (
+    <Modal isOpen={modalRegistration} toggle={toggleRegistration}>
+      <ModalHeader toggle={toggleRegistration}>Crear Usuario</ModalHeader>
+      <ModalBody>
+        <Form>
+          <FormGroup controlId="exampleForm.ControlInput1">
+            <Label>Correo electronico</Label>
+            <Input
+              type="email"
+              placeholder="wimp@wimp.com"
+              onChange={handleNewEmailChange}
+              className={emailError ? "input-error" : null}
+            />
+            {emailError ? (
+              <div className="error-msg">Formato de correo invalido.</div>
+            ) : null}
+          </FormGroup>
+          <FormGroup controlId="exampleForm.ControlInput1">
+            <Label>Usuario</Label>
+            <Input
+              type="text"
+              placeholder="WIMP"
+              onChange={handleNewUserChange}
+              className={userError ? "input-error" : null}
+            />
+            {userError ? (
+              <div className="error-msg">
+                El usuario debe contener al menos 4 caracteres.
+              </div>
+            ) : null}
+          </FormGroup>
+          <FormGroup controlId="exampleForm.ControlInput1">
+            <Label>Contraseña</Label>
+            <Input
+              type="password"
+              placeholder="*******"
+              onChange={handleNewPasswordChange}
+              className={passwordError ? "input-error" : null}
+            />
+            {passwordError ? (
+              <div className="error-msg">
+                La contraseña debe contener al menos 8 caracteres.
+              </div>
+            ) : null}
+          </FormGroup>
+        </Form>
+        <Modal isOpen={createSuccess} toggle={toggleNested}>
+          <ModalHeader>Nested Modal title</ModalHeader>
+          <ModalBody>Stuff and things</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={toggleNested}>
+              Done
+            </Button>{" "}
+          </ModalFooter>
+        </Modal>
+      </ModalBody>
+      <ModalFooter className="modal-footer-container">
+        {inputsError ? (
+          <div className="error-msg">Todos los campos son obligatorios.</div>
+        ) : null}
+
+        <div className="btn-container">
+          <Button color="danger" onClick={toggleRegistration}>
+            Cancel
+          </Button>
+          <Button color="success" onClick={registrationClickHandler}>
+            Aceptar
+          </Button>
+        </div>
+      </ModalFooter>
+    </Modal>
+  );
+
   return (
     <>
+      {changePasswordModal}
       {registrationModal}
       {showAlert ? (
         <UncontrolledAlert color="success" className="alert">
@@ -255,8 +421,16 @@ const Header = () => {
               {user ? (
                 <>
                   <DropdownItem
+                    disabled={username!=="jbilbao"}
                     onClick={() => {
-                      toggleModal();
+                      toggleRegistration();
+                    }}
+                  >
+                    Crear usuario
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => {
+                      toggleChangePassword();
                     }}
                   >
                     Modificar contraseña
@@ -293,7 +467,7 @@ const Header = () => {
           Lista de access points
         </a>
         <a className="menu-item" href="/alerts">
-          Lista de alertas 
+          Lista de alertas
         </a>
         <a className="menu-item" href="/anomalies">
           Lista de anomalías
