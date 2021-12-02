@@ -57,7 +57,14 @@ const Header = () => {
   const [nestedModal, setNestedModal] = useState(false);
   const [inputsError, setInputsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [allowScroll, setAllowScroll] = useState(true);
 
+  const toggleAllowScroll = (state) =>{
+    setAllowScroll(!allowScroll)
+    console.log('ure',state)
+    document.body.style.overflow = !allowScroll? 'unset' : 'hidden'
+  }
+  
   const toggleNested = () => {
     setNestedModal(!nestedModal);
   };
@@ -479,7 +486,7 @@ const Header = () => {
         </div>
       </div>
       <div class="alarms-container">{showAlarms}</div>
-      <Menu id={"sidebar"} className={"my-menu"}>
+      <Menu id={"sidebar"} className={"my-menu"} onStateChange={toggleAllowScroll}>
         <a className="menu-item" href="/landing">
           Inicio
         </a>

@@ -1,10 +1,15 @@
+.my-menu{
+  background-color: red;
+}
+
 /* Position and sizing of burger button */
 .bm-burger-button {
-  position: fixed;
+  position: relative;
   width: 36px;
   height: 30px;
   left: 36px;
-  top: 26px;
+  top: -52px;
+  z-index: 2000 !important;
 }
 
 /* Color/shape of burger icon bars */
@@ -21,6 +26,7 @@
 .bm-cross-button {
   height: 24px;
   width: 24px;
+  top: 83px !important;
 }
 
 /* Color/shape of close button cross */
@@ -37,6 +43,9 @@
   height: 100%;
   margin-top: -10px;
   width: 200px !important;
+  height: 105% !important;
+  margin-top: -114px;
+  z-index: 100;
 }
 
 .bm-menu-wrap a {
@@ -55,6 +64,8 @@
   background: #37718e;
   padding: 1.5em 0 0;
   font-size: 1.15em;
+  padding-top: 85px;
+  position: relative;
 }
 
 /* Morph shape necessary with bubble or elastic */
@@ -77,6 +88,8 @@
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
   z-index: 1;
+  width: 91%;
+  right: -81px;
 }
 
 /* Header styles */
@@ -153,6 +166,6 @@
   z-index: 2000 !important;
 }
 
-.registration-alert{
-  z-index: 2000 !important
+.registration-alert {
+  z-index: 2000 !important;
 }
