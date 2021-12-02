@@ -23,8 +23,14 @@ import {
   FormGroup,
   Label,
 } from "reactstrap";
-import { isUserLogedApi, logoutApi, changePassword, createUser} from "../../api/auth";
+import {
+  isUserLogedApi,
+  logoutApi,
+  changePassword,
+  createUser,
+} from "../../api/auth";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -37,6 +43,8 @@ const Header = () => {
   const [modalErrors, setModalErrors] = useState({});
   const [modalPassword, setModalPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showCreateUserAlert, setShowCreateUserAlert] = useState(false);
+  const [createUserError, setCreateUserError] = useState(false);
   const toggleChangePassword = () => setModalPassword(!modalPassword);
   const [modalRegistration, setModalRegistration] = useState(false);
   const toggleRegistration = () => setModalRegistration(!modalRegistration);
@@ -48,6 +56,7 @@ const Header = () => {
   const [createSuccess, setCreateSuccess] = useState(false);
   const [nestedModal, setNestedModal] = useState(false);
   const [inputsError, setInputsError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleNested = () => {
     setNestedModal(!nestedModal);
@@ -92,18 +101,21 @@ const Header = () => {
     return false;
   }
 
-  const registrationClickHandler = () => {
+  const registrationClickHandler = async () => {
+    setLoading(true);
     if (validateNewUserForm()) {
-      var response = createUser(newEmail, newUser, newPassword);
-      console.log(response);
-      if (response.ok) {
-        alert("usuario creado!");
-        setCreateSuccess(true);
+      var response = await createUser(newEmail, newUser, newPassword);
+      setShowCreateUserAlert(true)
+      if (response) {
+        setCreateUserError(false);
+        toggleRegistration();
+      } else {
+        setCreateUserError(true);
       }
     }
+    setLoading(false);
   };
 
-  
   const validateNewUserForm = () => {
     console.log(newEmail, newUser, newPassword);
     let userCheck = true;
@@ -235,9 +247,20 @@ const Header = () => {
     setNewUser(event.target.value);
   };
 
+  let circleLoading = null;
+  if (loading) {
+    circleLoading = (
+      <div class="overlay-createuser">
+        <CircularProgress className="loading-circle" />
+      </div>
+    );
+  }
+
   let changePasswordModal = (
     <Modal isOpen={modalPassword} toggle={toggleChangePassword}>
-      <ModalHeader toggle={toggleChangePassword}>Modificar contraseña</ModalHeader>
+      <ModalHeader toggle={toggleChangePassword}>
+        Modificar contraseña
+      </ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup controlId="exampleForm.ControlInput1">
@@ -397,9 +420,15 @@ const Header = () => {
     <>
       {changePasswordModal}
       {registrationModal}
+      {circleLoading}
       {showAlert ? (
-        <UncontrolledAlert color="success" className="alert">
+        <UncontrolledAlert color="success" className="registration-alert alert">
           Contraseña cambiada con exito!
+        </UncontrolledAlert>
+      ) : null}
+      {showCreateUserAlert ? (
+        <UncontrolledAlert color={createUserError?"danger":"success"} className="registration-alert alert">
+          {createUserError?"Correo o usuario existente.":"Usuario creado con exito"}
         </UncontrolledAlert>
       ) : null}
       <div className="header">
@@ -421,7 +450,7 @@ const Header = () => {
               {user ? (
                 <>
                   <DropdownItem
-                    disabled={username!=="jbilbao"}
+                    disabled={username !== "jbilbao"}
                     onClick={() => {
                       toggleRegistration();
                     }}

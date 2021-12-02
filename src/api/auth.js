@@ -92,21 +92,20 @@ export function createUser(email, usuario, password) {
     body: JSON.stringify(data),
   };
 
-  return fetch(url, params)
-    .then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        console.log(response);
-        return response;
-      }
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((err) => {
-      return err;
-    });
-}
+  return axios.post(url, data, {headers:params.headers})
+  .then(res=> {return true})
+  .catch(err=> {
+    return false
+  })
 
+  // fetch(url, params)
+  //   .then((response) => {
+  //     return response.status;
+  //   })
+  //   .catch((err) => {
+  //     return err;
+  //   });
+}
 
 export function changePassword(oldPassword, newPassword, newPasswordConfirm) {
   var token = getTokenApi();
@@ -682,7 +681,6 @@ export async function listarSwitches() {
       return err;
     });
 }
-
 
 export async function getAPs() {
   var token = getTokenApi();
