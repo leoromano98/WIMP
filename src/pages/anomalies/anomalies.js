@@ -126,9 +126,9 @@ const Anomalies = () => {
           },
         ];
       }
+      setTableHeader(header);
       setTableData(adaptData);
       setFilterData(adaptData);
-      setTableHeader(header);
     }
     func();
   }, [selectedList]);
@@ -154,7 +154,7 @@ const Anomalies = () => {
       </div>
 
       {filterData && tableHeader ? (
-        <TableComponent header={tableHeader} data={filterData} />
+        <TableComponent header={tableHeader} data={filterData} paginate/>
       ) : (
         <div class="overlay">
           <CircularProgress className="loading-circle" />

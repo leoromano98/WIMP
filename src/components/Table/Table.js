@@ -1,20 +1,27 @@
 import { ViewColumnSharp } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { Table } from "reactstrap";
 import "./Table.css";
 import { Button } from "reactstrap";
 import { Animated } from "react-animated-css";
+import Pagination from "@mui/material/Pagination";
 
 // Recibe 2 props:
 //  props.header: Array con los nombres de cada columna. Cada elemento tiene
 //                { key: para identificar columna ; text: lo que se muestra en la tabla}
 //  props.data: Array con elementos JSON que contiene la informacion de cada fila
 const TableComponent = (props) => {
+  const [page, setPage] = React.useState(1);
+  const [smallData, setSmallData] = React.useState(null);
+  const handleChange = (event,value) => {
+    setPage(value);
+  };
+
   const header = props.header.map((index) => {
     return <th>{index.text}</th>;
   });
-
-  let data = [];
+  
+  let data = []
 
   // Esta funcion se encarga de ordenar los datos de acuerdo a header.key
   const dataTable = () => {
@@ -71,19 +78,25 @@ const TableComponent = (props) => {
   };
 
   dataTable();
+  
+  useEffect(() => {
+    if (props.paginate) {
+      setSmallData(data.slice((page - 1) * 10, page * 10));
+      console.log('repeat?', data,header)
+    }
+  }, [page]);
 
   return (
-    <Animated
-      animationIn="zoomIn"
-      animationInDuration={600}
-      isVisible={true}
-    >
+    <Animated animationIn="zoomIn" animationInDuration={600} isVisible={true}>
       <Table striped hover className="table">
         <thead>
           <tr>{header}</tr>
         </thead>
-        <tbody>{data}</tbody>
+        <tbody>{props.paginate ? smallData : data}</tbody>
       </Table>
+      {props.paginate ? (
+        <Pagination count={parseInt(data.length/10)} page={page} onChange={handleChange} />
+      ) : null}
     </Animated>
   );
 };

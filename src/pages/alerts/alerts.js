@@ -156,7 +156,7 @@ const Alerts = () => {
       </div>
 
       {filterData && tableHeader ? (
-        <TableComponent header={tableHeader} data={filterData} />
+        <TableComponent header={tableHeader} data={filterData}/>
       ) : (
         <div class="overlay">
           <CircularProgress className="loading-circle" />

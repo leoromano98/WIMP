@@ -741,9 +741,7 @@ export async function ubicarSwitch(mac, lat, lng) {
 }
 
 export const formatDate = (pDate) => {
-  console.log("params", pDate);
   const date = new Date(pDate);
-  console.log("date", date);
   const dia = date.getDate();
   const mes = date.getMonth() + 1;
   const anio = date.getFullYear();

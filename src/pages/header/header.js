@@ -62,7 +62,7 @@ const Header = () => {
   const toggleAllowScroll = (state) =>{
     setAllowScroll(!allowScroll)
     console.log('ure',state)
-    document.body.style.overflow = !allowScroll? 'unset' : 'hidden'
+    document.body.style.overflow = allowScroll? 'unset' : 'hidden'
   }
   
   const toggleNested = () => {
