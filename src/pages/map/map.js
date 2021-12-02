@@ -171,9 +171,9 @@ export default class MapDisplay extends Component {
     //fiin
 
     ubicarSwitch(
-      this.state.selectedSwitch.mac,
-      this.state.newPos.lat,
-      this.state.newPos.lng
+      this.state.selectedSwitch?.mac,
+      this.state.newPos?.lat,
+      this.state.newPos?.lng
     );
 
     this.setState({
