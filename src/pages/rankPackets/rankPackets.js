@@ -61,7 +61,7 @@ const tableHeader = [
   },
   {
     key: "bytes",
-    text: "Cantidad de bytes",
+    text: "Cantidad de MB",
   },
 ];
 
@@ -88,7 +88,7 @@ const RankPackets = () => {
           index: i,
           mac: index._id.srcmac,
           ip: index._id.srcip,
-          bytes: index.bytes,
+          bytes: Math.round((index.bytes/1000000) * 1000) / 1000 ,
           paquetes: index.paquetes,
         });
         i++;
