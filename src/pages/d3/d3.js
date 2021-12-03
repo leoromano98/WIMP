@@ -99,8 +99,12 @@ const D3 = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSwitch, setSelectedSwitch] = useState(null);
-  const [nodes, setNodes] = useState([]);
-  const [links, setLinks] = useState([]);
+  // const [nodes, setNodes] = useState([]);
+  // const [links, setLinks] = useState([]);
+  const [nodesData, setNodesData] = useState([]);
+  const [linksData, setLinksData] = useState([]);
+  let nodes = []
+  let links = []
   const [showGraph, setShowGraph] = useState(false);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -124,70 +128,75 @@ const D3 = () => {
     }
   }, []);
 
-  const displayNodesAndLinks = (array, macSW) => {
+  const displayNodesAndLinks = (array, macSW, links, nodes) => {
+    console.log("[displayNodesAndLinks]", links, nodes);
     const auxLinks = links;
     const auxNodes = nodes;
     if (array instanceof Array) {
       array.forEach((index) => {
         if (macSW) {
           if (macSW === index.mac) {
-            const hijo = displayNodesAndLinks(index);
+            const hijo = displayNodesAndLinks(index, null, links, nodes);
             if (hijo && array.mac && index.mac) {
               auxLinks.push({ source: array.mac, target: index.mac });
-              setLinks(auxLinks);
+
+              links = auxLinks;
             }
           }
         } else {
-          const hijo = displayNodesAndLinks(index);
+          const hijo = displayNodesAndLinks(index, null, links, nodes);
           if (hijo && array.mac && index.mac) {
             auxLinks.push({ source: array.mac, target: index.mac });
-            setLinks(auxLinks);
+
+            links = auxLinks;
           }
         }
       });
       if (array.mac) {
         auxNodes.push({ id: array.mac, svg: switchSvg });
-        setNodes(auxNodes);
+
+        nodes = auxNodes;
       }
     } else {
       if (array.tipo === "SW") {
         if (array.ports) {
           //puede no tener nada conectado
           array.ports.forEach((index) => {
-            const hijo = displayNodesAndLinks(index);
+            const hijo = displayNodesAndLinks(index, null, links, nodes);
             if (hijo && array.mac && index.mac) {
               auxLinks.push({ source: array.mac, target: index.mac });
-              setLinks(auxLinks);
+              links = auxLinks;
             }
           });
           auxNodes.push({ id: array.mac, svg: switchSvg });
-          setNodes(auxNodes);
+          nodes = auxNodes;
           return array;
         }
       }
       if (array.tipo === "AP") {
         if (array.clientesap) {
           array.clientesap.forEach((index) => {
-            const hijo = displayNodesAndLinks(index);
+            const hijo = displayNodesAndLinks(index, null, links, nodes);
             if (hijo && array.mac && index.mac) {
               auxLinks.push({ source: array.mac, target: index.mac });
-              setLinks(auxLinks);
+              links = auxLinks;
             }
           });
           auxNodes.push({ id: array.mac, svg: apSvg });
-          setNodes(auxNodes);
+          nodes = auxNodes;
           return array;
         }
       }
       auxNodes.push({ id: array.mac, svg: clientSvg });
-      setNodes(auxNodes);
+      nodes = auxNodes;
       return array;
     }
     console.log("1", auxLinks);
     console.log("2", auxNodes);
-    setLinks(auxLinks);
-    setNodes(auxNodes);
+    // setLinks(auxLinks);
+    // setNodes(auxNodes);
     setShowGraph(true);
+    console.log("dale1");
   };
 
   const circleLoading = (
@@ -196,75 +205,93 @@ const D3 = () => {
     </div>
   );
 
-  const handleShowButton = () => {
-    console.log(nodes, links);
-    if (nodes.length !== 0) {
-      console.log("entro if");
-      setIsLoading(true);
+  // const handleShowButton = () => {
+  //   console.log(nodes, links);
+  //   if (nodes.length !== 0) {
+  //     console.log("entro if");
+  //     setIsLoading(true);
 
-      // remove old nodes
-      let auxNodes = nodes;
-      let auxLinks = links;
-      nodes.forEach((index) => {
-        const findIndex = nodes.findIndex((el) => el === index);
-        const id = index.id;
-        auxLinks = auxLinks.filter((l) => l.source !== id && l.target !== id);
-        auxNodes.splice(findIndex, 1);
-      });
-      //finish remove
-      setLinks(auxLinks);
-      setNodes(auxNodes);
-      displayNodesAndLinks(data, selectedSwitch);
+  //     // remove old nodes
+  //     let auxNodes = nodes;
+  //     let auxLinks = links;
+  //     nodes.forEach((index) => {
+  //       debugger;
+  //       const findIndex = nodes.findIndex((el) => el === index);
+  //       const id = index.id;
+  //       auxLinks = auxLinks.filter((l) => l.source !== id && l.target !== id);
+  //       auxNodes.splice(findIndex, 1);
+  //     });
+  //     //finish remove
+  //     setLinks(auxLinks);
+  //     setNodes(auxNodes);
+  //     displayNodesAndLinks(data, selectedSwitch);
 
-      setIsLoading(false);
-    } else {
-      console.log("entro else");
-      displayNodesAndLinks(data, selectedSwitch);
-    }
-  };
+  //     setIsLoading(false);
+  //   } else {
+  //     console.log("entro else");
+  //     displayNodesAndLinks(data, selectedSwitch);
+  //   }
+  // };
 
   const handleRemoveButton = () => {
     let auxNodes = nodes;
-    const id = nodes[0].id;
-    auxNodes.splice(0, 1);
-    let auxLinks = links.filter((l) => l.source !== id && l.target !== id);
-    setLinks(auxLinks);
-    setNodes(auxNodes);
-    return auxLinks.length === 0 && auxNodes.length === 0;
+    let auxLinks = links;
+    console.log("hola1", auxLinks.length, auxNodes.length);
+    while (auxLinks.length !== 0 && auxNodes.length !== 0) {
+      let auxNodes = nodes;
+      let auxLinks = links;
+      const id = nodes[0].id;
+      auxNodes.splice(0, 1);
+      console.log(
+        "jeje",
+        id,
+        auxLinks.filter((l) => l.source !== id && l.target !== id)
+      );
+      const auxLinks2 = auxLinks2.filter(
+        (l) => l.source !== id && l.target !== id
+      );
+      links = auxLinks
+      nodes = auxNodes
+      // setLinks(auxLinks);
+      // setNodes(auxNodes);
+      console.log("hola2", auxLinks.length, auxNodes.length);
+    }
   };
 
   const handleDropdownItemClick = (event) => {
     const selected = event.target.value;
     setSelectedSwitch(selected);
     // handleShowButton();
-    if (nodes.length !== 0) {
+    if (nodes.length !== 0 || links.length !== 0) {
       console.log("entro if");
       setIsLoading(true);
 
       // remove old nodes
-      let auxNodes = nodes;
-      let auxLinks = links;
-      let flag = false;
-      // while (!flag) {
-      //   flag = handleRemoveButton();
-      // }
+      // let auxNodes = nodes;
+      // let auxLinks = links;
+      handleRemoveButton();
 
-      console.log("llego1");
-      setLinks(auxLinks);
-      setNodes(auxNodes);
-      console.log("llego2");
-      displayNodesAndLinks(data, selected);
+      console.log("llego1", links, nodes);
+      // setLinks(auxLinks);
+      // setNodes(auxNodes);
+      // console.log("llego2");
+      displayNodesAndLinks(data, selected, links, nodes);
+      console.log("dale2");
 
       setIsLoading(false);
+      console.log("dale3");
     } else {
       console.log("entro else");
-      displayNodesAndLinks(data, selected);
+      displayNodesAndLinks(data, selected, links, nodes);
+      console.log("dale4");
     }
+    setLinksData(links)
+    setNodesData(nodes)
   };
 
   return (
     <div className="login-container">
-<BackHome />
+      <BackHome />
       <h1 className="title-page">Visor dinámico de topología de red</h1>
       <div className="graph-container">
         Seleccione un dispositivo
@@ -294,20 +321,14 @@ const D3 = () => {
             })}
           </DropdownMenu>
         </Dropdown>
-        {/* <button
-          onClick={handleRemoveButton}
-        >
-          QUITAR 1 NODO
-        </button> */}
         {isLoading ? (
           circleLoading
         ) : (
           <>
-            {console.log({ nodes: nodes, links: links })}
             {showGraph ? (
               <Graph
                 id={"graph-id"} // id is mandatory
-                data={{ nodes: nodes, links: links }}
+                data={{ nodes: nodesData, links: linksData }}
                 config={myConfig}
                 onClickNode={onClickNode}
                 onClickLink={onClickLink}
